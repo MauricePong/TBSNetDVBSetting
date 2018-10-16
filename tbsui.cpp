@@ -17,10 +17,11 @@ tbsui::~tbsui()
 {
 	if (tbshd)
 	{
-		tbshd->stop();
+		//tbshd->stop();
 		m_Thread.quit();
 		m_Thread.wait();
-		qDebug("22222222222233");
+		connect(&m_Thread, SIGNAL(finished()), tbshd, SLOT(deleteLater()));
+		connect(&m_Thread, SIGNAL(finished()), this, SLOT(threadFinished()));
 	}
 	//database.close();
 	//delete sql_query;
@@ -194,9 +195,20 @@ void tbsui::initForm()
 	tbshd = new TBShardware();
 	tbshd->moveToThread(&m_Thread);
 	connect(&m_Thread, SIGNAL(started()), tbshd, SLOT(start()));
-	connect(&m_Thread, SIGNAL(finished()), tbshd, SLOT(deleteLater()));
-	connect(&m_Thread, SIGNAL(finished()), this, SLOT(threadFinished()));
+	//connect(&m_Thread, SIGNAL(finished()), tbshd, SLOT(deleteLater()));
+	//connect(&m_Thread, SIGNAL(finished()), this, SLOT(threadFinished()));
+	qDebug() << QString("%1->%2->%3->%4")
+		.arg(__FILE__)
+		.arg(__LINE__)
+		.arg(__FUNCTION__)
+		.arg((int)QThread::currentThreadId());
 	m_Thread.start();
+	//QThread::sleep(5);
+	m_Thread.quit();
+	m_Thread.wait();
+	m_Thread.start();
+
+
 }
 
 
@@ -232,7 +244,9 @@ void tbsui::on_btnMenu_Close_clicked()
 {
 	if (tbshd)
 	{
-		tbshd->stop();
+		connect(&m_Thread, SIGNAL(finished()), tbshd, SLOT(deleteLater()));
+		connect(&m_Thread, SIGNAL(finished()), this, SLOT(threadFinished()));
+		//tbshd->stop();
 		m_Thread.quit();
 		m_Thread.wait();
 		tbshd = NULL;

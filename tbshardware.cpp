@@ -14,7 +14,7 @@ TBShardware::~TBShardware()
 }
 void TBShardware::start()
 {
-	while (1) {
+	//while (1) {
 		QMutexLocker locker(&m_Mutex);
 		switch (runmode) {
 		case TBS_READ_FUNC:
@@ -28,14 +28,15 @@ void TBShardware::start()
 			break;
 		}
 		runmode = 0;
-		if (false == m_bRun) {
-			break;
-		}
-		qDebug() << QString("%1->%2->%3")
+	//	if (false == m_bRun) {
+	//		break;
+	//	}
+		qDebug() << QString("%1->%2->%3->%4")
 			.arg(__FILE__)
 			.arg(__LINE__)
-			.arg(__FUNCTION__);
-	}
+			.arg(__FUNCTION__)
+			.arg((int)QThread::currentThreadId());
+	//}
 
 }
 
