@@ -309,7 +309,7 @@ public:
         che_t0 = new QCheckBox(gbox_Tuners);
         che_t0->setObjectName(QStringLiteral("che_t0"));
         che_t0->setEnabled(true);
-        che_t0->setChecked(false);
+        che_t0->setChecked(true);
 
         verticalLayout_2->addWidget(che_t0);
 
@@ -364,6 +364,7 @@ public:
         gridLayout_5->addWidget(lin_Pla, 1, 1, 1, 1);
 
         com_Modulation = new QComboBox(groupBox_2);
+        com_Modulation->addItem(QString());
         com_Modulation->addItem(QString());
         com_Modulation->addItem(QString());
         com_Modulation->addItem(QString());
@@ -479,7 +480,8 @@ public:
         retranslateUi(tbsui);
 
         stackedWidget->setCurrentIndex(0);
-        tw_Set->setCurrentIndex(0);
+        tw_Set->setCurrentIndex(1);
+        com_Modulation->setCurrentIndex(-1);
 
 
         QMetaObject::connectSlotsByName(tbsui);
@@ -529,11 +531,12 @@ public:
         label_13->setText(QApplication::translate("tbsui", "(dBm)", nullptr));
         label_5->setText(QApplication::translate("tbsui", "Modulation:", nullptr));
         label_12->setText(QApplication::translate("tbsui", "(MHZ)", nullptr));
-        com_Modulation->setItemText(0, QApplication::translate("tbsui", "16QAM", nullptr));
-        com_Modulation->setItemText(1, QApplication::translate("tbsui", "32QAM", nullptr));
-        com_Modulation->setItemText(2, QApplication::translate("tbsui", "64QAM", nullptr));
-        com_Modulation->setItemText(3, QApplication::translate("tbsui", "128QAM", nullptr));
-        com_Modulation->setItemText(4, QApplication::translate("tbsui", "256QAM", nullptr));
+        com_Modulation->setItemText(0, QApplication::translate("tbsui", ".", nullptr));
+        com_Modulation->setItemText(1, QApplication::translate("tbsui", "16QAM", nullptr));
+        com_Modulation->setItemText(2, QApplication::translate("tbsui", "32QAM", nullptr));
+        com_Modulation->setItemText(3, QApplication::translate("tbsui", "64QAM", nullptr));
+        com_Modulation->setItemText(4, QApplication::translate("tbsui", "128QAM", nullptr));
+        com_Modulation->setItemText(5, QApplication::translate("tbsui", "256QAM", nullptr));
 
         label_9->setText(QApplication::translate("tbsui", "Frequence:", nullptr));
         label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));

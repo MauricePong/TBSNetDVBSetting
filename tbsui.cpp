@@ -196,7 +196,7 @@ void tbsui::initForm()
 		che->setCheckable(true);
 		connect(che, SIGNAL(clicked()), this, SLOT(tunersCheckboxClick()));
 	}
-
+	ui->tw_Set->setCurrentIndex(0);
 	width_s = this->size().width();
 	height_s = this->size().height();
 	width = width_s;

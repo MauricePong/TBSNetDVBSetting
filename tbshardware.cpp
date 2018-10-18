@@ -198,12 +198,16 @@ int TBShardware::readIPParm(void)
 int TBShardware::readModulatorParm(void)
 {
 	int ret = 0;
+	int i = 0;
 	u8 tmp[32] = { 0x41,0x54,0x5f,0x00,0xa3,
 	0x00,0x00,0x00,0x00 };
 	u8 tmpright0to1byte[2] = { 0x1d,0x1a };
 	int tsportaddr[4] = { 0x4020,0x4024,0x4028,0x402c };
 	u8 tsportdata[2] = { 0,0 };
-	ret = readREG(REG64_BY_UDP_FUNC, tsportaddr[rwparm.devno], 2, tsportdata);
+	int playrateaddr[4] = { 0x001b,0x0020,0x0025,0x002a };
+	u8 playeratedata[4] = {0,0,0,0};
+	ret = readREG(REG64_BY_UDP_FUNC,
+		tsportaddr[rwparm.devno], 2, tsportdata);
 	if (-1 == ret) {
 		return ret;
 	}
@@ -237,6 +241,12 @@ int TBShardware::readModulatorParm(void)
 	if (-1 == ret) {
 		return ret;
 	}
+	memset(tmp,0,32);
+	ret = controlExternalMemory(READ, playrateaddr[rwparm.devno], tmp, 4);
+	for (i = 0; i < 4; i++) {
+		playeratedata[i] = tmp[4 - i];
+	}
+	rwparm.pla = QString("%1").arg(*(int*)(playeratedata[0]));
 	return 0;
 }
 
