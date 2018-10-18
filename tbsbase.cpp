@@ -129,6 +129,9 @@ int TBSbase::readREG64ByUDP(int subAddr, unsigned char num, unsigned char *rdbuf
 	int j = 0;
 	char sendbuff[64] = { 0 };
 	char recvbuff[64] = { 0 };
+	if (udpfd < 3) {
+		return -1;
+	}
 	len = sizeof(udpsockaddr);
 	// 27bit address
 	sendbuff[0] = 0xc0 + (u8)((subAddr & 0x07000000) >> 24);
@@ -164,6 +167,9 @@ int TBSbase::writeREG64ByUDP(int subAddr, unsigned char num, unsigned char *wtbu
 	int j = 0;
 	char sendbuff[64] = { 0 };
 	char recvbuff[64] = { 0 };
+	if (udpfd < 3) {
+		return -1;
+	}
 	len = sizeof(udpsockaddr);
 	// 27bit address
 	sendbuff[0] = 0x00 + (u8)((subAddr & 0x07000000) >> 24);
@@ -199,7 +205,7 @@ int TBSbase::readREG(int mode,
 	unsigned char *rdbuffer)
 {
 	switch (mode) {
-	case 1:
+	case REG64_BY_UDP_FUNC:
 		return readREG64ByUDP(subAddr, num, rdbuffer);
 		break;
 	default:
@@ -213,7 +219,7 @@ int TBSbase::writeREG(int mode,
 	unsigned char *wtbuffer)
 {
 	switch (mode) {
-	case 1:
+	case REG64_BY_UDP_FUNC:
 		return writeREG64ByUDP(subAddr, num, wtbuffer);
 		break;
 	default:
@@ -226,7 +232,7 @@ int TBSbase::readREG32FromExternalMemoryOnce(int m_addr,
 	unsigned char num)
 {
 	int i = 0;
-	int mode = 1;
+	int mode = REG64_BY_UDP_FUNC;
 	unsigned char  buff[8] = { 0 };
 	if (num == 0) {
 		qDebug() << QString("%1->%2->%3:error! (num == 0)")
@@ -278,7 +284,7 @@ int TBSbase::writeREG32ToExternalMemoryOnce(int m_addr,
 	unsigned char num)
 {
 	int i = 0;
-	int mode = 0;
+	int mode = REG64_BY_UDP_FUNC;
 	u8 buff[8] = { 0 };
 	if (num == 0) {
 		qDebug() << QString("%1->%2->%3:error! (num == 0)")
@@ -333,7 +339,7 @@ int TBSbase::readFromExternalMemoryOnce(int mode,
 	unsigned char num)
 {
 	switch (mode) {
-	case 1:
+	case REG32_TO_OR_FromExtMemOnce:
 		return readREG32FromExternalMemoryOnce(m_addr, rdbuff, num);
 		break;
 	default:
@@ -348,7 +354,7 @@ int TBSbase::writeToExternalMemoryOnce(int mode,
 	unsigned char num)
 {
 	switch (mode) {
-	case 1:
+	case REG32_TO_OR_FromExtMemOnce:
 		return writeREG32ToExternalMemoryOnce(m_addr, wtbuff, num);
 		break;
 	default:
@@ -358,24 +364,24 @@ int TBSbase::writeToExternalMemoryOnce(int mode,
 }
 
 int TBSbase::readFromExternalMemory(int ram_addr,
-	unsigned char * rdbff, 
+	unsigned char * rdbff,
 	int rd_size)
 {
 	int i = 0;
 	int k = 0;
 	int g = 0;
 	int ret = 0;
-	int mode = 1;
+	int mode = REG32_TO_OR_FromExtMemOnce;
 	const int x8byte = 8;
-	u8 buff[8] = {0};
+	u8 buff[8] = { 0 };
 	if (rd_size <= 8) {
-		return readFromExternalMemoryOnce(mode,ram_addr, rdbff, rd_size);
+		return readFromExternalMemoryOnce(mode, ram_addr, rdbff, rd_size);
 	}
-	else if(rd_size > 8){
+	else if (rd_size > 8) {
 		k = rd_size / x8byte;
 		g = rd_size % x8byte;
 		for (i = 0; i < k; i++) {
-			ret = readFromExternalMemoryOnce(mode, (ram_addr+i*8), rdbff, x8byte);
+			ret = readFromExternalMemoryOnce(mode, (ram_addr + i * 8), rdbff, x8byte);
 			if (-1 == ret) {
 				return ret;
 			}
@@ -396,7 +402,7 @@ int TBSbase::writeToExternalMemory(int ram_addr,
 	int k = 0;
 	int g = 0;
 	int ret = 0;
-	int mode = 1;
+	int mode = REG32_TO_OR_FromExtMemOnce;
 	const int x8byte = 8;
 	u8 buff[8] = { 0 };
 	if (wt_size <= 8) {
@@ -428,7 +434,7 @@ int TBSbase::controlExternalMemory(int mode,
 		return readFromExternalMemory(addr, buff, size);
 	}
 	else if (WRITE == mode) {
-		return writeToExternalMemory(addr,buff,size);
+		return writeToExternalMemory(addr, buff, size);
 	}
 	else {
 		qDebug() << QString("%1->%2->%3:read write mode error!")
@@ -442,7 +448,7 @@ int TBSbase::readREG32MonopolizeCPUStatus(int m_addr,
 	unsigned char num)
 {
 	int i = 0;
-	int mode = 1;
+	int mode = REG64_BY_UDP_FUNC;
 	unsigned char  buff[8] = { 0 };
 	if (num == 0) {
 		qDebug() << QString("%1->%2->%3:error! (num == 0)")
@@ -492,7 +498,7 @@ int TBSbase::readREG32MonopolizeCPUStatus(int m_addr,
 int TBSbase::writeREG32MonopolizeCPUStatus(int m_addr, unsigned char * wtbuff, unsigned char num)
 {
 	int i = 0;
-	int mode = 0;
+	int mode = REG64_BY_UDP_FUNC;
 	u8 buff[8] = { 0 };
 	if (num == 0) {
 		qDebug() << QString("%1->%2->%3:error! (num == 0)")
@@ -547,9 +553,9 @@ int TBSbase::readMonopolizeCPUStatus(int mode,
 	unsigned char num)
 {
 	switch (mode) {
-	case 1:
-		return readREG32MonopolizeCPUStatus(m_addr, 
-			rdbuff, 
+	case REG32MonopolizeCPU:
+		return readREG32MonopolizeCPUStatus(m_addr,
+			rdbuff,
 			num);
 		break;
 	default:
@@ -558,13 +564,13 @@ int TBSbase::readMonopolizeCPUStatus(int mode,
 	return 0;
 }
 
-int TBSbase::writeMonopolizeCPUStatus(int mode ,
+int TBSbase::writeMonopolizeCPUStatus(int mode,
 	int m_addr,
 	unsigned char * wtbuff,
 	unsigned char num)
 {
 	switch (mode) {
-	case 1:
+	case REG32MonopolizeCPU:
 		return writeREG32MonopolizeCPUStatus(m_addr,
 			wtbuff,
 			num);
@@ -572,7 +578,6 @@ int TBSbase::writeMonopolizeCPUStatus(int mode ,
 	default:
 		break;
 	}
-	return 0;
 	return 0;
 }
 

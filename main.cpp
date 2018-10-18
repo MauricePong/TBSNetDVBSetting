@@ -3,12 +3,20 @@
 #include <QTextCodec>
 #include <QFile>
 #include <QStyleFactory>  
+
+#if  1
+#define QTBS_MAIN_UI  tbsui
+#elif 0
+
+#else
+
+#endif
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 	/* 设置全局风格 */
 	QApplication::setStyle(QStyleFactory::create("windows"));
-	a.setWindowIcon(QIcon::fromTheme(QLatin1String("TBSSETMAC"), QIcon(":/image/tbs.ico")));
+	a.setWindowIcon(QIcon::fromTheme(QLatin1String("TBSSET"), QIcon(":/image/tbs.ico")));
 #if (QT_VERSION <= QT_VERSION_CHECK(5,0,0))
 #if _MSC_VER
     QTextCodec *codec = QTextCodec::codecForName("gbk");
@@ -35,11 +43,11 @@ int main(int argc, char *argv[])
     a.setFont(QFont("Microsoft Yahei", 9));
     AppInit::Instance()->start();
 
-  //  QFont font  = qApp->font();
-   //    font.setPointSize(10);
-   //    qApp->setFont(font);
+   // QFont font  = qApp->font();
+   // font.setPointSize(9);
+   // qApp->setFont(font);
 
-    tbsui w;
+	QTBS_MAIN_UI  w;
     w.show();
 
     return a.exec();

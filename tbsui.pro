@@ -16,15 +16,15 @@ UI_DIR      = temp/ui
 OBJECTS_DIR = temp/obj
 DESTDIR     = $$PWD/../bin
 
-SOURCES     += main.cpp tbsbase.cpp tbshardware.cpp 
+SOURCES     += main.cpp tbsbase.cpp tbshardware.cpp tbsmesgdlg.cpp
 SOURCES     += iconhelper.cpp
 SOURCES     += appinit.cpp
 SOURCES     += tbsui.cpp
 
-HEADERS     += iconhelper.h tbsbase.h  tbshardware.h
+HEADERS     += iconhelper.h tbsbase.h  tbshardware.h tbsmesgdlg.h
 HEADERS     += appinit.h
 HEADERS     += tbsui.h
-FORMS       += tbsui.ui
+FORMS       += tbsui.ui tbsmesgdlg.ui
 
 RESOURCES   += main.qrc
 RESOURCES   += qss.qrc

@@ -17,6 +17,7 @@ class tbsui : public QDialog
 public:
     explicit tbsui(QWidget *parent = 0);
     ~tbsui();
+	void initForm();
 	void init_sql(void);
 	void updateMac_sql(QString qstrMac);
 protected:
@@ -27,19 +28,34 @@ private:
     int height;
     int width_s;
     int height_s;
-	QMessageBox *qbox;
+	int iserror;
+	int devno;
+	TBSMesgDlg *msgbox;
 	QSqlDatabase database;
 	QSqlQuery *sql_query;
 	QThread m_Thread;
 	TBShardware *tbshd;
+	RD_WT_PARM tbsrwparm;
+	
+#ifdef Q_OS_WIN //windows
+	SOCKET uiudpfd;
+#else
+	int uiudpfd;
+#endif
 private slots:
-    void initForm();
 	void threadFinished();
+	void soltsDisplayMsgUI(TBS_Msg_Type * msg);
+	void tunersCheckboxClick();
 
-    void on_sli_H_valueChanged(int value);
+	void on_sli_H_valueChanged(int value);
     void on_btnMenu_Min_clicked();
     void on_btnMenu_Max_clicked();
     void on_btnMenu_Close_clicked();
+
+	//ui set
+	void on_too_Read_clicked();
+	void on_too_Apply_clicked();
+
 };
 
 #endif //

@@ -19,6 +19,7 @@
 #include <QMutex>
 #include <QThread>
 #include <QObject>
+#include "tbsmesgdlg.h"
 #ifdef Q_OS_WIN //windows
 #include <windows.h>
 #include <conio.h>
@@ -29,7 +30,7 @@
 #include <bdamedia.h>
 #include <bdaiface.h>
 #include <tuner.h>
-#include <atlbase.h>
+//#include <atlbase.h>
 #include <comdef.h>
 #include <winsock.h>
 #define  QMSLEEP(n)  Sleep(n)
@@ -66,6 +67,7 @@
 #define  QMSLEEP(n)  usleep(1000*n)
 
 #endif
+#define TBSSWAP(a,b)   do{a^=b ;b ^= a;a ^= b;}while(0)
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -75,11 +77,57 @@ typedef unsigned int u32;
 #ifndef READ
 #define READ             1
 #endif
+//run
+#define TBS_NULL_FUNC   0
+#define TBS_READ_FUNC   1
+#define TBS_WRITE_FUNC  2
+
+//read
+#define READ_NULL_FUNC				0
+#define READ_SWITCH_STATUS_FUNC		1
+#define READ_NET_PARM_FUNC			2
+#define READ_MODULATOR_PARM_FUNC    3
+
+//write
+#define WRITE_NULL_FUNC					0
+#define WRITE_NET_PARM_FUNC				2
+#define WRITE_MODULATOR_PARM_FUNC       3
+
+#define REG64_BY_UDP_FUNC          1
+
+#define REG32_TO_OR_FromExtMemOnce  1
+
+#define REG32MonopolizeCPU		1
 
 class RD_WT_PARM {
 public:
-	int rw;
+	u8 switchStatus;
+	int dhcp;
+	int port;
+	QString ip;
+	QString Netmask;
+	QString gateway;
+
+	int tsport;
+	int devno;
+	int qam;
+	int sym;
+	QString pla;
+	QString fre;
+	QString lev;
 };
+
+class TBS_Msg_Type {
+public:
+	int type;
+	int iserror;
+	int btnL;
+	int btnR;
+	QString btnRtext;
+	QString tilie;
+	QString displaytext;
+};
+
 
 class TBSbase
 {
@@ -151,11 +199,11 @@ public:
 	int writeREG32MonopolizeCPUStatus(int m_addr,
 		unsigned char * wtbuff,
 		unsigned char num);
-	int readMonopolizeCPUStatus(int mode,int m_addr, 
+	int readMonopolizeCPUStatus(int mode, int m_addr,
 		unsigned char * rdbuff,
 		unsigned char num);
-	int writeMonopolizeCPUStatus(int mode,int m_addr,
-		unsigned char * wtbuff, 
+	int writeMonopolizeCPUStatus(int mode, int m_addr,
+		unsigned char * wtbuff,
 		unsigned char num);
 
 	int checkHostStatus(int cs);

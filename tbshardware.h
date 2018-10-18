@@ -1,6 +1,4 @@
 #pragma once
-#define TBS_READ_FUNC   1
-#define TBS_WRITE_FUNC  2
 #include "tbsbase.h"
 class RD_WT_PARM;
 /*
@@ -19,6 +17,15 @@ public:
 	~TBShardware();
 	int readBuffer(int rmode);
 	int writeBuffer(int wmode);
+	//read
+	int readSwitchStatus(void);
+	int readIPParm(void);
+	int readModulatorParm(void);
+	//write
+	int writeIPParm(void);
+	int writeModulatorParm(void);
+
+
 	int getRunMode();
 	void setRunMode(int mode);
 	int getReadMode();
@@ -39,7 +46,8 @@ public:
 #endif
 	RD_WT_PARM getHardWareParm(void);
 	void setHardWareParm(RD_WT_PARM rw);
-	
+signals:
+	void sigDisplayMsgUI(TBS_Msg_Type *);
 public slots:
 	void start();
 	void stop();
@@ -49,5 +57,6 @@ private:
 	int runmode;
 	int readmode;
 	int writemode;
+	TBS_Msg_Type *tbsmsg;
 	RD_WT_PARM rwparm;
 };
