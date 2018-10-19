@@ -25,14 +25,49 @@ TBShardware::~TBShardware()
 void TBShardware::start()
 {
 	int ret = -1;
+#ifdef Q_OS_WIN //windows
+	SOCKET  sudpfd;
+#else 
+	int sudpfd;
+#endif
 	//while (1) {
 	QMutexLocker locker(&m_Mutex);
+	tbsmsg->type = 1;
+	tbsmsg->iserror = 0;
+	tbsmsg->isread = 2;
+	tbsmsg->btnL = 0;
+	tbsmsg->btnR = 0;
+	tbsmsg->btnRtext = QString("");
+	tbsmsg->tilie = QString("information");
+	tbsmsg->displaytext = QString("Device running now,please wait..");
+	emit sigDisplayMsgUI(tbsmsg);
+
 	switch (runmode) {
 	case TBS_READ_FUNC:
 		ret = readBuffer(readmode);
 		break;
 	case TBS_WRITE_FUNC:
 		ret = writeBuffer(writemode);
+		break;
+	case TBS_UDPMULTICAST_FUNC:
+		ret = udpMulticastClinet();
+		if (-1 == ret) {
+			break;
+		}
+		sudpfd = udpOpen(first_ip.ip, first_ip.port);
+		if (sudpfd < 3) {
+			ret = -1; 
+			break;
+		}
+		setudpfd(sudpfd);
+		ret = readBuffer(READ_NET_PARM_FUNC);
+		if (-1 == ret) {
+			break;
+		}
+		ret = readBuffer(READ_MODULATOR_PARM_FUNC);
+		if (-1 == ret) {
+			break;
+		}
 		break;
 	case TBS_NULL_FUNC:
 		ret = -1;
@@ -44,10 +79,13 @@ void TBShardware::start()
 	runmode = 0;
 	readmode = 0;
 	writemode = 0;
+	sudpfd = udpClose(sudpfd);
+	setudpfd(sudpfd);
 
-	if (0 == ret) {
+	if (0 == ret) { //read success
 		tbsmsg->type = 1;
 		tbsmsg->iserror = 0;
+		tbsmsg->isread = 1;
 		tbsmsg->btnL = 0;
 		tbsmsg->btnR = 1;
 		tbsmsg->btnRtext = QString("OK");
@@ -55,19 +93,22 @@ void TBShardware::start()
 		tbsmsg->displaytext = QString("Success");
 		emit sigDisplayMsgUI(tbsmsg);
 	}
-	else if (-1 == ret) {
+	else if (-1 == ret) {//rw failure
 		tbsmsg->type = 1;
 		tbsmsg->iserror = 1;
+		tbsmsg->isread = 2;
 		tbsmsg->btnL = 0;
 		tbsmsg->btnR = 1;
 		tbsmsg->btnRtext = QString("OK");
 		tbsmsg->tilie = QString("error");
 		tbsmsg->displaytext = QString("Failure");
+		QMSLEEP(5);
 		emit sigDisplayMsgUI(tbsmsg);
 	}
 	else if (1 == ret) {
 		tbsmsg->type = 1;
 		tbsmsg->iserror = 0;
+		tbsmsg->isread = 2;
 		tbsmsg->btnL = 0;
 		tbsmsg->btnR = 0;
 		tbsmsg->btnRtext = QString("");
@@ -75,28 +116,33 @@ void TBShardware::start()
 		tbsmsg->displaytext = QString("Configuring now,please wait..");
 		emit sigDisplayMsgUI(tbsmsg);
 	}
-	else if (2 == ret) {
+	/*else if (2 == ret) {
 		tbsmsg->type = 2;
 		tbsmsg->iserror = 0;
+		tbsmsg->isread = 1;
+		tbsmsg->btnL = 0;
+		tbsmsg->btnR = 1;
+		tbsmsg->btnRtext = QString("OK");
+		tbsmsg->tilie = QString("information");
+		tbsmsg->displaytext = QString("Successful network communication");
 		emit sigDisplayMsgUI(tbsmsg);
 	}
 	else if (-2 == ret) {
 		tbsmsg->type = 2;
 		tbsmsg->iserror = 1;
-		emit sigDisplayMsgUI(tbsmsg);
-	}
-	else if (3 == ret) {
-		tbsmsg->type = 1;
-		tbsmsg->iserror = 0;
+		tbsmsg->isread = 1;
 		tbsmsg->btnL = 0;
-		tbsmsg->btnR = 0;
-		tbsmsg->btnRtext = QString("");
-		tbsmsg->tilie = QString("information");
-		tbsmsg->displaytext = QString("Configuring now,please wait..");
+		tbsmsg->btnR = 1;
+		tbsmsg->btnRtext = QString("OK");
+		tbsmsg->tilie = QString("error");
+		tbsmsg->displaytext = QString("Network communication failed");
 		emit sigDisplayMsgUI(tbsmsg);
+	}*/
+	else if (3 == ret) {
 		QMSLEEP(10000);
 		tbsmsg->type = 1;
 		tbsmsg->iserror = 0;
+		tbsmsg->isread = 0;
 		tbsmsg->btnL = 0;
 		tbsmsg->btnR = 1;
 		tbsmsg->btnRtext = QString("OK");
@@ -124,9 +170,6 @@ void TBShardware::stop()
 int TBShardware::readBuffer(int rmode)
 {
 	switch (rmode) {
-	case READ_SWITCH_STATUS_FUNC:
-		return readSwitchStatus();
-		break;
 	case READ_NET_PARM_FUNC:
 		return readIPParm();
 		break;
@@ -165,9 +208,9 @@ int TBShardware::writeBuffer(int wmode)
 int TBShardware::readSwitchStatus(void)
 {
 	u8 tmp[8] = { 0 };
-	int ret = readREG(REG64_BY_UDP_FUNC, 0x4018, 8, tmp);
+	int ret = readREG(REG64_BY_UDP_FUNC, 0x4014, 8, tmp);
 	//for (int i = 0; i < 8; i++) {
-	//	qDebug("tmp[%d]:%02x", i, tmp[i]);
+	//	qDebug("tmp[%d]:%02x  ret= %d", i, tmp[i],ret);
 	//}
 	rwparm.switchStatus = (tmp[0] & 0x0f);
 	if (-1 == ret) {
@@ -183,6 +226,10 @@ int TBShardware::readIPParm(void)
 {
 	u8 tmp[27] = { 0 };
 	int ret = controlExternalMemory(READ, 0x0000, tmp, 27);
+	for (int i = 0; i < 27; i++) {
+		qDebug() << tmp[i];
+	}
+
 	rwparm.ip = QString("%1.%2.%3.%4").arg(tmp[0])
 		.arg(tmp[1]).arg(tmp[2]).arg(tmp[3]);
 	TBSSWAP(tmp[4], tmp[5]);
@@ -205,7 +252,7 @@ int TBShardware::readModulatorParm(void)
 	int tsportaddr[4] = { 0x4020,0x4024,0x4028,0x402c };
 	u8 tsportdata[2] = { 0,0 };
 	int playrateaddr[4] = { 0x001b,0x0020,0x0025,0x002a };
-	u8 playeratedata[4] = {0,0,0,0};
+	u8 playeratedata[4] = { 0,0,0,0 };
 	ret = readREG(REG64_BY_UDP_FUNC,
 		tsportaddr[rwparm.devno], 2, tsportdata);
 	if (-1 == ret) {
@@ -241,7 +288,7 @@ int TBShardware::readModulatorParm(void)
 	if (-1 == ret) {
 		return ret;
 	}
-	memset(tmp,0,32);
+	memset(tmp, 0, 32);
 	ret = controlExternalMemory(READ, playrateaddr[rwparm.devno], tmp, 4);
 	for (i = 0; i < 4; i++) {
 		playeratedata[i] = tmp[4 - i];
@@ -430,6 +477,171 @@ int TBShardware::writeModulatorParm(void)
 	}
 	return ret;
 }
+
+int TBShardware::udpMulticastClinet(void)
+{
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	int ret = 0;
+	int timevalue = 1000;
+	getHostIpAddress();
+#ifdef Q_OS_WIN //windows
+	SOCKET  Mfd;
+	SOCKET  mudpfd;
+	WSADATA wsaData;
+	WSAStartup(MAKEWORD(1, 1), &wsaData);
+	int timeout = timevalue;
+
+#else           //linux
+	int Mfd;
+	int mudpfd;
+	struct timeval timeout = { 1,0 };
+#endif
+	struct sockaddr_in addr;
+	char recvtmp[128] = { '\0' };
+	char sendbuf[64] = { '\0' };
+	char recvbuf[64] = { '\0' };
+	u8 tmp[2] = { 0 };
+	if ((Mfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+	{
+		qDebug() << "fail to socket";
+		return -1;
+	}
+	memset(&addr, 0, sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = inet_addr("239.255.0.9");
+	addr.sin_port = htons(21571);//0x5443
+	len = sizeof(addr);
+	setsockopt(Mfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
+	setsockopt(Mfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout));
+	sendbuf[0] = 0xc0;//read
+	sendbuf[1] = 0xff;
+	sendbuf[2] = 0xff;
+	sendbuf[3] = 0xff;
+	sendbuf[4] = 0x54;
+	sendbuf[5] = 0x42;
+	sendbuf[6] = 0x53;
+	sendbuf[7] = 0x50;
+	sendbuf[8] = 0x52;
+	sendbuf[9] = 0x4f;
+	sendbuf[10] = 0x44;
+	sendbuf[11] = 0x54;
+	//c0ffffff54425350524f4454
+	if (sendto(Mfd, sendbuf, strlen(sendbuf), 0, (struct sockaddr *) &addr, len) < 0)
+	{
+		qDebug() << " fail to sendto";
+		return -1;
+	}
+
+	while (i < 16) {
+		int n = recvfrom(Mfd, recvbuf, 64, 0, (struct sockaddr *)&addr, &len);
+		if (n < 0) {
+			qDebug() << QString("%1->%2->%3:scan ip dev over")
+				.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+			if (i > 0) {
+				
+			}
+			break;
+		}
+		else {
+
+			/**
+			sprintf(recvtmp, "TBS%02x%02x:%d.%d.%d.%d:%d"
+				"/%02x:%02x:%02x:%02x:%02x:%02x",
+				(u8)0x80, (u8)0x30, (u8)recvbuf[6], \
+				(u8)recvbuf[7], (u8)recvbuf[8],
+				(u8)recvbuf[9], *(u16*)&tmp[0],
+				(u8)recvbuf[12], (u8)recvbuf[13],
+				(u8)recvbuf[14], (u8)recvbuf[15],
+				(u8)recvbuf[16], (u8)recvbuf[17]);
+
+			if ((((u8)(0x80) != (u8)recvbuf[4]) &&
+				((u8)(0x63) != (u8)recvbuf[4])) ||
+				(((u8)(0x30) != (u8)recvbuf[5]) &&
+				((u8)(0x16) != (u8)recvbuf[5])) ||
+					(((u8)(0x00) != (u8)(recvbuf[12])) ||
+				((u8)(0x22) != (u8)(recvbuf[13])) ||
+						((u8)(0xab) != (u8)(recvbuf[14])))) {
+				continue;
+			**/
+		}
+		if (((u8)(0x80) != (u8)recvbuf[4]) &&
+			(u8)(0x30) != (u8)recvbuf[5]) {
+			continue;
+		}
+
+		for (k = 0; k < gatewaynum; k++) {
+			if (true == hostip[k].contains(QString("%1.%2.%3")
+				.arg((u8)recvbuf[6]).arg((u8)recvbuf[7])
+				.arg((u8)recvbuf[8]), Qt::CaseSensitive)) {
+				break;
+			}
+		}
+		if (k == gatewaynum) {
+			continue;
+		}
+		tmp[0] = (u8)recvbuf[11];
+		tmp[1] = (u8)recvbuf[10];
+		tbsmsg->devip = QString("%1.%2.%3.%4").arg((u8)recvbuf[6])
+			.arg((u8)recvbuf[6])
+			.arg((u8)recvbuf[7])
+			.arg((u8)recvbuf[8]);
+
+		tbsmsg->devport = *(u16*)(tmp);
+		tbsmsg->type = 3;
+		mudpfd = udpOpen(tbsmsg->devip, tbsmsg->devport);
+		if (mudpfd < 3) {
+			continue;
+		}
+		setudpfd(mudpfd);
+		ret = readREG(REG64_BY_UDP_FUNC, 0x4014, 1, &tbsmsg->switchStatus);
+		mudpfd = udpClose(mudpfd);
+		setudpfd(mudpfd);
+		if (ret < 0) {
+			continue;
+		}
+		first_ip.ip = tbsmsg->devip;
+		first_ip.port = tbsmsg->devport;
+		first_ip.switchStatus = tbsmsg->switchStatus;
+		emit sigDisplayMsgUI(tbsmsg);
+		i++;
+	}
+	memset(recvbuf, 0, sizeof(recvbuf));
+#ifdef Q_OS_WIN //windows
+	closesocket(Mfd);
+	WSACleanup();
+#else           //linux
+	::close(Mfd);
+#endif
+	return 0;
+}
+
+int TBShardware::getHostIpAddress(void)
+{
+	QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
+	// 获取第一个本主机的IPv4地址
+	int nListSize = ipAddressesList.size();
+	gatewaynum = 0;
+	for (int i = 0; i < nListSize; ++i)
+	{
+		if (ipAddressesList.at(i) != QHostAddress::LocalHost &&
+			ipAddressesList.at(i).toIPv4Address() &&
+			(ipAddressesList.at(i) != QHostAddress::Null)) {
+			hostip[i] = ipAddressesList.at(i).toString();
+			qDebug() << i << "local PC ip:" << hostip[i];
+			gatewaynum++;
+		}
+	}
+	// 如果没有找到，则以本地IP地址为IP
+	if (0 == gatewaynum) {
+		hostip[0] = QHostAddress(QHostAddress::LocalHost).toString();
+		qDebug() << "local PC ip:" << hostip[0];
+		gatewaynum = 1;
+	}
+	return 0;
+}
+
 
 int TBShardware::getRunMode()
 {

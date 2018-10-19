@@ -19,6 +19,9 @@
 #include <QMutex>
 #include <QThread>
 #include <QObject>
+#include <QHostAddress>
+#include <QNetworkInterface>
+
 #include "tbsmesgdlg.h"
 #ifdef Q_OS_WIN //windows
 #include <windows.h>
@@ -81,17 +84,16 @@ typedef unsigned int u32;
 #define TBS_NULL_FUNC   0
 #define TBS_READ_FUNC   1
 #define TBS_WRITE_FUNC  2
-
+#define TBS_UDPMULTICAST_FUNC 3
 //read
 #define READ_NULL_FUNC				0
-#define READ_SWITCH_STATUS_FUNC		1
-#define READ_NET_PARM_FUNC			2
-#define READ_MODULATOR_PARM_FUNC    3
+#define READ_NET_PARM_FUNC			1
+#define READ_MODULATOR_PARM_FUNC    2
 
 //write
 #define WRITE_NULL_FUNC					0
-#define WRITE_NET_PARM_FUNC				2
-#define WRITE_MODULATOR_PARM_FUNC       3
+#define WRITE_NET_PARM_FUNC				1
+#define WRITE_MODULATOR_PARM_FUNC       2
 
 #define REG64_BY_UDP_FUNC          1
 
@@ -121,13 +123,24 @@ class TBS_Msg_Type {
 public:
 	int type;
 	int iserror;
+	int isread;
 	int btnL;
 	int btnR;
+	u8 switchStatus;
 	QString btnRtext;
 	QString tilie;
 	QString displaytext;
+	QString devip;
+	int devport;
+
 };
 
+class NET_NODE {
+public:
+	QString ip;
+	int port;
+	int switchStatus;
+};
 
 class TBSbase
 {
@@ -140,6 +153,7 @@ public:
 	SOCKET  udpOpen_no(QString ipaddr, int ipport);
 	SOCKET  getudpfd(void);
 	void    setudpfd(SOCKET ufd);
+
 #else
 	int		udpOpen(QString ipaddr, int ipport);
 	int		udpClose(int ufd);
@@ -208,8 +222,10 @@ public:
 
 	int checkHostStatus(int cs);
 	int waitForHostWorkDone();
+
 private:
 	struct sockaddr_in udpsockaddr;
+
 #ifdef Q_OS_WIN //windows
 	//net
 	SOCKET		udpfd;

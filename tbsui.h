@@ -30,12 +30,14 @@ private:
     int height_s;
 	int iserror;
 	int devno;
+	int netnum;
 	TBSMesgDlg *msgbox;
 	QSqlDatabase database;
 	QSqlQuery *sql_query;
 	QThread m_Thread;
 	TBShardware *tbshd;
 	RD_WT_PARM tbsrwparm;
+	NET_NODE nettag[16];
 	
 #ifdef Q_OS_WIN //windows
 	SOCKET uiudpfd;
@@ -53,8 +55,11 @@ private slots:
     void on_btnMenu_Close_clicked();
 
 	//ui set
+	void on_too_Refresh_clicked();
 	void on_too_Read_clicked();
 	void on_too_Apply_clicked();
+
+	
 
 };
 

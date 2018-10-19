@@ -204,6 +204,7 @@ void tbsui::initForm()
 	uiudpfd = 0;
 	iserror = -1;
 	devno = 0;
+	netnum = 0;
 	tbsrwparm.switchStatus = 0x0f;
 	msgbox = NULL;
 	msgbox = new TBSMesgDlg();
@@ -268,221 +269,94 @@ void tbsui::on_btnMenu_Close_clicked()
 	close();
 }
 
+void tbsui::on_too_Refresh_clicked()
+{
+}
+
 void tbsui::on_too_Read_clicked()
 {
 #if 1
-	int i = 0;
-	const int waittime = 1000;
 	int  index = ui->tw_Set->currentIndex();
-	QString uiipAndport = ui->lin_IPPort->text();
-	QString qstip = uiipAndport.section(':', 0, 0).trimmed();
-	int intport = uiipAndport.section(':', 1, 1).trimmed().toInt();
-	uiudpfd = tbshd->udpOpen(qstip, intport);
+	int  ipindex = ui->com_IP->currentIndex();
+	if (-1 == ipindex) {
+		return;
+	}
+
+	uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
 	if (uiudpfd < 3) {
-		QToolTip::showText(ui->lin_IPPort->mapToGlobal(QPoint(100, 0)),
-			"Network communication failed, please re-enter");
-		ui->lin_IPPort->setStyleSheet("QLineEdit{border:1px solid red }");
-		uiudpfd = 0;
-		tbshd->setudpfd(uiudpfd);
 		return;
 	}
 	else {
 		tbshd->setudpfd(uiudpfd);
-		tbshd->setRunMode(TBS_READ_FUNC);
-		tbshd->setReadMode(READ_SWITCH_STATUS_FUNC);
-		m_Thread.quit();
-		m_Thread.wait();
-		m_Thread.start();
-		for (i = 0; i < waittime; i++) {
-			if (-1 != iserror) {
-				break;
-			}
-			else {
-				QMSLEEP(1);
-			}
-		}
-		if ((0 != iserror) || (waittime == i)) {
-			QToolTip::showText(ui->lin_IPPort->mapToGlobal(QPoint(100, 0)),
-				"Network communication failed, please re-enter");
-			ui->lin_IPPort->setStyleSheet("QLineEdit{border:1px solid red }");
-			iserror = -1;
-			uiudpfd = tbshd->udpClose(uiudpfd);
-			tbshd->setudpfd(uiudpfd);
-			return;
-		}
-		else {
-			iserror = -1;
-			ui->lin_IPPort->setStyleSheet(
-				"QLineEdit{border:1px solid gray border-radius:1px}");
-			tbshd->setudpfd(uiudpfd);
-			tbsrwparm = tbshd->getHardWareParm();
-			qDebug() << "tbsrwparm.switchStatus:" << tbsrwparm.switchStatus;
-			ui->che_t0->setDisabled((tbsrwparm.switchStatus >> 0) & 0x01);
-			ui->che_t1->setDisabled((tbsrwparm.switchStatus >> 1) & 0x01);
-			ui->che_t2->setDisabled((tbsrwparm.switchStatus >> 2) & 0x01);
-			ui->che_t3->setDisabled((tbsrwparm.switchStatus >> 3) & 0x01);
-		}
-	}
-	if (0 == index) {
-		tbshd->setRunMode(TBS_READ_FUNC);
-		tbshd->setReadMode(READ_NET_PARM_FUNC);
-		m_Thread.quit();
-		m_Thread.wait();
-		m_Thread.start();
-		for (i = 0; i < waittime; i++) {
-			if (-1 != iserror) {
-				break;
-			}
-			else {
-				QMSLEEP(1);
-			}
-		}
-		if (0 == iserror) {
-			tbsrwparm = tbshd->getHardWareParm();
-			ui->che_dhcp->setChecked(tbsrwparm.dhcp);
-			ui->lin_LIP->setText(tbsrwparm.ip);
-			ui->lin_Lport->setText(QString("%1").arg(tbsrwparm.port));
-			ui->Lin_Netmask->setText(tbsrwparm.Netmask);
-			ui->lin_Gateway->setText(tbsrwparm.gateway);
-		}
-	}
-	else if(1 == index) {
-		if (0 == ((tbsrwparm.switchStatus >> devno) & 0x01)) {
+		if (0 == index) {
 			tbshd->setRunMode(TBS_READ_FUNC);
-			tbshd->setReadMode(READ_MODULATOR_PARM_FUNC);
-			tbsrwparm.devno = devno;
-
+			tbshd->setReadMode(READ_NET_PARM_FUNC);
 			m_Thread.quit();
 			m_Thread.wait();
 			m_Thread.start();
-			for (i = 0; i < waittime; i++) {
-				if (-1 != iserror) {
-					break;
-				}
-				else {
-					QMSLEEP(1);
-				}
-			}
-			if (0 == iserror) {
-				tbsrwparm = tbshd->getHardWareParm();
-				ui->lin_Pla->setText(tbsrwparm.pla);
-				ui->lin_TSPort->setText(QString("%1").arg(tbsrwparm.tsport));
+		}
+		else if (1 == index) {
+			if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
+				tbshd->setRunMode(TBS_READ_FUNC);
+				tbshd->setReadMode(READ_MODULATOR_PARM_FUNC);
+				tbsrwparm.devno = devno;
+				m_Thread.quit();
+				m_Thread.wait();
+				m_Thread.start();
 			}
 		}
 	}
-	iserror = -1;
-	uiudpfd = tbshd->udpClose(uiudpfd);
-	tbshd->setudpfd(uiudpfd);
 #endif
 }
 
 void tbsui::on_too_Apply_clicked()
 {
 #if 1
-	int i = 0;
-	const int waittime = 1000;
 	int  index = ui->tw_Set->currentIndex();
-	qDebug() << index;
-	QString uiipAndport = ui->lin_IPPort->text();
-	QString qstip = uiipAndport.section(':', 0, 0).trimmed();
-	int intport = uiipAndport.section(':', 1, 1).trimmed().toInt();
-	uiudpfd = tbshd->udpOpen(qstip, intport);
+	int  ipindex = ui->com_IP->currentIndex();
+	if (-1 == ipindex) {
+		return;
+	}
+
+	uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
 	if (uiudpfd < 3) {
-		QToolTip::showText(ui->lin_IPPort->mapToGlobal(QPoint(100, 0)),
-			"Network communication failed, please re-enter");
-		ui->lin_IPPort->setStyleSheet("QLineEdit{border:1px solid red }");
-		uiudpfd = 0;
-		tbshd->setudpfd(uiudpfd);
 		return;
 	}
 	else {
 		tbshd->setudpfd(uiudpfd);
-		tbshd->setRunMode(TBS_READ_FUNC);
-		tbshd->setReadMode(READ_SWITCH_STATUS_FUNC);
-		m_Thread.quit();
-		m_Thread.wait();
-		m_Thread.start();
-		for (i = 0; i < waittime; i++) {
-			if (-1 != iserror) {
-				break;
-			}
-			else {
-				QMSLEEP(1);
-			}
-		}
-		if ((0 != iserror) || (waittime == i)) {
-			QToolTip::showText(ui->lin_IPPort->mapToGlobal(QPoint(100, 0)),
-				"Network communication failed, please re-enter");
-			ui->lin_IPPort->setStyleSheet("QLineEdit{border:1px solid red }");
-			iserror = -1;
-			uiudpfd = tbshd->udpClose(uiudpfd);
-			tbshd->setudpfd(uiudpfd);
-			return;
-		}
-		else {
-			iserror = -1;
-			ui->lin_IPPort->setStyleSheet(
-				"QLineEdit{border:1px solid gray border-radius:1px}");
-			tbshd->setudpfd(uiudpfd);
-			tbsrwparm = tbshd->getHardWareParm();
-			ui->che_t0->setDisabled((tbsrwparm.switchStatus >> 0) & 0x01);
-			ui->che_t1->setDisabled((tbsrwparm.switchStatus >> 1) & 0x01);
-			ui->che_t2->setDisabled((tbsrwparm.switchStatus >> 2) & 0x01);
-			ui->che_t3->setDisabled((tbsrwparm.switchStatus >> 3) & 0x01);
-		}
-	}
-
-	if (0 == index) {
-		tbshd->setRunMode(TBS_WRITE_FUNC);
-		tbshd->setReadMode(WRITE_NET_PARM_FUNC);
-		tbsrwparm.dhcp = ui->che_dhcp->isChecked();
-		tbsrwparm.ip = ui->lin_LIP->text();
-		tbsrwparm.port = ui->lin_Lport->text().toInt();
-		tbsrwparm.Netmask = ui->Lin_Netmask->text();
-		tbsrwparm.gateway = ui->lin_Gateway->text();
-
-		tbshd->setHardWareParm(tbsrwparm);
-		m_Thread.quit();
-		m_Thread.wait();
-		m_Thread.start();
-		for (i = 0; i < waittime; i++) {
-			if (-1 != iserror) {
-				break;
-			}
-			else {
-				QMSLEEP(1);
-			}
-		}
-	}
-	else if (1 == index) {
-		if (0 == ((tbsrwparm.switchStatus >> devno) & 0x01)) {
+		if (0 == index) {
 			tbshd->setRunMode(TBS_WRITE_FUNC);
-			tbshd->setReadMode(WRITE_MODULATOR_PARM_FUNC);
-			tbsrwparm.devno = devno;
-			tbsrwparm.qam = ui->com_Modulation->currentIndex();
-			tbsrwparm.sym = ui->lin_Sym->text().toInt();
-			//tbsrwparm.pla = ui->lin_Pla->text();
-			tbsrwparm.fre = ui->lin_Fre->text();
-			tbsrwparm.lev = ui->lin_Lev->text();
-			tbsrwparm.tsport = ui->lin_TSPort->text().toInt();
+			tbshd->setReadMode(WRITE_NET_PARM_FUNC);
+			tbsrwparm.dhcp = ui->che_dhcp->isChecked();
+			tbsrwparm.ip = ui->lin_LIP->text();
+			tbsrwparm.port = ui->lin_Lport->text().toInt();
+			tbsrwparm.Netmask = ui->Lin_Netmask->text();
+			tbsrwparm.gateway = ui->lin_Gateway->text();
 
 			tbshd->setHardWareParm(tbsrwparm);
 			m_Thread.quit();
 			m_Thread.wait();
 			m_Thread.start();
-			for (i = 0; i < waittime; i++) {
-				if (-1 != iserror) {
-					break;
-				}
-				else {
-					QMSLEEP(1);
-				}
+		}
+		else if (1 == index) {
+			if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
+				tbshd->setRunMode(TBS_WRITE_FUNC);
+				tbshd->setReadMode(WRITE_MODULATOR_PARM_FUNC);
+				tbsrwparm.devno = devno;
+				tbsrwparm.qam = ui->com_Modulation->currentIndex();
+				tbsrwparm.sym = ui->lin_Sym->text().toInt();
+				//tbsrwparm.pla = ui->lin_Pla->text();
+				tbsrwparm.fre = ui->lin_Fre->text();
+				tbsrwparm.lev = ui->lin_Lev->text();
+				tbsrwparm.tsport = ui->lin_TSPort->text().toInt();
+
+				tbshd->setHardWareParm(tbsrwparm);
+				m_Thread.quit();
+				m_Thread.wait();
+				m_Thread.start();
 			}
 		}
 	}
-	iserror = -1;
-	uiudpfd = tbshd->udpClose(uiudpfd);
-	tbshd->setudpfd(uiudpfd);
 #endif
 }
 
@@ -499,10 +373,28 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 	if (NULL == msgbox) {
 		return;
 	}
+
 	if (0 == msg->type) {
 		return;
 	}
-	else if (1 == msg->type) {
+	uiudpfd = tbshd->udpClose(uiudpfd);
+	tbshd->setudpfd(uiudpfd);
+	if (1 == msg->type) {
+		if ((1 == msg->isread) && (0 == msg->iserror)) {
+			int index = ui->tw_Set->currentIndex();
+			tbsrwparm = tbshd->getHardWareParm();
+			if (0 == index) {
+				ui->che_dhcp->setChecked(tbsrwparm.dhcp);
+				ui->lin_LIP->setText(tbsrwparm.ip);
+				ui->lin_Lport->setText(QString("%1").arg(tbsrwparm.port));
+				ui->Lin_Netmask->setText(tbsrwparm.Netmask);
+				ui->lin_Gateway->setText(tbsrwparm.gateway);
+			}
+			else if (1 == index) {
+				ui->lin_Pla->setText(tbsrwparm.pla);
+				ui->lin_TSPort->setText(QString("%1").arg(tbsrwparm.tsport));
+			}
+		}
 		msgbox->setWinTitle(msg->tilie);
 		msgbox->displayText(msg->displaytext);
 		msgbox->hideBtn(msg->btnL, msg->btnR, msg->btnRtext);
@@ -515,11 +407,23 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 			msgbox->exec();
 		}
 	}
+
 	else if (2 == msg->type) {
-		msgbox->setModal(false);
-		msgbox->hide();
+		qDebug() << QString("%1->%2->%3:msg->switchStatus=%4")
+			.arg(__FILE__)
+			.arg(__LINE__)
+			.arg(__FUNCTION__)
+			.arg(msg->switchStatus);
+		ui->che_t0->setDisabled((msg->switchStatus >> 0) & 0x01);
+		ui->che_t1->setDisabled((msg->switchStatus >> 1) & 0x01);
+		ui->che_t2->setDisabled((msg->switchStatus >> 2) & 0x01);
+		ui->che_t3->setDisabled((msg->switchStatus >> 3) & 0x01);
+		nettag[netnum].ip = msg->devip;
+		nettag[netnum].port = msg->devport;
+		nettag[netnum].switchStatus = msg->switchStatus;
+		ui->com_IP->addItem(nettag[netnum].ip, netnum);
+		netnum++;
 	}
-	iserror = msg->iserror;
 }
 
 void tbsui::tunersCheckboxClick()

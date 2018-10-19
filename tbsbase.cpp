@@ -373,20 +373,19 @@ int TBSbase::readFromExternalMemory(int ram_addr,
 	int ret = 0;
 	int mode = REG32_TO_OR_FromExtMemOnce;
 	const int x8byte = 8;
-	u8 buff[8] = { 0 };
 	if (rd_size <= 8) {
-		return readFromExternalMemoryOnce(mode, ram_addr, rdbff, rd_size);
+		return readFromExternalMemoryOnce(mode, ram_addr, &rdbff[0], rd_size);
 	}
 	else if (rd_size > 8) {
 		k = rd_size / x8byte;
 		g = rd_size % x8byte;
 		for (i = 0; i < k; i++) {
-			ret = readFromExternalMemoryOnce(mode, (ram_addr + i * 8), rdbff, x8byte);
+			ret = readFromExternalMemoryOnce(mode, (ram_addr + i * 8), &rdbff[i*8], x8byte);
 			if (-1 == ret) {
 				return ret;
 			}
 		}
-		return readFromExternalMemoryOnce(mode, (ram_addr + i * 8), rdbff, g);
+		return readFromExternalMemoryOnce(mode, (ram_addr + i * 8), &rdbff[i*8], g);
 	}
 	else {
 		return 0;
@@ -404,7 +403,6 @@ int TBSbase::writeToExternalMemory(int ram_addr,
 	int ret = 0;
 	int mode = REG32_TO_OR_FromExtMemOnce;
 	const int x8byte = 8;
-	u8 buff[8] = { 0 };
 	if (wt_size <= 8) {
 		return writeToExternalMemoryOnce(mode, ram_addr, wtbff, wt_size);
 	}
@@ -412,12 +410,12 @@ int TBSbase::writeToExternalMemory(int ram_addr,
 		k = wt_size / x8byte;
 		g = wt_size % x8byte;
 		for (i = 0; i < k; i++) {
-			ret = writeToExternalMemoryOnce(mode, (ram_addr + i * 8), wtbff, x8byte);
+			ret = writeToExternalMemoryOnce(mode, (ram_addr + i * 8), &wtbff[i*8], x8byte);
 			if (-1 == ret) {
 				return ret;
 			}
 		}
-		return writeToExternalMemoryOnce(mode, (ram_addr + i * 8), wtbff, g);
+		return writeToExternalMemoryOnce(mode, (ram_addr + i * 8), &wtbff[i*8], g);
 	}
 	else {
 		return 0;
@@ -585,11 +583,12 @@ int TBSbase::checkHostStatus(int cs)
 {
 	int i = 0;
 	int mode = 1;
-	int time = 20;
+	int time = 5000;
 	u8 tmp[4] = { 0 };
 
 	for (i = 0; i < time; i++) {
 		readREG(mode, 0x4000 + 0 * 4, 4, tmp);
+		qDebug("i = %d tmp[0] = %d  cs = %d",i,tmp[0],cs);
 		if ((tmp[0] & 0x01) == (u8)(cs)) {
 			break;
 		}
@@ -607,12 +606,12 @@ int TBSbase::waitForHostWorkDone()
 {
 	int i = 0;
 	int mode = 1;
-	int time = 20;
+	int time = 5000;
 	u8 tmp[4] = { 0 };
 	for (i = 0; i < time; i++)
 	{
 		readREG(mode, 0x4000 + 0 * 4, 4, tmp);
-
+		qDebug("i = %d tmp[0] = %d  0", i, tmp[0]);
 		if (0 != (tmp[0] & 0x01)) {
 			break;
 		}
@@ -625,3 +624,6 @@ int TBSbase::waitForHostWorkDone()
 	}
 	return 0;
 }
+
+
+

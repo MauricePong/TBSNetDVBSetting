@@ -25,6 +25,8 @@ public:
 	int writeIPParm(void);
 	int writeModulatorParm(void);
 
+	int udpMulticastClinet(void);
+	int getHostIpAddress(void);
 
 	int getRunMode();
 	void setRunMode(int mode);
@@ -59,4 +61,14 @@ private:
 	int writemode;
 	TBS_Msg_Type *tbsmsg;
 	RD_WT_PARM rwparm;
+	int gatewaynum;
+	QString hostip[16];
+	NET_NODE first_ip;
+#ifdef Q_OS_WIN //windows
+	//net
+	WSADATA		wsaData;
+	int			len;
+#else
+	socklen_t	len;
+#endif
 };
