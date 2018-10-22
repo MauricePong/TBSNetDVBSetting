@@ -583,7 +583,7 @@ int TBSbase::checkHostStatus(int cs)
 {
 	int i = 0;
 	int mode = REG64_BY_UDP_FUNC;
-	int time = 5000;
+	int time = 40;
 	u8 tmp[4] = { 0 };
 
 	for (i = 0; i < time; i++) {
@@ -593,7 +593,7 @@ int TBSbase::checkHostStatus(int cs)
 			break;
 		}
 		else {
-			QMSLEEP(1);
+			QMSLEEP(50);
 		}
 	}
 	if (time == i) {
@@ -606,7 +606,7 @@ int TBSbase::waitForHostWorkDone()
 {
 	int i = 0;
 	int mode = REG64_BY_UDP_FUNC;
-	int time = 5000;
+	int time = 40;
 	u8 tmp[4] = { 0 };
 	for (i = 0; i < time; i++)
 	{
@@ -616,7 +616,7 @@ int TBSbase::waitForHostWorkDone()
 			break;
 		}
 		else {
-			QMSLEEP(1);
+			QMSLEEP(50);
 		}
 	}
 	if (time == i) {

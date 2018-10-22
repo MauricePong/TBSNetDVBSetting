@@ -33,6 +33,7 @@ void TBShardware::start()
 	//while (1) {
 	QMutexLocker locker(&m_Mutex);
 	tbsmsg->type = 1;
+	tbsmsg->isreadall = 0;
 	tbsmsg->iserror = 0;
 	tbsmsg->isread = 2;
 	tbsmsg->btnL = 0;
@@ -321,19 +322,19 @@ int TBShardware::readModulatorParm(void)
 	if (-1 == ret) {
 		return ret;
 	}
-	//if (checkStatus_addr_0x0040(2000) < 0) {
-	//	return -1;
-	//}
+	if (checkStatus_addr_0x0040(30) < 0) {
+		return -1;
+	}
 	ret = writeREG(REG64_BY_UDP_FUNC, 0x0038, 8, &tmp[0]);
 	if (-1 == ret) {
 		return ret;
 	}
-	//if (checkStatus_addr_0x0038(2000) < 0) {
-	//	return -1;
-	//}
+	if (checkStatus_addr_0x0038(30) < 0) {
+		return -1;
+	}
 	memset(tmp, 0, 32);
 	addrTrigger[0] = 1;
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 1000; i++) {
 		ret = readREG(REG64_BY_UDP_FUNC, 0x4030, 1, addrTrigger);
 		if (0 == addrTrigger[0]) {
 			qDebug("ok");
@@ -358,8 +359,11 @@ int TBShardware::readModulatorParm(void)
 	if (setReqRxbuf(0) < 0) {
 		return -1;
 	}
+	ret = readREG(REG64_BY_UDP_FUNC, 0x4034, 1, addrTrigger);
+	qDebug() << "addrTrigger:" << addrTrigger[0];
+
 	rwparm.pla = QString("%1").arg(*(int*)(&playeratedata[0]));
-	return 0;
+	return ret;
 }
 
 int TBShardware::writeIPParm(void)
@@ -786,8 +790,10 @@ int TBShardware::checkStatus_addr_0x0040( int times)
 		if (1 == (checkstatus[0] & 0x01)) {
 			break;
 		}
+		else {
+			QMSLEEP(100);
+		}
 
-		QMSLEEP(1);
 	}
 	if (i == times) {
 		return -1;
@@ -806,10 +812,12 @@ int TBShardware::checkStatus_addr_0x0038(int times)
 			return -1;
 		}
 		qDebug() << "checkStatus(0x0038):" << checkstatus[1];
-		if (0x1f == (checkstatus[1] & 0x1f)) {
+		if (0x1e == (checkstatus[1] & 0x1f)) {
 			break;
 		}
-		QMSLEEP(1);
+		else {
+			QMSLEEP(100);
+		}
 	}
 	if (i == times) {
 		return -1;
