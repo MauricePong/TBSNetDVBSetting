@@ -124,6 +124,7 @@ public:
 	int type;
 	int iserror;
 	int isread;
+	int isreadall;
 	int btnL;
 	int btnR;
 	u8 switchStatus;

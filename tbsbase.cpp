@@ -151,7 +151,7 @@ int TBSbase::readREG64ByUDP(int subAddr, unsigned char num, unsigned char *rdbuf
 		return -1;
 	}
 	for (i = 0; i < 12; i++) {
-		//	qDebug("udp_REG64_rd recv:%d=%02x", i, (u8)recvbuff[i]);
+			//qDebug("udp_REG64_rd recv:%d=%02x", i, (u8)recvbuff[i]);
 		if ((i > 3) && (j < num)) {
 			rdbuffer[j] = (u8)recvbuff[i];
 			j++;
@@ -582,13 +582,13 @@ int TBSbase::writeMonopolizeCPUStatus(int mode,
 int TBSbase::checkHostStatus(int cs)
 {
 	int i = 0;
-	int mode = 1;
+	int mode = REG64_BY_UDP_FUNC;
 	int time = 5000;
 	u8 tmp[4] = { 0 };
 
 	for (i = 0; i < time; i++) {
 		readREG(mode, 0x4000 + 0 * 4, 4, tmp);
-		qDebug("i = %d tmp[0] = %d  cs = %d",i,tmp[0],cs);
+		//qDebug("i = %d tmp[0] = %d  cs = %d",i,tmp[0],cs);
 		if ((tmp[0] & 0x01) == (u8)(cs)) {
 			break;
 		}
@@ -605,7 +605,7 @@ int TBSbase::checkHostStatus(int cs)
 int TBSbase::waitForHostWorkDone()
 {
 	int i = 0;
-	int mode = 1;
+	int mode = REG64_BY_UDP_FUNC;
 	int time = 5000;
 	u8 tmp[4] = { 0 };
 	for (i = 0; i < time; i++)

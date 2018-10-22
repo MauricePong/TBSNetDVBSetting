@@ -20,6 +20,7 @@ public:
 	void initForm();
 	void init_sql(void);
 	void updateMac_sql(QString qstrMac);
+	void refresh(void);
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 private:
@@ -31,6 +32,7 @@ private:
 	int iserror;
 	int devno;
 	int netnum;
+	int com_IP_soltEN_flg;
 	TBSMesgDlg *msgbox;
 	QSqlDatabase database;
 	QSqlQuery *sql_query;
@@ -48,7 +50,7 @@ private slots:
 	void threadFinished();
 	void soltsDisplayMsgUI(TBS_Msg_Type * msg);
 	void tunersCheckboxClick();
-
+	
 	void on_sli_H_valueChanged(int value);
     void on_btnMenu_Min_clicked();
     void on_btnMenu_Max_clicked();
@@ -58,7 +60,7 @@ private slots:
 	void on_too_Refresh_clicked();
 	void on_too_Read_clicked();
 	void on_too_Apply_clicked();
-
+	void slot_com_IP_currentIndexChanged(int idx);
 	
 
 };

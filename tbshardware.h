@@ -34,7 +34,12 @@ public:
 	void setReadMode(int mode);
 	int getWriteMode();
 	void setWriteMode(int mode);
-#ifdef Q_OS_WIN //windows
+	int checkStatus_addr_0x0040(int times);
+	int checkStatus_addr_0x0038(int times);
+	int setReqRxbuf(u8 val);
+
+#ifdef Q_OS_WIN 
+	//windows
 	SOCKET gethdudpfdMode();
 	void sethdudpfdMode(SOCKET f_hdudpfd);
 	SOCKET  openNetSocket(QString ip, int port);
