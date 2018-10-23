@@ -299,6 +299,9 @@
                    <property name="accessibleDescription">
                     <string/>
                    </property>
+                   <property name="inputMask">
+                    <string>000.000.000.000</string>
+                   </property>
                    <property name="placeholderText">
                     <string>192.168.1.188</string>
                    </property>
@@ -320,13 +323,16 @@
                  </item>
                  <item row="2" column="1">
                   <widget class="QLineEdit" name="lin_Lport">
-                   <property name="placeholderText">
-                    <string>5442</string>
+                   <property name="inputMask">
+                    <string>00000</string>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
                   <widget class="QLineEdit" name="lin_Gateway">
+                   <property name="inputMask">
+                    <string>000.000.000.000</string>
+                   </property>
                    <property name="placeholderText">
                     <string>192.168.1.1</string>
                    </property>
@@ -334,6 +340,9 @@
                  </item>
                  <item row="3" column="1">
                   <widget class="QLineEdit" name="Lin_Netmask">
+                   <property name="inputMask">
+                    <string>000.000.000.000</string>
+                   </property>
                    <property name="placeholderText">
                     <string>255.255.255.0</string>
                    </property>
@@ -427,7 +436,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>(dBm)</string>
+                    <string>(0~-35dBm)</string>
                    </property>
                   </widget>
                  </item>
@@ -453,12 +462,15 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>(MHZ)</string>
+                    <string>(100~1000MHZ)</string>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
                   <widget class="QLineEdit" name="lin_Pla">
+                   <property name="text">
+                    <string>0</string>
+                   </property>
                    <property name="readOnly">
                     <bool>true</bool>
                    </property>
@@ -467,13 +479,8 @@
                  <item row="5" column="1">
                   <widget class="QComboBox" name="com_Modulation">
                    <property name="currentIndex">
-                    <number>-1</number>
+                    <number>0</number>
                    </property>
-                   <item>
-                    <property name="text">
-                     <string>.</string>
-                    </property>
-                   </item>
                    <item>
                     <property name="text">
                      <string>16QAM</string>
@@ -515,10 +522,45 @@
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QLineEdit" name="lin_Lev"/>
+                  <widget class="QLineEdit" name="lin_Lev">
+                   <property name="inputMask">
+                    <string>-00.0</string>
+                   </property>
+                   <property name="text">
+                    <string>-00.0</string>
+                   </property>
+                   <property name="placeholderText">
+                    <string>-00.0</string>
+                   </property>
+                   <property name="clearButtonEnabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QLineEdit" name="lin_Fre"/>
+                  <widget class="QLineEdit" name="lin_Fre">
+                   <property name="accessibleName">
+                    <string/>
+                   </property>
+                   <property name="inputMask">
+                    <string>0000.000</string>
+                   </property>
+                   <property name="text">
+                    <string>0000.000</string>
+                   </property>
+                   <property name="echoMode">
+                    <enum>QLineEdit::Normal</enum>
+                   </property>
+                   <property name="cursorPosition">
+                    <number>0</number>
+                   </property>
+                   <property name="dragEnabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="placeholderText">
+                    <string>0000.000</string>
+                   </property>
+                  </widget>
                  </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="label_7">
@@ -560,7 +602,14 @@
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QLineEdit" name="lin_Sym"/>
+                  <widget class="QLineEdit" name="lin_Sym">
+                   <property name="inputMask">
+                    <string extracomment="2000">0000</string>
+                   </property>
+                   <property name="text">
+                    <string>0000</string>
+                   </property>
+                  </widget>
                  </item>
                  <item row="1" column="2">
                   <widget class="QLabel" name="label_11">
@@ -584,12 +633,20 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>(kbps)</string>
+                    <string>(2000-7200
+kbps)</string>
                    </property>
                   </widget>
                  </item>
                  <item row="6" column="1">
-                  <widget class="QLineEdit" name="lin_TSPort"/>
+                  <widget class="QLineEdit" name="lin_TSPort">
+                   <property name="inputMask">
+                    <string>00000</string>
+                   </property>
+                   <property name="text">
+                    <string>0</string>
+                   </property>
+                  </widget>
                  </item>
                  <item row="6" column="0">
                   <widget class="QLabel" name="label_15">

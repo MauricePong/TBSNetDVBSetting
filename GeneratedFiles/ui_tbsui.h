@@ -354,7 +354,6 @@ public:
         com_Modulation->addItem(QString());
         com_Modulation->addItem(QString());
         com_Modulation->addItem(QString());
-        com_Modulation->addItem(QString());
         com_Modulation->setObjectName(QStringLiteral("com_Modulation"));
 
         gridLayout_5->addWidget(com_Modulation, 5, 1, 1, 1);
@@ -368,11 +367,15 @@ public:
 
         lin_Lev = new QLineEdit(groupBox_2);
         lin_Lev->setObjectName(QStringLiteral("lin_Lev"));
+        lin_Lev->setClearButtonEnabled(false);
 
         gridLayout_5->addWidget(lin_Lev, 3, 1, 1, 1);
 
         lin_Fre = new QLineEdit(groupBox_2);
         lin_Fre->setObjectName(QStringLiteral("lin_Fre"));
+        lin_Fre->setEchoMode(QLineEdit::Normal);
+        lin_Fre->setCursorPosition(0);
+        lin_Fre->setDragEnabled(false);
 
         gridLayout_5->addWidget(lin_Fre, 2, 1, 1, 1);
 
@@ -494,7 +497,7 @@ public:
 
         stackedWidget->setCurrentIndex(0);
         tw_Set->setCurrentIndex(0);
-        com_Modulation->setCurrentIndex(-1);
+        com_Modulation->setCurrentIndex(0);
         com_IP->setCurrentIndex(-1);
 
 
@@ -523,11 +526,14 @@ public:
 #ifndef QT_NO_ACCESSIBILITY
         lin_LIP->setAccessibleDescription(QString());
 #endif // QT_NO_ACCESSIBILITY
+        lin_LIP->setInputMask(QApplication::translate("tbsui", "000.000.000.000", nullptr));
         lin_LIP->setPlaceholderText(QApplication::translate("tbsui", "192.168.1.188", nullptr));
         label->setText(QApplication::translate("tbsui", "Local IP:", nullptr));
         label_2->setText(QApplication::translate("tbsui", "Local port:", nullptr));
-        lin_Lport->setPlaceholderText(QApplication::translate("tbsui", "5442", nullptr));
+        lin_Lport->setInputMask(QApplication::translate("tbsui", "00000", nullptr));
+        lin_Gateway->setInputMask(QApplication::translate("tbsui", "000.000.000.000", nullptr));
         lin_Gateway->setPlaceholderText(QApplication::translate("tbsui", "192.168.1.1", nullptr));
+        Lin_Netmask->setInputMask(QApplication::translate("tbsui", "000.000.000.000", nullptr));
         Lin_Netmask->setPlaceholderText(QApplication::translate("tbsui", "255.255.255.0", nullptr));
         label_3->setText(QApplication::translate("tbsui", "Netmask:", nullptr));
         label_4->setText(QApplication::translate("tbsui", "gateway:", nullptr));
@@ -538,22 +544,36 @@ public:
         che_t2->setText(QApplication::translate("tbsui", "Tuner 2", nullptr));
         che_t3->setText(QApplication::translate("tbsui", "Tuner 3", nullptr));
         groupBox_2->setTitle(QString());
-        label_13->setText(QApplication::translate("tbsui", "(dBm)", nullptr));
+        label_13->setText(QApplication::translate("tbsui", "(0~-35dBm)", nullptr));
         label_5->setText(QApplication::translate("tbsui", "Modulation:", nullptr));
-        label_12->setText(QApplication::translate("tbsui", "(MHZ)", nullptr));
-        com_Modulation->setItemText(0, QApplication::translate("tbsui", ".", nullptr));
-        com_Modulation->setItemText(1, QApplication::translate("tbsui", "16QAM", nullptr));
-        com_Modulation->setItemText(2, QApplication::translate("tbsui", "32QAM", nullptr));
-        com_Modulation->setItemText(3, QApplication::translate("tbsui", "64QAM", nullptr));
-        com_Modulation->setItemText(4, QApplication::translate("tbsui", "128QAM", nullptr));
-        com_Modulation->setItemText(5, QApplication::translate("tbsui", "256QAM", nullptr));
+        label_12->setText(QApplication::translate("tbsui", "(100~1000MHZ)", nullptr));
+        lin_Pla->setText(QApplication::translate("tbsui", "0", nullptr));
+        com_Modulation->setItemText(0, QApplication::translate("tbsui", "16QAM", nullptr));
+        com_Modulation->setItemText(1, QApplication::translate("tbsui", "32QAM", nullptr));
+        com_Modulation->setItemText(2, QApplication::translate("tbsui", "64QAM", nullptr));
+        com_Modulation->setItemText(3, QApplication::translate("tbsui", "128QAM", nullptr));
+        com_Modulation->setItemText(4, QApplication::translate("tbsui", "256QAM", nullptr));
 
         label_9->setText(QApplication::translate("tbsui", "Frequence:", nullptr));
+        lin_Lev->setInputMask(QApplication::translate("tbsui", "-00.0", nullptr));
+        lin_Lev->setText(QApplication::translate("tbsui", "-00.0", nullptr));
+        lin_Lev->setPlaceholderText(QApplication::translate("tbsui", "-00.0", nullptr));
+#ifndef QT_NO_ACCESSIBILITY
+        lin_Fre->setAccessibleName(QString());
+#endif // QT_NO_ACCESSIBILITY
+        lin_Fre->setInputMask(QApplication::translate("tbsui", "0000.000", nullptr));
+        lin_Fre->setText(QApplication::translate("tbsui", "0000.000", nullptr));
+        lin_Fre->setPlaceholderText(QApplication::translate("tbsui", "0000.000", nullptr));
         label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));
         label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
         label_6->setText(QApplication::translate("tbsui", "Symbolrate:", nullptr));
+        lin_Sym->setInputMask(QApplication::translate("tbsui", "0000", nullptr));
+        lin_Sym->setText(QApplication::translate("tbsui", "0000", nullptr));
         label_11->setText(QApplication::translate("tbsui", "(bps)", nullptr));
-        label_10->setText(QApplication::translate("tbsui", "(kbps)", nullptr));
+        label_10->setText(QApplication::translate("tbsui", "(2000-7200\n"
+"kbps)", nullptr));
+        lin_TSPort->setInputMask(QApplication::translate("tbsui", "00000", nullptr));
+        lin_TSPort->setText(QApplication::translate("tbsui", "0", nullptr));
         label_15->setText(QApplication::translate("tbsui", "TS Port:", nullptr));
         tw_Set->setTabText(tw_Set->indexOf(tab_KidSetting), QApplication::translate("tbsui", "Modulator", nullptr));
         too_Read->setText(QApplication::translate("tbsui", "Read    ", nullptr));

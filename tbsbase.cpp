@@ -583,7 +583,7 @@ int TBSbase::checkHostStatus(int cs)
 {
 	int i = 0;
 	int mode = REG64_BY_UDP_FUNC;
-	int time = 40;
+	int time = 100;
 	u8 tmp[4] = { 0 };
 
 	for (i = 0; i < time; i++) {
@@ -606,7 +606,7 @@ int TBSbase::waitForHostWorkDone()
 {
 	int i = 0;
 	int mode = REG64_BY_UDP_FUNC;
-	int time = 40;
+	int time = 100;
 	u8 tmp[4] = { 0 };
 	for (i = 0; i < time; i++)
 	{
