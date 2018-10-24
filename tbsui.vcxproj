@@ -112,7 +112,7 @@
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
       <InputFile>%(FullPath)</InputFile>
       <DynamicSource>output</DynamicSource>
-      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;$(QTDIR)\mkspecs/$(Platform)-msvc;.;$(QTDIR)\include;$(QTDIR)\include/QtWidgets;$(QTDIR)\include/QtGui;$(QTDIR)\include/QtANGLE;$(QTDIR)\include/QtNetwork;$(QTDIR)\include/QtSql;$(QTDIR)\include/QtCore;D:\Program Files\Microsoft Visual Studio\2017\VC\Tools\MSVC\14.16.26926\ATLMFC\include;D:\Program Files\Microsoft Visual Studio\2017\VC\Tools\MSVC\14.16.26926\include;C:\Program Files\Windows Kits\10\include\10.0.17134.0\ucrt;C:\Program Files\Windows Kits\10\include\10.0.17134.0\shared;C:\Program Files\Windows Kits\10\include\10.0.17134.0\um;C:\Program Files\Windows Kits\10\include\10.0.17134.0\winrt;C:\Program Files\Windows Kits\10\include\10.0.17134.0\cppwinrt</IncludePath>
+      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;$(QTDIR)\mkspecs/$(Platform)-msvc;.;$(QTDIR)\include;$(QTDIR)\include/QtWidgets;$(QTDIR)\include/QtGui;$(QTDIR)\include/QtANGLE;$(QTDIR)\include/QtNetwork;$(QTDIR)\include/QtSql;$(QTDIR)\include/QtCore;D:\Program Files\Microsoft Visual Studio\2017\VC\Tools\MSVC\14.16.27012\ATLMFC\include;D:\Program Files\Microsoft Visual Studio\2017\VC\Tools\MSVC\14.16.27012\include;C:\Program Files\Windows Kits\10\include\10.0.17134.0\ucrt;C:\Program Files\Windows Kits\10\include\10.0.17134.0\shared;C:\Program Files\Windows Kits\10\include\10.0.17134.0\um;C:\Program Files\Windows Kits\10\include\10.0.17134.0\winrt;C:\Program Files\Windows Kits\10\include\10.0.17134.0\cppwinrt</IncludePath>
     </QtMoc>
     <QtRcc>
       <OutputFile>.\GeneratedFiles\qrc_%(Filename).cpp</OutputFile>
@@ -184,7 +184,7 @@
       <ExecutionDescription>Moc'ing %(Identity)...</ExecutionDescription>
       <InputFile>%(FullPath)</InputFile>
       <DynamicSource>output</DynamicSource>
-      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;$(QTDIR)\mkspecs/$(Platform)-msvc;.;$(QTDIR)\include;$(QTDIR)\include/QtWidgets;$(QTDIR)\include/QtGui;$(QTDIR)\include/QtANGLE;$(QTDIR)\include/QtNetwork;$(QTDIR)\include/QtSql;$(QTDIR)\include/QtCore;D:\Program Files\Microsoft Visual Studio\2017\VC\Tools\MSVC\14.16.26926\ATLMFC\include;D:\Program Files\Microsoft Visual Studio\2017\VC\Tools\MSVC\14.16.26926\include;C:\Program Files\Windows Kits\10\include\10.0.17134.0\ucrt;C:\Program Files\Windows Kits\10\include\10.0.17134.0\shared;C:\Program Files\Windows Kits\10\include\10.0.17134.0\um;C:\Program Files\Windows Kits\10\include\10.0.17134.0\winrt;C:\Program Files\Windows Kits\10\include\10.0.17134.0\cppwinrt</IncludePath>
+      <IncludePath>.\GeneratedFiles\$(ConfigurationName);.\GeneratedFiles;$(QTDIR)\mkspecs/$(Platform)-msvc;.;$(QTDIR)\include;$(QTDIR)\include/QtWidgets;$(QTDIR)\include/QtGui;$(QTDIR)\include/QtANGLE;$(QTDIR)\include/QtNetwork;$(QTDIR)\include/QtSql;$(QTDIR)\include/QtCore;D:\Program Files\Microsoft Visual Studio\2017\VC\Tools\MSVC\14.16.27012\ATLMFC\include;D:\Program Files\Microsoft Visual Studio\2017\VC\Tools\MSVC\14.16.27012\include;C:\Program Files\Windows Kits\10\include\10.0.17134.0\ucrt;C:\Program Files\Windows Kits\10\include\10.0.17134.0\shared;C:\Program Files\Windows Kits\10\include\10.0.17134.0\um;C:\Program Files\Windows Kits\10\include\10.0.17134.0\winrt;C:\Program Files\Windows Kits\10\include\10.0.17134.0\cppwinrt</IncludePath>
     </QtMoc>
     <QtUic>
       <QTDIR>$(QTDIR)</QTDIR>
