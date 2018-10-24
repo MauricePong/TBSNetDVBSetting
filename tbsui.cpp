@@ -241,7 +241,6 @@ void tbsui::initForm()
 	//	.arg(__LINE__)
 	//	.arg(__FUNCTION__)
 	//	.arg((int)QThread::currentThreadId());
-
 }
 
 
@@ -507,12 +506,19 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 				}
 			}
 		}
-		else if ((0 == msg->isread) && (0 == msg->iserror)) {
+		else if ((0 == msg->isread) && (0 == msg->iserror)) { // return write 
 			uiudpfd = tbshd->udpClose(uiudpfd);
 			tbshd->setudpfd(uiudpfd);
-			int index = ui->com_IP->currentIndex();
-			nettag[index].ip = ui->lin_LIP->text();
-			nettag[index].port = ui->lin_Lport->text().toInt();
+			int comindex = ui->com_IP->currentIndex();
+			int twindex = ui->tw_Set->currentIndex();
+			if (0 == twindex) {
+				nettag[comindex].ip = ui->lin_LIP->text();
+				nettag[comindex].port = ui->lin_Lport->text().toInt();
+			}
+			else if(1 == twindex) {
+				tbsrwparm = tbshd->getHardWareParm();
+				//add something
+			}
 		}
 		msgbox->setWinTitle(msg->tilie);
 		msgbox->displayText(msg->displaytext);

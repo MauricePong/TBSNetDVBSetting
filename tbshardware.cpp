@@ -280,7 +280,7 @@ int TBShardware::readModulatorParm(void)
 	u8 tmpright0to1byte[2] = { 0x1d,0x1a };
 	int tsportaddr[4] = { 0x4020,0x4024,0x4028,0x402c };
 	u8 tsportdata[2] = { 0,0 };
-	int playrateaddr[4] = { 0x001b,0x0020,0x0025,0x002a };
+	int playrateaddr[4] = {0x0020,0x0024,0x0028,0x002c};
 	u8 playeratedata[4] = { 0,0,0,0 };
 	u8 addrTrigger[4] = {0,0,0,0};
 
