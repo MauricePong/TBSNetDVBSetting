@@ -547,6 +547,7 @@ int TBShardware::writeModulatorParm(void)
 		return ret;
 	}
 
+	/**
 	//sys rst
 	tmp[0] = (u8)(0x00); //devno
 	tmp[1] = 0x07; //num
@@ -565,13 +566,15 @@ int TBShardware::writeModulatorParm(void)
 	if (-1 == ret) {
 		return ret;
 	}
-	//ret = writeREG(REG64_BY_UDP_FUNC, 0x0040, 1, &tmp[7]);
-	//if (-1 == ret) {
-	//	return ret;
-	//}
+	
 	ret = writeREG(REG64_BY_UDP_FUNC, 0x0038, 7, &tmp[0]);
 	if (-1 == ret) {
 		return ret;
+	}
+	*/
+	ret = readModulatorParm();
+	if (-1 == ret) {
+		return -1;
 	}
 	if (0 == ret) {
 		ret = 3;

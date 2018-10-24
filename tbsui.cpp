@@ -515,9 +515,15 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 				nettag[comindex].ip = ui->lin_LIP->text();
 				nettag[comindex].port = ui->lin_Lport->text().toInt();
 			}
-			else if(1 == twindex) {
+			else if (1 == twindex) {
 				tbsrwparm = tbshd->getHardWareParm();
 				//add something
+				ui->lin_Pla->setText(tbsrwparm.pla);
+				ui->lin_TSPort->setText(QString("%1").arg(tbsrwparm.tsport));
+				ui->lin_Fre->setText(tbsrwparm.fre);
+				ui->lin_Lev->setText(tbsrwparm.lev);
+				ui->lin_Sym->setText(QString("%1").arg(tbsrwparm.sym));
+
 			}
 		}
 		msgbox->setWinTitle(msg->tilie);
@@ -532,7 +538,6 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 			msgbox->exec();
 		}
 	}
-
 	else if (2 == msg->type) {
 		uiudpfd = tbshd->udpClose(uiudpfd);
 		tbshd->setudpfd(uiudpfd);
@@ -556,7 +561,6 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 void tbsui::tunersCheckboxClick()
 {
 	QCheckBox *c = (QCheckBox *)sender();
-	QString name = c->text();
 	QList<QCheckBox *> ches = ui->gbox_Tuners->findChildren<QCheckBox *>();
 	foreach(QCheckBox *ch, ches) {
 		if (ch == c) {
@@ -567,6 +571,7 @@ void tbsui::tunersCheckboxClick()
 		}
 	}
 
+	QString name = c->text();
 	if (name == "Tuner 0") {
 		devno = 0;
 	}
@@ -579,6 +584,30 @@ void tbsui::tunersCheckboxClick()
 	else if (name == "Tuner 3") {
 		devno = 3;
 	}
+#if 1
+	int  ipindex = ui->com_IP->currentIndex();
+	if (-1 == ipindex) {
+		//return;
+	}
+	//uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
+	uiudpfd = tbshd->udpOpen(QString("192.168.8.232"), 5444);
+	if (uiudpfd < 3) {
+		return;
+	}
+	else {
+		tbshd->setudpfd(uiudpfd);
+		//if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
+		tbshd->setRunMode(TBS_READ_FUNC);
+		tbshd->setReadMode(READ_MODULATOR_PARM_FUNC);
+		tbsrwparm.devno = devno;
+		tbshd->setHardWareParm(tbsrwparm);
+		m_Thread.quit();
+		m_Thread.wait();
+		m_Thread.start();
+		//}
+	}
+#endif
+
 }
 
 void tbsui::on_sli_H_valueChanged(int value)

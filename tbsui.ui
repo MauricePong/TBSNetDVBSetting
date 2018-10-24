@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>633</width>
+    <width>560</width>
     <height>640</height>
    </rect>
   </property>
@@ -358,7 +358,7 @@
                  <item row="4" column="0">
                   <widget class="QLabel" name="label_4">
                    <property name="text">
-                    <string>gateway:</string>
+                    <string>Gateway:</string>
                    </property>
                   </widget>
                  </item>
@@ -681,7 +681,7 @@ kbps)</string>
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Net device list:</string>
+             <string>Net list:</string>
             </property>
            </widget>
           </item>
