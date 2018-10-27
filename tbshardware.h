@@ -34,10 +34,9 @@ public:
 	void setReadMode(int mode);
 	int getWriteMode();
 	void setWriteMode(int mode);
-	int checkStatus_addr_0x0040(int times);
-	int checkStatus_addr_0x0038(int times);
-	int setReqRxbuf(u8 val);
-
+	int checkStatus_RX(int times);
+	int checkStatus_TX(int times);
+	int reset();
 #ifdef Q_OS_WIN 
 	//windows
 	SOCKET gethdudpfdMode();

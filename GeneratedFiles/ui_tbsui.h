@@ -55,6 +55,7 @@ public:
     QGridLayout *gridLayout_4;
     QWidget *UpdateWdiget;
     QGridLayout *gridLayout_6;
+    QToolButton *too_Apply;
     QTabWidget *tw_Set;
     QWidget *tab_IPSetting;
     QGridLayout *gridLayout_7;
@@ -95,18 +96,16 @@ public:
     QLabel *label_10;
     QLineEdit *lin_TSPort;
     QLabel *label_15;
-    QToolButton *too_Read;
-    QLabel *label_14;
-    QToolButton *too_Apply;
-    QComboBox *com_IP;
     QToolButton *too_Refresh;
+    QLabel *label_14;
+    QComboBox *com_IP;
     QSlider *sli_H;
 
     void setupUi(QDialog *tbsui)
     {
         if (tbsui->objectName().isEmpty())
             tbsui->setObjectName(QStringLiteral("tbsui"));
-        tbsui->resize(560, 640);
+        tbsui->resize(520, 640);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -218,6 +217,12 @@ public:
         UpdateWdiget->setSizePolicy(sizePolicy);
         gridLayout_6 = new QGridLayout(UpdateWdiget);
         gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
+        too_Apply = new QToolButton(UpdateWdiget);
+        too_Apply->setObjectName(QStringLiteral("too_Apply"));
+        too_Apply->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout_6->addWidget(too_Apply, 1, 3, 1, 1);
+
         tw_Set = new QTabWidget(UpdateWdiget);
         tw_Set->setObjectName(QStringLiteral("tw_Set"));
         tab_IPSetting = new QWidget();
@@ -434,13 +439,13 @@ public:
 
         tw_Set->addTab(tab_KidSetting, QString());
 
-        gridLayout_6->addWidget(tw_Set, 2, 0, 1, 5);
+        gridLayout_6->addWidget(tw_Set, 2, 0, 1, 4);
 
-        too_Read = new QToolButton(UpdateWdiget);
-        too_Read->setObjectName(QStringLiteral("too_Read"));
-        too_Read->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+        too_Refresh = new QToolButton(UpdateWdiget);
+        too_Refresh->setObjectName(QStringLiteral("too_Refresh"));
+        too_Refresh->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
 
-        gridLayout_6->addWidget(too_Read, 1, 3, 1, 1);
+        gridLayout_6->addWidget(too_Refresh, 1, 2, 1, 1);
 
         label_14 = new QLabel(UpdateWdiget);
         label_14->setObjectName(QStringLiteral("label_14"));
@@ -452,23 +457,10 @@ public:
 
         gridLayout_6->addWidget(label_14, 1, 0, 1, 1);
 
-        too_Apply = new QToolButton(UpdateWdiget);
-        too_Apply->setObjectName(QStringLiteral("too_Apply"));
-        too_Apply->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout_6->addWidget(too_Apply, 1, 4, 1, 1);
-
         com_IP = new QComboBox(UpdateWdiget);
-        com_IP->addItem(QString());
         com_IP->setObjectName(QStringLiteral("com_IP"));
 
         gridLayout_6->addWidget(com_IP, 1, 1, 1, 1);
-
-        too_Refresh = new QToolButton(UpdateWdiget);
-        too_Refresh->setObjectName(QStringLiteral("too_Refresh"));
-        too_Refresh->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout_6->addWidget(too_Refresh, 1, 2, 1, 1);
 
 
         gridLayout_4->addWidget(UpdateWdiget, 1, 0, 1, 1);
@@ -496,9 +488,8 @@ public:
         retranslateUi(tbsui);
 
         stackedWidget->setCurrentIndex(0);
-        tw_Set->setCurrentIndex(0);
+        tw_Set->setCurrentIndex(1);
         com_Modulation->setCurrentIndex(0);
-        com_IP->setCurrentIndex(-1);
 
 
         QMetaObject::connectSlotsByName(tbsui);
@@ -518,6 +509,7 @@ public:
 #endif // QT_NO_TOOLTIP
         btnMenu_Min->setText(QString());
         btnMenu_Max->setText(QString());
+        too_Apply->setText(QApplication::translate("tbsui", "Apply  ", nullptr));
 #ifndef QT_NO_ACCESSIBILITY
         tab_IPSetting->setAccessibleDescription(QString());
 #endif // QT_NO_ACCESSIBILITY
@@ -526,15 +518,9 @@ public:
 #ifndef QT_NO_ACCESSIBILITY
         lin_LIP->setAccessibleDescription(QString());
 #endif // QT_NO_ACCESSIBILITY
-        lin_LIP->setInputMask(QApplication::translate("tbsui", "000.000.000.000", nullptr));
-        lin_LIP->setPlaceholderText(QApplication::translate("tbsui", "192.168.1.188", nullptr));
         label->setText(QApplication::translate("tbsui", "Local IP:", nullptr));
         label_2->setText(QApplication::translate("tbsui", "Local port:", nullptr));
         lin_Lport->setInputMask(QApplication::translate("tbsui", "00000", nullptr));
-        lin_Gateway->setInputMask(QApplication::translate("tbsui", "000.000.000.000", nullptr));
-        lin_Gateway->setPlaceholderText(QApplication::translate("tbsui", "192.168.1.1", nullptr));
-        Lin_Netmask->setInputMask(QApplication::translate("tbsui", "000.000.000.000", nullptr));
-        Lin_Netmask->setPlaceholderText(QApplication::translate("tbsui", "255.255.255.0", nullptr));
         label_3->setText(QApplication::translate("tbsui", "Netmask:", nullptr));
         label_4->setText(QApplication::translate("tbsui", "Gateway:", nullptr));
         tw_Set->setTabText(tw_Set->indexOf(tab_IPSetting), QApplication::translate("tbsui", "IP Setting", nullptr));
@@ -561,9 +547,9 @@ public:
 #ifndef QT_NO_ACCESSIBILITY
         lin_Fre->setAccessibleName(QString());
 #endif // QT_NO_ACCESSIBILITY
-        lin_Fre->setInputMask(QApplication::translate("tbsui", "0000.000", nullptr));
-        lin_Fre->setText(QApplication::translate("tbsui", "0000.000", nullptr));
-        lin_Fre->setPlaceholderText(QApplication::translate("tbsui", "0000.000", nullptr));
+        lin_Fre->setInputMask(QApplication::translate("tbsui", "0000.00", nullptr));
+        lin_Fre->setText(QApplication::translate("tbsui", "0000.00", nullptr));
+        lin_Fre->setPlaceholderText(QApplication::translate("tbsui", "0000.00", nullptr));
         label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));
         label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
         label_6->setText(QApplication::translate("tbsui", "Symbolrate:", nullptr));
@@ -576,12 +562,8 @@ public:
         lin_TSPort->setText(QApplication::translate("tbsui", "0", nullptr));
         label_15->setText(QApplication::translate("tbsui", "TS Port:", nullptr));
         tw_Set->setTabText(tw_Set->indexOf(tab_KidSetting), QApplication::translate("tbsui", "Modulator", nullptr));
-        too_Read->setText(QApplication::translate("tbsui", "Read    ", nullptr));
-        label_14->setText(QApplication::translate("tbsui", "Net list:", nullptr));
-        too_Apply->setText(QApplication::translate("tbsui", "Apply  ", nullptr));
-        com_IP->setItemText(0, QApplication::translate("tbsui", ".", nullptr));
-
         too_Refresh->setText(QApplication::translate("tbsui", "Refresh", nullptr));
+        label_14->setText(QApplication::translate("tbsui", "Net list:", nullptr));
     } // retranslateUi
 
 };

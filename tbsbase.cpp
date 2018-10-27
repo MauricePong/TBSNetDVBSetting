@@ -150,6 +150,13 @@ int TBSbase::readREG64ByUDP(int subAddr, unsigned char num, unsigned char *rdbuf
 			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
 		return -1;
 	}
+	if ((recvbuff[1] & 0xff) != 0x88) //check ACK;
+	{
+		qDebug() << QString("%1->%2->%3:recvfrom ACK failed")
+			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+		return -1;
+	}
+
 	for (i = 0; i < 12; i++) {
 			//qDebug("udp_REG64_rd recv:%d=%02x", i, (u8)recvbuff[i]);
 		if ((i > 3) && (j < num)) {
@@ -189,6 +196,12 @@ int TBSbase::writeREG64ByUDP(int subAddr, unsigned char num, unsigned char *wtbu
 	n = recvfrom(udpfd, recvbuff, 64, 0, (struct sockaddr*)&udpsockaddr, &len);
 	if (n < 0) {
 		qDebug() << QString("%1->%2->%3:recvfrom timeout")
+			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+		return -1;
+	}
+	if ((recvbuff[1] & 0xff) != 0x88) //check ACK;
+	{
+		qDebug() << QString("%1->%2->%3:recvfrom ACK failed")
 			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
 		return -1;
 	}
@@ -255,7 +268,9 @@ int TBSbase::readREG32FromExternalMemoryOnce(int m_addr,
 	buff[1] = num;
 	buff[2] = (unsigned char)(m_addr >> 8);
 	buff[3] = (unsigned char)(m_addr & 255);
-	writeREG(mode, 0x4000 + 0 * 4, 4, buff);	  //cs low;
+	if (writeREG(mode, 0x4000 + 0 * 4, 4, buff) < 0) {
+		return -1;
+	}//cs low;
 	//...ck host received data & process-->........
 	if (-1 == checkHostStatus(0)) {
 		qDebug() << QString("%1->%2->%3:wait for host active timeout!")
@@ -264,7 +279,9 @@ int TBSbase::readREG32FromExternalMemoryOnce(int m_addr,
 		return -1;
 	}
 	//...cs high................................
-	writeREG(mode, 0x4000 + 3 * 4, 4, buff);	  //cs high;
+	if (writeREG(mode, 0x4000 + 3 * 4, 4, buff) < 0) {
+		return -1;
+	}//cs high;
 	//...check host work done-->..................
 	if (-1 == waitForHostWorkDone())
 	{
@@ -272,8 +289,12 @@ int TBSbase::readREG32FromExternalMemoryOnce(int m_addr,
 			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
 		return -1;
 	}
-	readREG(mode, 0x4000 + 1 * 4, 4, &buff[0]);
-	readREG(mode, 0x4000 + 2 * 4, 4, &buff[4]);
+	if (readREG(mode, 0x4000 + 1 * 4, 4, &buff[0]) < 0) {
+		return -1;
+	}
+	if (readREG(mode, 0x4000 + 2 * 4, 4, &buff[4]) < 0) {
+		return -1;
+	}
 	for (i = 0; i < num; i++)
 		rdbuff[i] = buff[i];
 	return 0;
@@ -307,14 +328,21 @@ int TBSbase::writeREG32ToExternalMemoryOnce(int m_addr,
 	for (i = 0; i < num; i++) {
 		buff[i] = wtbuff[i];
 	}
-	writeREG(mode, 0x4000 + 2 * 4, 4, &buff[4]);
-	writeREG(mode, 0x4000 + 1 * 4, 4, &buff[0]);
+	if (writeREG(mode, 0x4000 + 2 * 4, 4, &buff[4]) < 0) {
+		return -1;
+	}
+	
+	if (writeREG(mode, 0x4000 + 1 * 4, 4, &buff[0]) < 0) {
+		return -1;
+	}
 
 	buff[0] = 0x30;
 	buff[1] = num;
 	buff[2] = (unsigned char)(m_addr >> 8);
 	buff[3] = (unsigned char)(m_addr & 255);
-	writeREG(mode, 0x4000 + 0 * 4, 4, buff); //cs low;
+	if (writeREG(mode, 0x4000 + 0 * 4, 4, buff) < 0) {
+		return -1;
+	}//cs low;
 	//...ck host received data & process-->........
 	if (-1 == checkHostStatus(0)) {
 		qDebug() << QString("%1->%2->%3:wait for host active timeout!")
@@ -322,7 +350,9 @@ int TBSbase::writeREG32ToExternalMemoryOnce(int m_addr,
 		writeREG(mode, 0x4000 + 3 * 4, 4, buff);	  //cs high;
 		return -1;
 	}
-	writeREG(mode, 0x4000 + 3 * 4, 4, buff);	  //cs high;
+	if (writeREG(mode, 0x4000 + 3 * 4, 4, buff) < 0) {
+		return -1;
+	}//cs high;
 	//...check host work done-->..................
 	if (-1 == waitForHostWorkDone())
 	{
@@ -385,12 +415,17 @@ int TBSbase::readFromExternalMemory(int ram_addr,
 				return ret;
 			}
 		}
-		return readFromExternalMemoryOnce(mode, (ram_addr + i * 8), &rdbff[i*8], g);
+		if (g != 0) {
+			ret = readFromExternalMemoryOnce(mode, (ram_addr + i * 8), &rdbff[i * 8], g);
+			if (-1 == ret) {
+				return ret;
+			}
+		}
 	}
 	else {
-		return 0;
+		return -1;
 	}
-	return 0;
+	return ret;
 }
 
 int TBSbase::writeToExternalMemory(int ram_addr,
@@ -415,12 +450,17 @@ int TBSbase::writeToExternalMemory(int ram_addr,
 				return ret;
 			}
 		}
-		return writeToExternalMemoryOnce(mode, (ram_addr + i * 8), &wtbff[i*8], g);
+		if (g != 0) {
+			ret =  writeToExternalMemoryOnce(mode, (ram_addr + i * 8), &wtbff[i * 8], g);
+			if (-1 == ret) {
+				return ret;
+			}
+		}
 	}
 	else {
-		return 0;
+		return -1;
 	}
-	return 0;
+	return ret;
 }
 
 int TBSbase::controlExternalMemory(int mode,
@@ -583,7 +623,7 @@ int TBSbase::checkHostStatus(int cs)
 {
 	int i = 0;
 	int mode = REG64_BY_UDP_FUNC;
-	int time = 100;
+	int time = 20;
 	u8 tmp[4] = { 0 };
 
 	for (i = 0; i < time; i++) {
@@ -593,7 +633,7 @@ int TBSbase::checkHostStatus(int cs)
 			break;
 		}
 		else {
-			QMSLEEP(50);
+			QMSLEEP(250);
 		}
 	}
 	if (time == i) {
@@ -606,7 +646,7 @@ int TBSbase::waitForHostWorkDone()
 {
 	int i = 0;
 	int mode = REG64_BY_UDP_FUNC;
-	int time = 100;
+	int time = 20;
 	u8 tmp[4] = { 0 };
 	for (i = 0; i < time; i++)
 	{
@@ -616,7 +656,7 @@ int TBSbase::waitForHostWorkDone()
 			break;
 		}
 		else {
-			QMSLEEP(50);
+			QMSLEEP(250);
 		}
 	}
 	if (time == i) {

@@ -136,7 +136,6 @@ void tbsui::refresh(void)
 {
 	netnum = 0;
 	ui->com_IP->clear();
-	ui->com_IP->addItem(".", -1);
 	disconnect(ui->com_IP, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_com_IP_currentIndexChanged(int)));
 	com_IP_soltEN_flg = 0;
 	tbshd->setRunMode(TBS_UDPMULTICAST_FUNC);
@@ -211,8 +210,6 @@ void tbsui::initForm()
 		connect(che, SIGNAL(clicked()), this, SLOT(tunersCheckboxClick()));
 	}
 	ui->com_IP->clear();
-	ui->com_IP->addItem(".", -1);
-
 	ui->tw_Set->setCurrentIndex(0);
 	width_s = this->size().width();
 	height_s = this->size().height();
@@ -232,8 +229,10 @@ void tbsui::initForm()
 	connect(&m_Thread, SIGNAL(started()), tbshd, SLOT(start()));
 	connect(tbshd, SIGNAL(sigDisplayMsgUI(TBS_Msg_Type*)), this, SLOT(soltsDisplayMsgUI(TBS_Msg_Type*)));
 
-	//tbshd->setRunMode(TBS_UDPMULTICAST_FUNC);
-	//m_Thread.start();
+	tbsrwparm.devno = devno;
+	tbshd->setHardWareParm(tbsrwparm);
+	tbshd->setRunMode(TBS_UDPMULTICAST_FUNC);
+	m_Thread.start();
 	//connect(&m_Thread, SIGNAL(finished()), tbshd, SLOT(deleteLater()));
 	//connect(&m_Thread, SIGNAL(finished()), this, SLOT(threadFinished()));
 	//qDebug() << QString("%1->%2->%3->%4")
@@ -288,48 +287,35 @@ void tbsui::on_btnMenu_Close_clicked()
 	close();
 }
 
-void tbsui::on_too_Refresh_clicked()
+/**
+void tbsui::on_btn_Reset_chlicked()
 {
-
-
-}
-
-void tbsui::on_too_Read_clicked()
-{
-#if 1
-	int  index = ui->tw_Set->currentIndex();
+	qDebug() << "2222222222222222222";
 	int  ipindex = ui->com_IP->currentIndex();
 	if (-1 == ipindex) {
-		//return;
+		return;
 	}
-	//uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
-	uiudpfd = tbshd->udpOpen(QString("192.168.8.232"), 5444);
-
+	uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
 	if (uiudpfd < 3) {
 		return;
 	}
 	else {
 		tbshd->setudpfd(uiudpfd);
-		if (0 == index) {
-			tbshd->setRunMode(TBS_READ_FUNC);
-			tbshd->setReadMode(READ_NET_PARM_FUNC);
-			m_Thread.quit();
-			m_Thread.wait();
-			m_Thread.start();
-		}
-		else if (1 == index) {
-			//if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
-			tbshd->setRunMode(TBS_READ_FUNC);
-			tbshd->setReadMode(READ_MODULATOR_PARM_FUNC);
-			tbsrwparm.devno = devno;
-			tbshd->setHardWareParm(tbsrwparm);
-			m_Thread.quit();
-			m_Thread.wait();
-			m_Thread.start();
-			//}
-		}
+		tbshd->setRunMode(TBS_RESET_FUNC);
+		tbsrwparm.devno = devno;
+		tbshd->setHardWareParm(tbsrwparm);
+
+		m_Thread.quit();
+		m_Thread.wait();
+		m_Thread.start();
 	}
-#endif
+	return;
+}
+*/
+
+void tbsui::on_too_Refresh_clicked()
+{
+	refresh();
 }
 
 void tbsui::on_too_Apply_clicked()
@@ -338,10 +324,10 @@ void tbsui::on_too_Apply_clicked()
 	int  index = ui->tw_Set->currentIndex();
 	int  ipindex = ui->com_IP->currentIndex();
 	if (-1 == ipindex) {
-		//	return;
+		return;
 	}
-	//uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
-	uiudpfd = tbshd->udpOpen(QString("192.168.8.232"), 5444);
+	uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
+	//uiudpfd = tbshd->udpOpen(QString("192.168.8.232"), 5444);
 	if (uiudpfd < 3) {
 		return;
 	}
@@ -362,57 +348,57 @@ void tbsui::on_too_Apply_clicked()
 			m_Thread.start();
 		}
 		else if (1 == index) {
-			//if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
+			if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
 				//check ui
-			int sym = ui->lin_Sym->text().toInt();//2000~7200
-			int tsport = ui->lin_TSPort->text().toInt();
-			float fre = ui->lin_Fre->text().toFloat();//100.000~1000.000
-			float lev = ui->lin_Lev->text().toFloat();//0.0~-35.0
+				int sym = ui->lin_Sym->text().toInt();//2000~7200
+				int tsport = ui->lin_TSPort->text().toInt();
+				float fre = ui->lin_Fre->text().toFloat();//100.000~1000.000
+				float lev = ui->lin_Lev->text().toFloat();//0.0~-35.0
 
-			if ((fre < 100.000) || (fre > 1000.000)) {
-				ui->lin_Fre->setStyleSheet("QLineEdit{border:1px solid red }");
-				return;
-			}
-			else {
-				ui->lin_Fre->setStyleSheet("QLineEdit{border:1px solid gray border-radius:1px}");
-			}
-			if ((lev > 0.0) || (lev < -35.0)) {
-				ui->lin_Lev->setStyleSheet("QLineEdit{border:1px solid red }");
-				return;
-			}
-			else {
-				ui->lin_Lev->setStyleSheet("QLineEdit{border:1px solid gray border-radius:1px}");
-			}
-			if ((sym < 2000) || (sym > 7200)) {
-				ui->lin_Sym->setStyleSheet("QLineEdit{border:1px solid red }");
-				return;
-			}
-			else {
-				ui->lin_Sym->setStyleSheet("QLineEdit{border:1px solid gray border-radius:1px}");
-			}
-			if ((tsport < 0) || (tsport > 65536)) {
-				ui->lin_TSPort->setStyleSheet("QLineEdit{border:1px solid red }");
-				return;
-			}
-			else {
-				ui->lin_TSPort->setStyleSheet("QLineEdit{border:1px solid gray border-radius:1px}");
-			}
-			tbshd->setRunMode(TBS_WRITE_FUNC);
-			tbshd->setWriteMode(WRITE_MODULATOR_PARM_FUNC);
-			tbsrwparm.devno = devno;
-			tbsrwparm.qam = ui->com_Modulation->currentIndex();
-			tbsrwparm.sym = ui->lin_Sym->text().toInt();
-			//tbsrwparm.pla = ui->lin_Pla->text();
-			tbsrwparm.fre = ui->lin_Fre->text();
-			tbsrwparm.lev = ui->lin_Lev->text();
-			tbsrwparm.tsport = ui->lin_TSPort->text().toInt();
+				if ((fre < 100.000) || (fre > 1000.000)) {
+					ui->lin_Fre->setStyleSheet("QLineEdit{border:1px solid red }");
+					return;
+				}
+				else {
+					ui->lin_Fre->setStyleSheet("QLineEdit{border:1px solid gray border-radius:1px}");
+				}
+				if ((lev > 0.0) || (lev < -35.0)) {
+					ui->lin_Lev->setStyleSheet("QLineEdit{border:1px solid red }");
+					return;
+				}
+				else {
+					ui->lin_Lev->setStyleSheet("QLineEdit{border:1px solid gray border-radius:1px}");
+				}
+				if ((sym < 2000) || (sym > 7200)) {
+					ui->lin_Sym->setStyleSheet("QLineEdit{border:1px solid red }");
+					return;
+				}
+				else {
+					ui->lin_Sym->setStyleSheet("QLineEdit{border:1px solid gray border-radius:1px}");
+				}
+				if ((tsport < 0) || (tsport > 65536)) {
+					ui->lin_TSPort->setStyleSheet("QLineEdit{border:1px solid red }");
+					return;
+				}
+				else {
+					ui->lin_TSPort->setStyleSheet("QLineEdit{border:1px solid gray border-radius:1px}");
+				}
+				tbshd->setRunMode(TBS_WRITE_FUNC);
+				tbshd->setWriteMode(WRITE_MODULATOR_PARM_FUNC);
+				tbsrwparm.devno = devno;
+				tbsrwparm.qam = ui->com_Modulation->currentIndex();
+				tbsrwparm.sym = ui->lin_Sym->text().toInt();
+				//tbsrwparm.pla = ui->lin_Pla->text();
+				tbsrwparm.fre = ui->lin_Fre->text();
+				tbsrwparm.lev = ui->lin_Lev->text();
+				tbsrwparm.tsport = ui->lin_TSPort->text().toInt();
 
-			tbshd->setHardWareParm(tbsrwparm);
-			m_Thread.quit();
-			m_Thread.wait();
-			m_Thread.start();
+				tbshd->setHardWareParm(tbsrwparm);
+				m_Thread.quit();
+				m_Thread.wait();
+				m_Thread.start();
+			}
 		}
-		//}
 	}
 #endif
 }
@@ -420,35 +406,24 @@ void tbsui::on_too_Apply_clicked()
 void tbsui::slot_com_IP_currentIndexChanged(int idx)
 {
 #if 1
-	int  index = ui->tw_Set->currentIndex();
 	if (idx < 0) {
 		return;
 	}
-	//uiudpfd = tbshd->udpOpen(nettag[idx].ip, nettag[idx].port);
-	uiudpfd = tbshd->udpOpen(QString("192.168.8.232"), 5444);
+	qDebug() << "idx" << idx << nettag[idx].ip << nettag[idx].port;
+	uiudpfd = tbshd->udpOpen(nettag[idx].ip, nettag[idx].port);
+	//uiudpfd = tbshd->udpOpen(QString("192.168.8.232"), 5444);
 	if (uiudpfd < 3) {
 		return;
 	}
 	else {
 		tbshd->setudpfd(uiudpfd);
-		if (0 == index) {
-			tbshd->setRunMode(TBS_READ_FUNC);
-			tbshd->setReadMode(READ_NET_PARM_FUNC);
-			m_Thread.quit();
-			m_Thread.wait();
-			m_Thread.start();
-		}
-		else if (1 == index) {
-			//if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
-			tbshd->setRunMode(TBS_READ_FUNC);
-			tbshd->setReadMode(READ_MODULATOR_PARM_FUNC);
-			tbsrwparm.devno = devno;
-			tbshd->setHardWareParm(tbsrwparm);
-			m_Thread.quit();
-			m_Thread.wait();
-			m_Thread.start();
-			//}
-		}
+		tbsrwparm.devno = devno;
+		tbshd->setHardWareParm(tbsrwparm);
+		tbshd->setRunMode(TBS_READ_FUNC);
+		tbshd->setReadMode(READ_NET_PARM_FUNC);
+		m_Thread.quit();
+		m_Thread.wait();
+		m_Thread.start();
 	}
 #endif
 }
@@ -472,7 +447,6 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 	}
 
 	if (1 == msg->type) {
-
 		if ((1 == msg->isread) && (0 == msg->iserror)) {
 			uiudpfd = tbshd->udpClose(uiudpfd);
 			tbshd->setudpfd(uiudpfd);
@@ -488,8 +462,13 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 				ui->lin_Lport->setText(QString("%1").arg(tbsrwparm.port));
 				ui->Lin_Netmask->setText(tbsrwparm.Netmask);
 				ui->lin_Gateway->setText(tbsrwparm.gateway);
+
 				ui->lin_Pla->setText(tbsrwparm.pla);
 				ui->lin_TSPort->setText(QString("%1").arg(tbsrwparm.tsport));
+				ui->lin_Fre->setText(tbsrwparm.fre);
+				ui->lin_Lev->setText(tbsrwparm.lev);
+				ui->lin_Sym->setText(QString("%1").arg(tbsrwparm.sym));
+				ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
 			}
 			else {
 				int index = ui->tw_Set->currentIndex();
@@ -503,6 +482,10 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 				else if (1 == index) {
 					ui->lin_Pla->setText(tbsrwparm.pla);
 					ui->lin_TSPort->setText(QString("%1").arg(tbsrwparm.tsport));
+					ui->lin_Fre->setText(tbsrwparm.fre);
+					ui->lin_Sym->setText(QString("%1").arg(tbsrwparm.sym));
+					ui->lin_Lev->setText(tbsrwparm.lev);
+					ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
 				}
 			}
 		}
@@ -523,7 +506,14 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 				ui->lin_Fre->setText(tbsrwparm.fre);
 				ui->lin_Lev->setText(tbsrwparm.lev);
 				ui->lin_Sym->setText(QString("%1").arg(tbsrwparm.sym));
-
+				ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
+			}
+		}
+		else if ((2 == msg->isread) && (1 == msg->iserror)) {
+			if (0 == com_IP_soltEN_flg) {
+				connect(ui->com_IP, SIGNAL(currentIndexChanged(int)),
+					this, SLOT(slot_com_IP_currentIndexChanged(int)));
+				com_IP_soltEN_flg = 1;
 			}
 		}
 		msgbox->setWinTitle(msg->tilie);
@@ -539,21 +529,23 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 		}
 	}
 	else if (2 == msg->type) {
-		uiudpfd = tbshd->udpClose(uiudpfd);
-		tbshd->setudpfd(uiudpfd);
 		qDebug() << QString("%1->%2->%3:msg->switchStatus=%4")
 			.arg(__FILE__)
 			.arg(__LINE__)
 			.arg(__FUNCTION__)
 			.arg(msg->switchStatus);
-		ui->che_t0->setDisabled((msg->switchStatus >> 0) & 0x01);
-		ui->che_t1->setDisabled((msg->switchStatus >> 1) & 0x01);
-		ui->che_t2->setDisabled((msg->switchStatus >> 2) & 0x01);
-		ui->che_t3->setDisabled((msg->switchStatus >> 3) & 0x01);
+		if (0 == netnum) {
+			ui->che_t0->setDisabled((msg->switchStatus >> 0) & 0x01);
+			ui->che_t1->setDisabled((msg->switchStatus >> 1) & 0x01);
+			ui->che_t2->setDisabled((msg->switchStatus >> 2) & 0x01);
+			ui->che_t3->setDisabled((msg->switchStatus >> 3) & 0x01);
+		}
+		qDebug() << "netnum:" << netnum << msg->devip << msg->devport;
 		nettag[netnum].ip = msg->devip;
 		nettag[netnum].port = msg->devport;
 		nettag[netnum].switchStatus = msg->switchStatus;
 		ui->com_IP->addItem(nettag[netnum].ip, netnum);
+		ui->com_IP->setCurrentIndex(0);;
 		netnum++;
 	}
 }
@@ -587,24 +579,23 @@ void tbsui::tunersCheckboxClick()
 #if 1
 	int  ipindex = ui->com_IP->currentIndex();
 	if (-1 == ipindex) {
-		//return;
+		return;
 	}
-	//uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
-	uiudpfd = tbshd->udpOpen(QString("192.168.8.232"), 5444);
+	uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
 	if (uiudpfd < 3) {
 		return;
 	}
 	else {
 		tbshd->setudpfd(uiudpfd);
-		//if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
-		tbshd->setRunMode(TBS_READ_FUNC);
-		tbshd->setReadMode(READ_MODULATOR_PARM_FUNC);
-		tbsrwparm.devno = devno;
-		tbshd->setHardWareParm(tbsrwparm);
-		m_Thread.quit();
-		m_Thread.wait();
-		m_Thread.start();
-		//}
+		if (0 == ((nettag[ipindex].switchStatus >> devno) & 0x01)) {
+			tbshd->setRunMode(TBS_READ_FUNC);
+			tbshd->setReadMode(READ_MODULATOR_PARM_FUNC);
+			tbsrwparm.devno = devno;
+			tbshd->setHardWareParm(tbsrwparm);
+			m_Thread.quit();
+			m_Thread.wait();
+			m_Thread.start();
+		}
 	}
 #endif
 
