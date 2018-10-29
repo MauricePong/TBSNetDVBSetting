@@ -1,14 +1,16 @@
 #include "tbsui.h"
+#include "setmactool.h"
 #include <QApplication>
 #include <QTextCodec>
 #include <QFile>
 #include <QStyleFactory>  
 
-#if  1
+#if  0
 #define QTBS_MAIN_UI  tbsui
-#elif 0
-
+#elif 1
+#define QTBS_MAIN_UI SetMACTool
 #else
+#define QTBS_MAIN_UI  tbsui
 
 #endif
 int main(int argc, char *argv[])

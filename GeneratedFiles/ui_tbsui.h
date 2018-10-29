@@ -530,7 +530,7 @@ public:
         che_t2->setText(QApplication::translate("tbsui", "Tuner 2", nullptr));
         che_t3->setText(QApplication::translate("tbsui", "Tuner 3", nullptr));
         groupBox_2->setTitle(QString());
-        label_13->setText(QApplication::translate("tbsui", "(0~-35dBm)", nullptr));
+        label_13->setText(QApplication::translate("tbsui", "(-35~0dBm)", nullptr));
         label_5->setText(QApplication::translate("tbsui", "Modulation:", nullptr));
         label_12->setText(QApplication::translate("tbsui", "(100~1000MHZ)", nullptr));
         lin_Pla->setText(QApplication::translate("tbsui", "0", nullptr));
@@ -541,25 +541,19 @@ public:
         com_Modulation->setItemText(4, QApplication::translate("tbsui", "256QAM", nullptr));
 
         label_9->setText(QApplication::translate("tbsui", "Frequence:", nullptr));
-        lin_Lev->setInputMask(QApplication::translate("tbsui", "-00.0", nullptr));
-        lin_Lev->setText(QApplication::translate("tbsui", "-00.0", nullptr));
-        lin_Lev->setPlaceholderText(QApplication::translate("tbsui", "-00.0", nullptr));
+        lin_Lev->setText(QString());
 #ifndef QT_NO_ACCESSIBILITY
         lin_Fre->setAccessibleName(QString());
 #endif // QT_NO_ACCESSIBILITY
-        lin_Fre->setInputMask(QApplication::translate("tbsui", "0000.00", nullptr));
-        lin_Fre->setText(QApplication::translate("tbsui", "0000.00", nullptr));
-        lin_Fre->setPlaceholderText(QApplication::translate("tbsui", "0000.00", nullptr));
+        lin_Fre->setText(QString());
         label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));
         label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
         label_6->setText(QApplication::translate("tbsui", "Symbolrate:", nullptr));
-        lin_Sym->setInputMask(QApplication::translate("tbsui", "0000", nullptr));
-        lin_Sym->setText(QApplication::translate("tbsui", "0000", nullptr));
+        lin_Sym->setText(QString());
         label_11->setText(QApplication::translate("tbsui", "(bps)", nullptr));
         label_10->setText(QApplication::translate("tbsui", "(2000-7200\n"
 "kbps)", nullptr));
-        lin_TSPort->setInputMask(QApplication::translate("tbsui", "00000", nullptr));
-        lin_TSPort->setText(QApplication::translate("tbsui", "0", nullptr));
+        lin_TSPort->setText(QString());
         label_15->setText(QApplication::translate("tbsui", "TS Port:", nullptr));
         tw_Set->setTabText(tw_Set->indexOf(tab_KidSetting), QApplication::translate("tbsui", "Modulator", nullptr));
         too_Refresh->setText(QApplication::translate("tbsui", "Refresh", nullptr));

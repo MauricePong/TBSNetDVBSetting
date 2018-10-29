@@ -619,6 +619,62 @@ int TBSbase::writeMonopolizeCPUStatus(int mode,
 	return 0;
 }
 
+int TBSbase::writeRdCmdFinish(int m_addr,
+	unsigned char * wtbuff,
+	unsigned char num)
+{
+	int i = 0;
+	int mode = REG64_BY_UDP_FUNC;
+	u8 buff[8] = { 0 };
+	if (num == 0) {
+		qDebug() << QString("%1->%2->%3:error! (num == 0)")
+			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+		return -1;
+	}
+	else if (num > 8)
+	{
+		qDebug() << QString("%1->%2->%3:error! (num >8)")
+			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+		return -1;
+	}
+	//...check host free -->......................
+	if (-1 == checkHostStatus(1)) {
+		qDebug() << QString("%1->%2->%3:wait for host free timeout")
+			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+		return -1;
+	}
+	//...wt data & cs to low-->...................
+	for (i = 0; i < num; i++) {
+		buff[i] = wtbuff[i];
+	}
+	writeREG(mode, 0x4000 + 2 * 4, 4, &buff[4]);
+	writeREG(mode, 0x4000 + 1 * 4, 4, &buff[0]);
+
+	buff[0] = 0x32;
+	buff[1] = num;
+	buff[2] = (unsigned char)(m_addr >> 8);
+	buff[3] = (unsigned char)(m_addr & 255);
+	writeREG(mode, 0x4000 + 0 * 4, 4, buff); //cs low;
+	/*********
+	//...ck host received data & process-->........
+	if (-1 == checkHostStatus(0)) {
+		qDebug() << QString("%1->%2->%3:wait for host active timeout!")
+			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+		writeREG(mode, 0x4000 + 3 * 4, 4, buff);	  //cs high;
+		return -1;
+	}
+	writeREG(mode, 0x4000 + 3 * 4, 4, buff);	  //cs high;
+	//...check host work done-->..................
+	if (-1 == waitForHostWorkDone())
+	{
+		qDebug() << QString("%1->%2->%3:wait host work done timeout!")
+			.arg(__FILE__).arg(__LINE__).arg(__FUNCTION__);
+		return -1;
+	}
+	************/
+	return 0;
+}
+
 int TBSbase::checkHostStatus(int cs)
 {
 	int i = 0;

@@ -122,8 +122,8 @@
       <InputFile>%(FullPath)</InputFile>
     </QtRcc>
     <QtUic>
-      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
       <QTDIR>$(QTDIR)</QTDIR>
+      <OutputFile>.\GeneratedFiles\ui_%(Filename).h</OutputFile>
       <ExecutionDescription>Uic'ing %(Identity)...</ExecutionDescription>
       <InputFile>%(FullPath)</InputFile>
     </QtUic>
@@ -197,6 +197,7 @@
     <ClCompile Include="appinit.cpp" />
     <ClCompile Include="iconhelper.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="setmactool.cpp" />
     <ClCompile Include="tbsbase.cpp" />
     <ClCompile Include="tbshardware.cpp" />
     <ClCompile Include="tbsmesgdlg.cpp" />
@@ -206,6 +207,8 @@
     <QtMoc Include="appinit.h">
     </QtMoc>
     <QtMoc Include="iconhelper.h">
+    </QtMoc>
+    <QtMoc Include="setmactool.h">
     </QtMoc>
     <ClInclude Include="tbsbase.h" />
     <QtMoc Include="tbshardware.h">
@@ -228,10 +231,13 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">temp\moc\moc_predefs.h;%(Outputs)</Outputs>
     </CustomBuild>
     <ClCompile Include=".\tbsset_plugin_import.cpp" />
+    <ClInclude Include="temp\ui\ui_setmactool.h" />
     <ClInclude Include="temp\ui\ui_tbsmesgdlg.h" />
     <ClInclude Include="temp\ui\ui_tbsui.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="setmactool.ui">
+    </QtUic>
     <QtUic Include="tbsmesgdlg.ui">
     </QtUic>
     <QtUic Include="tbsui.ui">

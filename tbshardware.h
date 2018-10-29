@@ -21,9 +21,12 @@ public:
 	int readSwitchStatus(void);
 	int readIPParm(void);
 	int readModulatorParm(void);
+	int readNetMac(void);
+
 	//write
 	int writeIPParm(void);
 	int writeModulatorParm(void);
+	int writeNetMac(void);
 
 	int udpMulticastClinet(void);
 	int getHostIpAddress(void);

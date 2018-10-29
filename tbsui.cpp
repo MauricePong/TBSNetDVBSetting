@@ -215,6 +215,9 @@ void tbsui::initForm()
 	height_s = this->size().height();
 	width = width_s;
 	height = height_s;
+	tbsrwparm.isQam_sym_changed = 0;
+	tbsrwparm.isLevel_changed = 0;
+	tbsrwparm.isFreq_changed = 0;
 	uiudpfd = 0;
 	iserror = -1;
 	devno = 0;
@@ -386,9 +389,30 @@ void tbsui::on_too_Apply_clicked()
 				tbshd->setRunMode(TBS_WRITE_FUNC);
 				tbshd->setWriteMode(WRITE_MODULATOR_PARM_FUNC);
 				tbsrwparm.devno = devno;
+				if ((tbsrwparm.qam == ui->com_Modulation->currentIndex())
+					&& (tbsrwparm.sym == ui->lin_Sym->text().toInt())) {
+					tbsrwparm.isQam_sym_changed = 0;
+				}
+				else {
+					tbsrwparm.isQam_sym_changed = 1;
+				}
+
+				if (tbsrwparm.fre == ui->lin_Fre->text()) {
+					tbsrwparm.isFreq_changed = 0;
+				}
+				else {
+					tbsrwparm.isFreq_changed = 1;
+				}
+
+				if (tbsrwparm.lev == ui->lin_Lev->text()) {
+					tbsrwparm.isLevel_changed = 0;
+				}
+				else {
+					tbsrwparm.isLevel_changed = 1;
+				}
+
 				tbsrwparm.qam = ui->com_Modulation->currentIndex();
 				tbsrwparm.sym = ui->lin_Sym->text().toInt();
-				//tbsrwparm.pla = ui->lin_Pla->text();
 				tbsrwparm.fre = ui->lin_Fre->text();
 				tbsrwparm.lev = ui->lin_Lev->text();
 				tbsrwparm.tsport = ui->lin_TSPort->text().toInt();
@@ -495,8 +519,15 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 			int comindex = ui->com_IP->currentIndex();
 			int twindex = ui->tw_Set->currentIndex();
 			if (0 == twindex) {
-				nettag[comindex].ip = ui->lin_LIP->text();
-				nettag[comindex].port = ui->lin_Lport->text().toInt();
+				int dhcpEN = ui->che_dhcp->isChecked();
+				if (0 == dhcpEN) {
+					nettag[comindex].ip = ui->lin_LIP->text();
+					nettag[comindex].port = ui->lin_Lport->text().toInt();
+					ui->com_IP->setItemText(comindex, nettag[comindex].ip);
+				}
+				else {
+					ui->com_IP->setItemText(comindex, QString(""));
+				}
 			}
 			else if (1 == twindex) {
 				tbsrwparm = tbshd->getHardWareParm();

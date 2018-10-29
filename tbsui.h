@@ -60,8 +60,6 @@ private slots:
 	void on_too_Refresh_clicked();
 	void on_too_Apply_clicked();
 	void slot_com_IP_currentIndexChanged(int idx);
-	
-
 };
 
 #endif //

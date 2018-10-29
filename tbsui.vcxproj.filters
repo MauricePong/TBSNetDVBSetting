@@ -56,6 +56,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="setmactool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="tbsbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -79,6 +82,9 @@
     <QtMoc Include="iconhelper.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="setmactool.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
     <ClInclude Include="tbsbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,6 +102,9 @@
     <CustomBuild Include="temp\moc\moc_predefs.h.cbt">
       <Filter>Generated Files</Filter>
     </CustomBuild>
+    <ClInclude Include="temp\ui\ui_setmactool.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
     <ClInclude Include="temp\ui\ui_tbsmesgdlg.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
@@ -104,6 +113,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="setmactool.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
     <QtUic Include="tbsmesgdlg.ui">
       <Filter>Form Files</Filter>
     </QtUic>

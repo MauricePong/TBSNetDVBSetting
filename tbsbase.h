@@ -21,7 +21,7 @@
 #include <QObject>
 #include <QHostAddress>
 #include <QNetworkInterface>
-
+#include <QFile>
 #include "tbsmesgdlg.h"
 #ifdef Q_OS_WIN //windows
 #include <windows.h>
@@ -90,11 +90,14 @@ typedef unsigned int u32;
 #define READ_NULL_FUNC				0
 #define READ_NET_PARM_FUNC			1
 #define READ_MODULATOR_PARM_FUNC    2
+#define READ_NET_MODULATOR_PARM_FUNC    3
+#define READ_NET_MAC_FUNC			4
 
 //write
 #define WRITE_NULL_FUNC					0
 #define WRITE_NET_PARM_FUNC				1
 #define WRITE_MODULATOR_PARM_FUNC       2
+#define WRITE_NET_MAC_FUNC				4
 
 #define REG64_BY_UDP_FUNC          1
 
@@ -113,7 +116,7 @@ public:
 	QString ip;
 	QString Netmask;
 	QString gateway;
-
+	QString netmac;
 	int tsport;
 	int devno;
 	int qam;
@@ -121,6 +124,9 @@ public:
 	QString pla;
 	QString fre;
 	QString lev;
+	int isQam_sym_changed;
+	int isLevel_changed;
+	int isFreq_changed;
 };
 
 class TBS_Msg_Type {
@@ -222,6 +228,9 @@ public:
 		unsigned char * rdbuff,
 		unsigned char num);
 	int writeMonopolizeCPUStatus(int mode, int m_addr,
+		unsigned char * wtbuff,
+		unsigned char num);
+	int writeRdCmdFinish(int m_addr,
 		unsigned char * wtbuff,
 		unsigned char num);
 
