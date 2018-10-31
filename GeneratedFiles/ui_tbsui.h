@@ -80,22 +80,24 @@ public:
     QCheckBox *che_t3;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_5;
-    QLabel *label_13;
-    QLabel *label_5;
-    QLabel *label_12;
     QLineEdit *lin_Pla;
-    QComboBox *com_Modulation;
-    QLabel *label_9;
-    QLineEdit *lin_Lev;
-    QLineEdit *lin_Fre;
+    QLabel *label_13;
+    QLabel *label_12;
+    QLabel *label_5;
     QLabel *label_7;
-    QLabel *label_8;
-    QLabel *label_6;
-    QLineEdit *lin_Sym;
+    QLineEdit *lin_Fre;
+    QLabel *label_9;
+    QComboBox *com_Modulation;
+    QLineEdit *lin_Lev;
     QLabel *label_11;
+    QLabel *label_8;
     QLabel *label_10;
+    QLineEdit *lin_Sym;
+    QLabel *label_6;
     QLineEdit *lin_TSPort;
     QLabel *label_15;
+    QLabel *label_16;
+    QComboBox *com_Protocol;
     QToolButton *too_Refresh;
     QLabel *label_14;
     QComboBox *com_IP;
@@ -326,19 +328,18 @@ public:
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         gridLayout_5 = new QGridLayout(groupBox_2);
         gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
+        lin_Pla = new QLineEdit(groupBox_2);
+        lin_Pla->setObjectName(QStringLiteral("lin_Pla"));
+        lin_Pla->setReadOnly(true);
+
+        gridLayout_5->addWidget(lin_Pla, 1, 1, 1, 1);
+
         label_13 = new QLabel(groupBox_2);
         label_13->setObjectName(QStringLiteral("label_13"));
         sizePolicy1.setHeightForWidth(label_13->sizePolicy().hasHeightForWidth());
         label_13->setSizePolicy(sizePolicy1);
 
         gridLayout_5->addWidget(label_13, 3, 2, 1, 1);
-
-        label_5 = new QLabel(groupBox_2);
-        label_5->setObjectName(QStringLiteral("label_5"));
-        sizePolicy1.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
-        label_5->setSizePolicy(sizePolicy1);
-
-        gridLayout_5->addWidget(label_5, 5, 0, 1, 1);
 
         label_12 = new QLabel(groupBox_2);
         label_12->setObjectName(QStringLiteral("label_12"));
@@ -347,11 +348,34 @@ public:
 
         gridLayout_5->addWidget(label_12, 2, 2, 1, 1);
 
-        lin_Pla = new QLineEdit(groupBox_2);
-        lin_Pla->setObjectName(QStringLiteral("lin_Pla"));
-        lin_Pla->setReadOnly(true);
+        label_5 = new QLabel(groupBox_2);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        sizePolicy1.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
+        label_5->setSizePolicy(sizePolicy1);
 
-        gridLayout_5->addWidget(lin_Pla, 1, 1, 1, 1);
+        gridLayout_5->addWidget(label_5, 5, 0, 1, 1);
+
+        label_7 = new QLabel(groupBox_2);
+        label_7->setObjectName(QStringLiteral("label_7"));
+        sizePolicy1.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
+        label_7->setSizePolicy(sizePolicy1);
+
+        gridLayout_5->addWidget(label_7, 1, 0, 1, 1);
+
+        lin_Fre = new QLineEdit(groupBox_2);
+        lin_Fre->setObjectName(QStringLiteral("lin_Fre"));
+        lin_Fre->setEchoMode(QLineEdit::Normal);
+        lin_Fre->setCursorPosition(0);
+        lin_Fre->setDragEnabled(false);
+
+        gridLayout_5->addWidget(lin_Fre, 2, 1, 1, 1);
+
+        label_9 = new QLabel(groupBox_2);
+        label_9->setObjectName(QStringLiteral("label_9"));
+        sizePolicy1.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
+        label_9->setSizePolicy(sizePolicy1);
+
+        gridLayout_5->addWidget(label_9, 2, 0, 1, 1);
 
         com_Modulation = new QComboBox(groupBox_2);
         com_Modulation->addItem(QString());
@@ -363,52 +387,11 @@ public:
 
         gridLayout_5->addWidget(com_Modulation, 5, 1, 1, 1);
 
-        label_9 = new QLabel(groupBox_2);
-        label_9->setObjectName(QStringLiteral("label_9"));
-        sizePolicy1.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
-        label_9->setSizePolicy(sizePolicy1);
-
-        gridLayout_5->addWidget(label_9, 2, 0, 1, 1);
-
         lin_Lev = new QLineEdit(groupBox_2);
         lin_Lev->setObjectName(QStringLiteral("lin_Lev"));
         lin_Lev->setClearButtonEnabled(false);
 
         gridLayout_5->addWidget(lin_Lev, 3, 1, 1, 1);
-
-        lin_Fre = new QLineEdit(groupBox_2);
-        lin_Fre->setObjectName(QStringLiteral("lin_Fre"));
-        lin_Fre->setEchoMode(QLineEdit::Normal);
-        lin_Fre->setCursorPosition(0);
-        lin_Fre->setDragEnabled(false);
-
-        gridLayout_5->addWidget(lin_Fre, 2, 1, 1, 1);
-
-        label_7 = new QLabel(groupBox_2);
-        label_7->setObjectName(QStringLiteral("label_7"));
-        sizePolicy1.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
-        label_7->setSizePolicy(sizePolicy1);
-
-        gridLayout_5->addWidget(label_7, 1, 0, 1, 1);
-
-        label_8 = new QLabel(groupBox_2);
-        label_8->setObjectName(QStringLiteral("label_8"));
-        sizePolicy1.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
-        label_8->setSizePolicy(sizePolicy1);
-
-        gridLayout_5->addWidget(label_8, 3, 0, 1, 1);
-
-        label_6 = new QLabel(groupBox_2);
-        label_6->setObjectName(QStringLiteral("label_6"));
-        sizePolicy1.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
-        label_6->setSizePolicy(sizePolicy1);
-
-        gridLayout_5->addWidget(label_6, 4, 0, 1, 1);
-
-        lin_Sym = new QLineEdit(groupBox_2);
-        lin_Sym->setObjectName(QStringLiteral("lin_Sym"));
-
-        gridLayout_5->addWidget(lin_Sym, 4, 1, 1, 1);
 
         label_11 = new QLabel(groupBox_2);
         label_11->setObjectName(QStringLiteral("label_11"));
@@ -417,6 +400,13 @@ public:
 
         gridLayout_5->addWidget(label_11, 1, 2, 1, 1);
 
+        label_8 = new QLabel(groupBox_2);
+        label_8->setObjectName(QStringLiteral("label_8"));
+        sizePolicy1.setHeightForWidth(label_8->sizePolicy().hasHeightForWidth());
+        label_8->setSizePolicy(sizePolicy1);
+
+        gridLayout_5->addWidget(label_8, 3, 0, 1, 1);
+
         label_10 = new QLabel(groupBox_2);
         label_10->setObjectName(QStringLiteral("label_10"));
         sizePolicy1.setHeightForWidth(label_10->sizePolicy().hasHeightForWidth());
@@ -424,15 +414,41 @@ public:
 
         gridLayout_5->addWidget(label_10, 4, 2, 1, 1);
 
+        lin_Sym = new QLineEdit(groupBox_2);
+        lin_Sym->setObjectName(QStringLiteral("lin_Sym"));
+
+        gridLayout_5->addWidget(lin_Sym, 4, 1, 1, 1);
+
+        label_6 = new QLabel(groupBox_2);
+        label_6->setObjectName(QStringLiteral("label_6"));
+        sizePolicy1.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
+        label_6->setSizePolicy(sizePolicy1);
+
+        gridLayout_5->addWidget(label_6, 4, 0, 1, 1);
+
         lin_TSPort = new QLineEdit(groupBox_2);
         lin_TSPort->setObjectName(QStringLiteral("lin_TSPort"));
 
-        gridLayout_5->addWidget(lin_TSPort, 6, 1, 1, 1);
+        gridLayout_5->addWidget(lin_TSPort, 7, 1, 1, 1);
 
         label_15 = new QLabel(groupBox_2);
         label_15->setObjectName(QStringLiteral("label_15"));
 
-        gridLayout_5->addWidget(label_15, 6, 0, 1, 1);
+        gridLayout_5->addWidget(label_15, 7, 0, 1, 1);
+
+        label_16 = new QLabel(groupBox_2);
+        label_16->setObjectName(QStringLiteral("label_16"));
+        sizePolicy1.setHeightForWidth(label_16->sizePolicy().hasHeightForWidth());
+        label_16->setSizePolicy(sizePolicy1);
+
+        gridLayout_5->addWidget(label_16, 6, 0, 1, 1);
+
+        com_Protocol = new QComboBox(groupBox_2);
+        com_Protocol->addItem(QString());
+        com_Protocol->addItem(QString());
+        com_Protocol->setObjectName(QStringLiteral("com_Protocol"));
+
+        gridLayout_5->addWidget(com_Protocol, 6, 1, 1, 1);
 
 
         gridLayout_3->addWidget(groupBox_2, 0, 1, 1, 1);
@@ -530,31 +546,35 @@ public:
         che_t2->setText(QApplication::translate("tbsui", "Tuner 2", nullptr));
         che_t3->setText(QApplication::translate("tbsui", "Tuner 3", nullptr));
         groupBox_2->setTitle(QString());
-        label_13->setText(QApplication::translate("tbsui", "(-35~0dBm)", nullptr));
-        label_5->setText(QApplication::translate("tbsui", "Modulation:", nullptr));
-        label_12->setText(QApplication::translate("tbsui", "(100~1000MHZ)", nullptr));
         lin_Pla->setText(QApplication::translate("tbsui", "0", nullptr));
+        label_13->setText(QApplication::translate("tbsui", "(-35~0dBm)", nullptr));
+        label_12->setText(QApplication::translate("tbsui", "(100~1000MHZ)", nullptr));
+        label_5->setText(QApplication::translate("tbsui", "Modulation:", nullptr));
+        label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));
+#ifndef QT_NO_ACCESSIBILITY
+        lin_Fre->setAccessibleName(QString());
+#endif // QT_NO_ACCESSIBILITY
+        lin_Fre->setText(QString());
+        label_9->setText(QApplication::translate("tbsui", "Frequence:", nullptr));
         com_Modulation->setItemText(0, QApplication::translate("tbsui", "16QAM", nullptr));
         com_Modulation->setItemText(1, QApplication::translate("tbsui", "32QAM", nullptr));
         com_Modulation->setItemText(2, QApplication::translate("tbsui", "64QAM", nullptr));
         com_Modulation->setItemText(3, QApplication::translate("tbsui", "128QAM", nullptr));
         com_Modulation->setItemText(4, QApplication::translate("tbsui", "256QAM", nullptr));
 
-        label_9->setText(QApplication::translate("tbsui", "Frequence:", nullptr));
         lin_Lev->setText(QString());
-#ifndef QT_NO_ACCESSIBILITY
-        lin_Fre->setAccessibleName(QString());
-#endif // QT_NO_ACCESSIBILITY
-        lin_Fre->setText(QString());
-        label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));
-        label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
-        label_6->setText(QApplication::translate("tbsui", "Symbolrate:", nullptr));
-        lin_Sym->setText(QString());
         label_11->setText(QApplication::translate("tbsui", "(bps)", nullptr));
+        label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
         label_10->setText(QApplication::translate("tbsui", "(2000-7200\n"
 "kbps)", nullptr));
+        lin_Sym->setText(QString());
+        label_6->setText(QApplication::translate("tbsui", "Symbolrate:", nullptr));
         lin_TSPort->setText(QString());
         label_15->setText(QApplication::translate("tbsui", "TS Port:", nullptr));
+        label_16->setText(QApplication::translate("tbsui", "Net protocol:", nullptr));
+        com_Protocol->setItemText(0, QApplication::translate("tbsui", "UDP", nullptr));
+        com_Protocol->setItemText(1, QApplication::translate("tbsui", "RTP", nullptr));
+
         tw_Set->setTabText(tw_Set->indexOf(tab_KidSetting), QApplication::translate("tbsui", "Modulator", nullptr));
         too_Refresh->setText(QApplication::translate("tbsui", "Refresh", nullptr));
         label_14->setText(QApplication::translate("tbsui", "Net list:", nullptr));

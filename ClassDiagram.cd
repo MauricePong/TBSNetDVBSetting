@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AppInit">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEgAQAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>appinit.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RD_WT_PARM">
+    <Position X="6.5" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgABoAAAAABgQICEAAAAZAAAAAgAAAAgUABAAAA=</HashCode>
+      <FileName>tbsbase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TBS_Msg_Type" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQAAAAQgAAAAAAAAAAAEAYBABAAAAAAABAAAAAAE=</HashCode>
+      <FileName>tbsbase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NET_NODE" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAAAgAAAAgAAAAAAA=</HashCode>
+      <FileName>tbsbase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TBSbase">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAQAZAAEABAABABACCCAACKAAgIBAgQAgAKAAAHAAA=</HashCode>
+      <FileName>tbsbase.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IconHelper">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAFAAAAAAAEAAAAAAAAAAAAAAIACAAAAAAMAAQg=</HashCode>
+      <FileName>iconhelper.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SetMACTool">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAEEwAAAAAAEAAAQAAAQQEAEQAAQAAAAEAAAAgQAAI=</HashCode>
+      <FileName>setmactool.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TBShardware">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAAAAUCGAAhAOACgAATKBAEAABAgAECIAQAEB0JMEEA=</HashCode>
+      <FileName>tbshardware.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TBSMesgDlg">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAQAAEAAAAAAAAAAAAAAAACAAAAAAAAAQBCA=</HashCode>
+      <FileName>tbsmesgdlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="tbsui" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAEE0AEAACCEARAQACAARECMAAQUAAAIAAAEAoQAAI=</HashCode>
+      <FileName>tbsui.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Typedef Name="u8" Collapsed="true">
+    <Position X="6.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>tbsbase.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="u16" Collapsed="true">
+    <Position X="3" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>tbsbase.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="u32" Collapsed="true">
+    <Position X="4.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>tbsbase.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

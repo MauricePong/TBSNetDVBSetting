@@ -1,4 +1,4 @@
-﻿#include "appinit.h"
+#include "appinit.h"
 #include "qmutex.h"
 #include "qapplication.h"
 #include "qevent.h"
@@ -18,11 +18,13 @@ AppInit *AppInit::Instance()
     return self;
 }
 
-AppInit::AppInit(QObject *parent) : QObject(parent)
+AppInit::AppInit(QObject *parent) : QObject(
+        parent)
 {
 }
 
-bool AppInit::eventFilter(QObject *obj, QEvent *evt)
+bool AppInit::eventFilter(QObject *obj,
+                          QEvent *evt)
 {
     QWidget *w = (QWidget *)obj;
     if (!w->property("canMove").toBool()) {
@@ -32,18 +34,21 @@ bool AppInit::eventFilter(QObject *obj, QEvent *evt)
     static QPoint mousePoint;
     static bool mousePressed = false;
 
-    QMouseEvent *event = static_cast<QMouseEvent *>(evt);
+    QMouseEvent *event = static_cast<QMouseEvent *>
+                         (evt);
     if (event->type() == QEvent::MouseButtonPress) {
         if (event->button() == Qt::LeftButton) {
             mousePressed = true;
             mousePoint = event->globalPos() - w->pos();
             return true;
         }
-    } else if (event->type() == QEvent::MouseButtonRelease) {
+    } else if (event->type() ==
+               QEvent::MouseButtonRelease) {
         mousePressed = false;
         return true;
     } else if (event->type() == QEvent::MouseMove) {
-        if (mousePressed && (event->buttons() && Qt::LeftButton)) {
+        if (mousePressed && (event->buttons()
+                             && Qt::LeftButton)) {
             w->move(event->globalPos() - mousePoint);
             return true;
         }

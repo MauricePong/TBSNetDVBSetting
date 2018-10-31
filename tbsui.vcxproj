@@ -14,7 +14,7 @@
     <ProjectGuid>{C43172DB-906F-3F57-BF65-FDFF70336E4D}</ProjectGuid>
     <RootNamespace>TBSSET</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -244,6 +244,7 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="qss\psblack\uilogo\Checkbox" />
     <None Include="qss\psblack\uilogo\Check" />
     <None Include="qss\psblack\uilogo\Invalid" />

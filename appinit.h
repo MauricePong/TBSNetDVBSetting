@@ -5,18 +5,18 @@
 
 class AppInit : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	static AppInit *Instance();
-	explicit AppInit(QObject *parent = 0);
+    static AppInit *Instance();
+    explicit AppInit(QObject *parent = 0);
 
-	void start();
+    void start();
 
 protected:
-	bool eventFilter(QObject *obj, QEvent *evt);
+    bool eventFilter(QObject *obj, QEvent *evt);
 
 private:
-	static AppInit *self;
+    static AppInit *self;
 
 signals:
 
