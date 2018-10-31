@@ -99,12 +99,10 @@ void tbsui::init_sql(void)
 			//	{
 			//		qDebug() << "inserted two!";
 			//	}
-
 		}
 	}
 
 	qDebug() << "init sql over";
-
 }
 
 void tbsui::updateMac_sql(QString qstrMac)
@@ -145,7 +143,6 @@ void tbsui::refresh(void)
 	m_Thread.wait();
 	m_Thread.start();
 }
-
 
 bool tbsui::eventFilter(QObject *watched, QEvent *event)
 {
@@ -244,7 +241,6 @@ void tbsui::initForm()
 	//	.arg(__FUNCTION__)
 	//	.arg((int)QThread::currentThreadId());
 }
-
 
 void tbsui::on_btnMenu_Min_clicked()
 {
@@ -435,7 +431,6 @@ void tbsui::slot_com_IP_currentIndexChanged(int idx)
 	}
 	qDebug() << "idx" << idx << nettag[idx].ip << nettag[idx].port;
 	uiudpfd = tbshd->udpOpen(nettag[idx].ip, nettag[idx].port);
-	//uiudpfd = tbshd->udpOpen(QString("192.168.8.232"), 5444);
 	if (uiudpfd < 3) {
 		return;
 	}
@@ -444,7 +439,7 @@ void tbsui::slot_com_IP_currentIndexChanged(int idx)
 		tbsrwparm.devno = devno;
 		tbshd->setHardWareParm(tbsrwparm);
 		tbshd->setRunMode(TBS_READ_FUNC);
-		tbshd->setReadMode(READ_NET_PARM_FUNC);
+		tbshd->setReadMode(READ_NET_MODULATOR_PARM_FUNC);
 		m_Thread.quit();
 		m_Thread.wait();
 		m_Thread.start();
@@ -513,7 +508,7 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type* msg)
 				}
 			}
 		}
-		else if ((0 == msg->isread) && (0 == msg->iserror)) { // return write 
+		else if ((0 == msg->isread) && (0 == msg->iserror)) { // return write
 			uiudpfd = tbshd->udpClose(uiudpfd);
 			tbshd->setudpfd(uiudpfd);
 			int comindex = ui->com_IP->currentIndex();
@@ -629,7 +624,6 @@ void tbsui::tunersCheckboxClick()
 		}
 	}
 #endif
-
 }
 
 void tbsui::on_sli_H_valueChanged(int value)
@@ -641,4 +635,3 @@ void tbsui::on_sli_H_valueChanged(int value)
 	this->resize(width, height);
 	QString qst = QString("QCheckBox::indicator{ width: %1px; height: %1px; }").arg(4 + value);//改变大小
 }
-

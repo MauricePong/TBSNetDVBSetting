@@ -40,7 +40,7 @@ public:
 	int checkStatus_RX(int times);
 	int checkStatus_TX(int times);
 	int reset();
-#ifdef Q_OS_WIN 
+#ifdef Q_OS_WIN
 	//windows
 	SOCKET gethdudpfdMode();
 	void sethdudpfdMode(SOCKET f_hdudpfd);

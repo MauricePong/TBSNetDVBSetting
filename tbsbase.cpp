@@ -2,7 +2,6 @@
 
 TBSbase::TBSbase()
 {
-
 }
 
 TBSbase::~TBSbase()
@@ -63,7 +62,6 @@ int TBSbase::udpClose(int ufd)
 	return ufd;
 }
 
-
 #ifdef Q_OS_WIN //windows
 SOCKET TBSbase::udpOpen_no(QString ipaddr, int ipport)
 {
@@ -100,7 +98,7 @@ int TBSbase::udpOpen_no(QString ipaddr, int ipport)
 		qDebug("fcntl");
 		return ufd;
 	}
-#endif 
+#endif
 	return ufd;
 }
 #ifdef Q_OS_WIN //windows
@@ -111,7 +109,6 @@ int TBSbase::getudpfd(void)
 {
 	return udpfd;
 }
-
 
 #ifdef Q_OS_WIN //windows
 void TBSbase::setudpfd(SOCKET ufd)
@@ -158,7 +155,7 @@ int TBSbase::readREG64ByUDP(int subAddr, unsigned char num, unsigned char *rdbuf
 	}
 
 	for (i = 0; i < 12; i++) {
-			//qDebug("udp_REG64_rd recv:%d=%02x", i, (u8)recvbuff[i]);
+		//qDebug("udp_REG64_rd recv:%d=%02x", i, (u8)recvbuff[i]);
 		if ((i > 3) && (j < num)) {
 			rdbuffer[j] = (u8)recvbuff[i];
 			j++;
@@ -209,7 +206,6 @@ int TBSbase::writeREG64ByUDP(int subAddr, unsigned char num, unsigned char *wtbu
 	//qDebug("udp_REG64_wt:recv:%d=%02x", i, (u8)recvbuff[i]);
 	//}
 	return 0;
-
 }
 
 int TBSbase::readREG(int mode,
@@ -331,7 +327,7 @@ int TBSbase::writeREG32ToExternalMemoryOnce(int m_addr,
 	if (writeREG(mode, 0x4000 + 2 * 4, 4, &buff[4]) < 0) {
 		return -1;
 	}
-	
+
 	if (writeREG(mode, 0x4000 + 1 * 4, 4, &buff[0]) < 0) {
 		return -1;
 	}
@@ -410,7 +406,7 @@ int TBSbase::readFromExternalMemory(int ram_addr,
 		k = rd_size / x8byte;
 		g = rd_size % x8byte;
 		for (i = 0; i < k; i++) {
-			ret = readFromExternalMemoryOnce(mode, (ram_addr + i * 8), &rdbff[i*8], x8byte);
+			ret = readFromExternalMemoryOnce(mode, (ram_addr + i * 8), &rdbff[i * 8], x8byte);
 			if (-1 == ret) {
 				return ret;
 			}
@@ -445,13 +441,13 @@ int TBSbase::writeToExternalMemory(int ram_addr,
 		k = wt_size / x8byte;
 		g = wt_size % x8byte;
 		for (i = 0; i < k; i++) {
-			ret = writeToExternalMemoryOnce(mode, (ram_addr + i * 8), &wtbff[i*8], x8byte);
+			ret = writeToExternalMemoryOnce(mode, (ram_addr + i * 8), &wtbff[i * 8], x8byte);
 			if (-1 == ret) {
 				return ret;
 			}
 		}
 		if (g != 0) {
-			ret =  writeToExternalMemoryOnce(mode, (ram_addr + i * 8), &wtbff[i * 8], g);
+			ret = writeToExternalMemoryOnce(mode, (ram_addr + i * 8), &wtbff[i * 8], g);
 			if (-1 == ret) {
 				return ret;
 			}
@@ -720,6 +716,3 @@ int TBSbase::waitForHostWorkDone()
 	}
 	return 0;
 }
-
-
-

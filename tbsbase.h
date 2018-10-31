@@ -85,7 +85,8 @@ typedef unsigned int u32;
 #define TBS_READ_FUNC   1
 #define TBS_WRITE_FUNC  2
 #define TBS_UDPMULTICAST_FUNC 3
-#define TBS_RESET_FUNC  4  
+#define TBS_RESET_FUNC  4
+#define TBS_UDOMULTICAST_MAC_FUNC 5
 //read
 #define READ_NULL_FUNC				0
 #define READ_NET_PARM_FUNC			1
@@ -105,9 +106,6 @@ typedef unsigned int u32;
 
 #define REG32MonopolizeCPU		1
 
-
-
-
 class RD_WT_PARM {
 public:
 	u8 switchStatus;
@@ -117,6 +115,7 @@ public:
 	QString Netmask;
 	QString gateway;
 	QString netmac;
+	QString setnetmac;
 	int tsport;
 	int devno;
 	int qam;
@@ -143,7 +142,6 @@ public:
 	QString displaytext;
 	QString devip;
 	int devport;
-
 };
 
 class NET_NODE {

@@ -15,7 +15,6 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
@@ -30,7 +29,7 @@ class Ui_SetMACTool
 public:
     QGridLayout *gridLayout;
     QGroupBox *groupBox;
-    QFormLayout *formLayout;
+    QGridLayout *gridLayout_2;
     QLabel *label;
     QComboBox *com_LocalIP;
     QLabel *label_2;
@@ -43,46 +42,49 @@ public:
     {
         if (SetMACTool->objectName().isEmpty())
             SetMACTool->setObjectName(QStringLiteral("SetMACTool"));
+        SetMACTool->resize(320, 240);
         gridLayout = new QGridLayout(SetMACTool);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         groupBox = new QGroupBox(SetMACTool);
         groupBox->setObjectName(QStringLiteral("groupBox"));
-        formLayout = new QFormLayout(groupBox);
-        formLayout->setObjectName(QStringLiteral("formLayout"));
+        gridLayout_2 = new QGridLayout(groupBox);
+        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         label = new QLabel(groupBox);
         label->setObjectName(QStringLiteral("label"));
 
-        formLayout->setWidget(0, QFormLayout::LabelRole, label);
+        gridLayout_2->addWidget(label, 0, 0, 1, 1);
 
         com_LocalIP = new QComboBox(groupBox);
         com_LocalIP->setObjectName(QStringLiteral("com_LocalIP"));
 
-        formLayout->setWidget(0, QFormLayout::FieldRole, com_LocalIP);
+        gridLayout_2->addWidget(com_LocalIP, 0, 1, 1, 1);
 
         label_2 = new QLabel(groupBox);
         label_2->setObjectName(QStringLiteral("label_2"));
 
-        formLayout->setWidget(1, QFormLayout::LabelRole, label_2);
+        gridLayout_2->addWidget(label_2, 1, 0, 1, 1);
 
         lin_NetMac = new QLineEdit(groupBox);
         lin_NetMac->setObjectName(QStringLiteral("lin_NetMac"));
+        lin_NetMac->setEnabled(true);
+        lin_NetMac->setReadOnly(true);
 
-        formLayout->setWidget(1, QFormLayout::FieldRole, lin_NetMac);
+        gridLayout_2->addWidget(lin_NetMac, 1, 1, 1, 1);
 
         label_3 = new QLabel(groupBox);
         label_3->setObjectName(QStringLiteral("label_3"));
 
-        formLayout->setWidget(2, QFormLayout::LabelRole, label_3);
+        gridLayout_2->addWidget(label_3, 2, 0, 1, 1);
 
         lin_SeNetMac = new QLineEdit(groupBox);
         lin_SeNetMac->setObjectName(QStringLiteral("lin_SeNetMac"));
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, lin_SeNetMac);
+        gridLayout_2->addWidget(lin_SeNetMac, 2, 1, 1, 1);
 
         btn_Macapply = new QPushButton(groupBox);
         btn_Macapply->setObjectName(QStringLiteral("btn_Macapply"));
 
-        formLayout->setWidget(3, QFormLayout::FieldRole, btn_Macapply);
+        gridLayout_2->addWidget(btn_Macapply, 3, 1, 1, 1);
 
 
         gridLayout->addWidget(groupBox, 0, 0, 1, 1);
@@ -95,7 +97,7 @@ public:
 
     void retranslateUi(QDialog *SetMACTool)
     {
-        SetMACTool->setWindowTitle(QApplication::translate("SetMACTool", "Dialog", nullptr));
+        SetMACTool->setWindowTitle(QApplication::translate("SetMACTool", "MACTOOL", nullptr));
         groupBox->setTitle(QApplication::translate("SetMACTool", "SetMAC:", nullptr));
         label->setText(QApplication::translate("SetMACTool", "LocalIP:", nullptr));
         label_2->setText(QApplication::translate("SetMACTool", "Display Netmac:", nullptr));

@@ -27,7 +27,7 @@ void TBShardware::start()
 	int ret = -1;
 #ifdef Q_OS_WIN //windows
 	SOCKET  sudpfd = 0;
-#else 
+#else
 	int sudpfd = 0;
 #endif
 	//while (1) {
@@ -45,6 +45,7 @@ void TBShardware::start()
 	tbsmsg->devport = 0;
 	tbsmsg->switchStatus = 0x0f;
 	emit sigDisplayMsgUI(tbsmsg);
+
 	switch (runmode) {
 	case TBS_READ_FUNC:
 		ret = readBuffer(readmode);
@@ -64,6 +65,22 @@ void TBShardware::start()
 		}
 		setudpfd(sudpfd);
 		ret = readBuffer(READ_NET_MODULATOR_PARM_FUNC);
+		if (-1 == ret) {
+			break;
+		}
+		break;
+	case TBS_UDOMULTICAST_MAC_FUNC:
+		ret = udpMulticastClinet();
+		if (-1 == ret) {
+			break;
+		}
+		sudpfd = udpOpen(first_ip.ip, first_ip.port);
+		if (sudpfd < 3) {
+			ret = -1;
+			break;
+		}
+		setudpfd(sudpfd);
+		ret = readBuffer(READ_NET_MAC_FUNC);
 		if (-1 == ret) {
 			break;
 		}
@@ -178,11 +195,11 @@ void TBShardware::start()
 		tbsmsg->switchStatus = 0x0f;
 		emit sigDisplayMsgUI(tbsmsg);
 	}
-	else if (6 == ret) {
-		tbsmsg->type = 1;
+	else if (6 == ret) { //read mac
+		tbsmsg->type = 3;
 		tbsmsg->isreadall = 0;
 		tbsmsg->iserror = 0;
-		tbsmsg->isread = 3;
+		tbsmsg->isread = 1;
 		tbsmsg->btnL = 0;
 		tbsmsg->btnR = 1;
 		tbsmsg->btnRtext = QString("OK");
@@ -192,20 +209,21 @@ void TBShardware::start()
 		tbsmsg->devport = 0;
 		tbsmsg->switchStatus = 0x0f;
 		emit sigDisplayMsgUI(tbsmsg);
-	}else if (7 == ret) {
-	tbsmsg->type = 1;
-	tbsmsg->isreadall = 0;
-	tbsmsg->iserror = 0;
-	tbsmsg->isread = 3;
-	tbsmsg->btnL = 0;
-	tbsmsg->btnR = 1;
-	tbsmsg->btnRtext = QString("OK");
-	tbsmsg->tilie = QString("information");
-	tbsmsg->displaytext = QString("Success");
-	tbsmsg->devip = QString("");
-	tbsmsg->devport = 0;
-	tbsmsg->switchStatus = 0x0f;
-	emit sigDisplayMsgUI(tbsmsg);
+	}
+	else if (7 == ret) {
+		tbsmsg->type = 3;
+		tbsmsg->isreadall = 0;
+		tbsmsg->iserror = 0;
+		tbsmsg->isread = 0;
+		tbsmsg->btnL = 0;
+		tbsmsg->btnR = 1;
+		tbsmsg->btnRtext = QString("OK");
+		tbsmsg->tilie = QString("information");
+		tbsmsg->displaytext = QString("Success");
+		tbsmsg->devip = QString("");
+		tbsmsg->devport = 0;
+		tbsmsg->switchStatus = 0x0f;
+		emit sigDisplayMsgUI(tbsmsg);
 	}
 
 	//	if (false == m_bRun) {
@@ -259,12 +277,17 @@ int TBShardware::readBuffer(int rmode)
 
 int TBShardware::writeBuffer(int wmode)
 {
+	int ret = 0;
 	switch (wmode) {
 	case WRITE_NET_PARM_FUNC:
 		return writeIPParm();
 		break;
 	case WRITE_MODULATOR_PARM_FUNC:
-		return writeModulatorParm();
+		ret = writeModulatorParm();
+		if (-1 == ret) {
+			u8 writeMcudata[2] = { 0,0 };
+			writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
+		}
 		break;
 	case WRITE_NET_MAC_FUNC:
 		return writeNetMac();
@@ -276,7 +299,7 @@ int TBShardware::writeBuffer(int wmode)
 		return -1;
 		break;
 	}
-	return 0;
+	return ret;
 }
 
 int TBShardware::readSwitchStatus(void)
@@ -326,7 +349,6 @@ int TBShardware::readIPParm(void)
 
 int TBShardware::readModulatorParm(void)
 {
-
 	int ret = 0;
 	int i = 0;
 	int delaytime = 1000;
@@ -438,10 +460,22 @@ int TBShardware::readModulatorParm(void)
 int TBShardware::readNetMac(void)
 {
 	u8 tmp[8] = { 0 };
+	u8 mac[8] = { 0 };
 	int ret = controlExternalMemory(READ, 0x0008, tmp, 6);
-	rwparm.netmac.sprintf("%02x.%02x.%02x.%02x.%02x.%02x",
+	rwparm.netmac.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
+		tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
+
+	mac[0] = tmp[5];
+	mac[1] = tmp[4];
+	mac[2] = tmp[3];
+	*(int*)&mac[0] = *(int*)&mac[0] + 1;
+	tmp[5] = mac[0];
+	tmp[4] = mac[1];
+	tmp[3] = mac[2];
+	rwparm.setnetmac.sprintf("%02x:%02x:%02x:%02x:%02x:%02x",
 		tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
 	qDebug() << rwparm.netmac;
+	qDebug() << rwparm.setnetmac;
 	if (0 == ret) {
 		ret = 6;
 	}
@@ -509,6 +543,158 @@ int TBShardware::writeModulatorParm(void)
 	if (-1 == ret) {
 		return ret;
 	}
+
+#if 1
+	if (1 == rwparm.isFreq_changed) {
+		//freq
+		QString qfreq = QString::number(rwparm.fre.toFloat(), 'f', 2);
+		tmp[0] = (u8)(00);
+		tmp[1] = (u8)(11 + qfreq.length()); //num
+
+		tmp[2] = 0x41; //0
+		tmp[3] = 0x54;
+		tmp[4] = 0x5f;
+
+		tmp[5] = 0xaa;
+		tmp[6] = 0xa3;
+		tmp[7] = 0x00;
+
+		tmp[8] = 0x00;
+		tmp[9] = 0x00;
+		tmp[10] = 0x00;
+
+		for (i = 0; i < qfreq.length(); i++) {
+			tmp[11 + i] = (u8)(qfreq.at(i).toLatin1());
+			qDebug("%d:%c", 11 + i, tmp[11 + i]);
+		}
+		tmp[11 + i] = tmpright0to1byte[0];
+		tmp[11 + i + 1] = tmpright0to1byte[1];
+
+		writeMcudata[0] = 1;
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		QMSLEEP(delaytime);
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x0030, 1, (u8*)&rwparm.devno);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x0048, 8, &tmp[16]);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x0040, 8, &tmp[8]);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x0038, 8, &tmp[0]);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		ret = checkStatus_TX(30);
+		if (-1 == ret) {
+			return ret;
+		}
+		ret = checkStatus_RX(30);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		writeMcudata[0] = 0;
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
+		if (-1 == ret) {
+			return ret;
+		}
+		memset(tmp, 0, 32);
+		if ((1 == rwparm.isLevel_changed) || (1 == rwparm.isQam_sym_changed)) {
+			QMSLEEP(2000);
+		}
+	}
+	qDebug("fre over");
+#endif
+
+#if 1
+	if (1 == rwparm.isLevel_changed) {
+		//level
+		QString qlevel = QString::number(rwparm.lev.toFloat(), 'f', 1);
+		tmp[0] = (u8)(0x00); //devno
+		tmp[1] = (u8)(11 + qlevel.length()); //num
+
+		tmp[2] = 0x41;
+		tmp[3] = 0x54;
+		tmp[4] = 0x5f;
+
+		tmp[5] = 0xaa;
+		tmp[6] = 0xa4;
+
+		tmp[7] = 0x00;
+		tmp[8] = 0x00;
+		tmp[9] = 0x00;
+		tmp[10] = 0x00;
+
+		for (i = 0; i < qlevel.length(); i++) {
+			tmp[11 + i] = (u8)(qlevel.at(i).toLatin1());
+		}
+
+		tmp[11 + i] = tmpright0to1byte[0];
+		tmp[11 + i + 1] = tmpright0to1byte[1];
+
+		writeMcudata[0] = 1;
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		QMSLEEP(delaytime);
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x0030, 1, (u8*)&rwparm.devno);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x0048, 2, &tmp[16]);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x0040, 8, &tmp[8]);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x0038, 8, &tmp[0]);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		ret = checkStatus_TX(30);
+		if (-1 == ret) {
+			return ret;
+		}
+		ret = checkStatus_RX(30);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		writeMcudata[0] = 0;
+		ret = writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
+		if (-1 == ret) {
+			return ret;
+		}
+
+		memset(tmp, 0, 32);
+		if (1 == rwparm.isQam_sym_changed) {
+			QMSLEEP(2000);
+		}
+	}
+	qDebug("lev over");
+#endif
+
 #if 1
 	if (1 == rwparm.isQam_sym_changed) {
 		//QAM
@@ -570,153 +756,10 @@ int TBShardware::writeModulatorParm(void)
 		}
 		memset(tmp, 0, 32);
 	}
+	qDebug("qam_sym over");
 #endif
-	//QMSLEEP(500);
+
 #if 1
-	if (1 == rwparm.isFreq_changed) {
-		//freq
-		QString qfreq = QString::number(rwparm.fre.toFloat(), 'f', 2);
-		tmp[0] = (u8)(00);
-		tmp[1] = (u8)(11 + qfreq.length()); //num
-
-		tmp[2] = 0x41; //0
-		tmp[3] = 0x54;
-		tmp[4] = 0x5f;
-
-		tmp[5] = 0x00;
-		tmp[6] = 0xa3;
-		tmp[7] = 0x00;
-
-		tmp[8] = 0x00;
-		tmp[9] = 0x00;
-		tmp[10] = 0x00;
-
-		for (i = 0; i < qfreq.length(); i++) {
-			tmp[11 + i] = (u8)(qfreq.at(i).toLatin1());
-			qDebug("%d:%c", 11 + i, tmp[11 + i]);
-		}
-		tmp[11 + i] = tmpright0to1byte[0];
-		tmp[11 + i + 1] = tmpright0to1byte[1];
-
-		writeMcudata[0] = 1;
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		QMSLEEP(delaytime);
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x0030, 1, (u8*)&rwparm.devno);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x0048, 8, &tmp[16]);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x0040, 8, &tmp[8]);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x0038, 8, &tmp[0]);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		ret = checkStatus_TX(30);
-		if (-1 == ret) {
-			return ret;
-		}
-		ret = checkStatus_RX(30);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		writeMcudata[0] = 0;
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		memset(tmp, 0, 32);
-	}
-#endif
-	//QMSLEEP(500);
-#if 1 
-	if (1 == rwparm.isLevel_changed) {
-		//level
-		QString qlevel = QString::number(rwparm.lev.toFloat(), 'f', 1);
-		tmp[0] = (u8)(0x00); //devno
-		tmp[1] = (u8)(11 + qlevel.length()); //num
-
-		tmp[2] = 0x41;
-		tmp[3] = 0x54;
-		tmp[4] = 0x5f;
-
-		tmp[5] = 0x00;
-		tmp[6] = 0xa4;
-
-		tmp[7] = 0x00;
-		tmp[8] = 0x00;
-		tmp[9] = 0x00;
-		tmp[10] = 0x00;
-
-		for (i = 0; i < qlevel.length(); i++) {
-			tmp[11 + i] = (u8)(qlevel.at(i).toLatin1());
-		}
-
-		tmp[11 + i] = tmpright0to1byte[0];
-		tmp[11 + i + 1] = tmpright0to1byte[1];
-
-		writeMcudata[0] = 1;
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		QMSLEEP(delaytime);
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x0030, 1, (u8*)&rwparm.devno);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x0048, 2, &tmp[16]);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x0040, 8, &tmp[8]);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x0038, 8, &tmp[0]);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		ret = checkStatus_TX(30);
-		if (-1 == ret) {
-			return ret;
-		}
-		ret = checkStatus_RX(30);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		writeMcudata[0] = 0;
-		ret = writeREG(REG64_BY_UDP_FUNC, 0x4034, 1, writeMcudata);
-		if (-1 == ret) {
-			return ret;
-		}
-
-		memset(tmp, 0, 32);
-	}
-#endif
-
-#if 1 
 	//QMSLEEP(500);
 	ret = readModulatorParm();
 	if (-1 == ret) {
@@ -738,16 +781,20 @@ int TBShardware::writeModulatorParm(void)
 
 	return ret;
 }
-
 int TBShardware::writeNetMac(void)
 {
 	u8 tmp[10] = { 0 };
 	qDebug() << rwparm.netmac;
-	for (int i = 0; i < 6; i++) {
-		tmp[i] = rwparm.netmac.section('.', i, i).trimmed().toInt();
-	}
+	char charry[32] = { '\0' };
+	strcpy(charry, rwparm.netmac.toLatin1().data());
+	sscanf(charry, "%02x:%02x:%02x:%02x:%02x:%02x"
+		, &tmp[0], &tmp[1], &tmp[2], &tmp[3], &tmp[4], &tmp[5]);
 	int ret = controlExternalMemory(WRITE, 0x0008, tmp, 6);
-	if (0 == ret) {
+	if (-1 == ret) {
+		return ret;
+	}
+	ret = readBuffer(READ_NET_MAC_FUNC);
+	if (6 == ret) {
 		ret = 7;
 	}
 	return ret;
@@ -827,7 +874,6 @@ int TBShardware::udpMulticastClinet(void)
 			break;
 		}
 		else {
-
 			/**
 			sprintf(recvtmp, "TBS%02x%02x:%d.%d.%d.%d:%d"
 				"/%02x:%02x:%02x:%02x:%02x:%02x",
@@ -848,7 +894,9 @@ int TBShardware::udpMulticastClinet(void)
 				continue;
 			**/
 
-			qDebug("%02x %02x", (u8)recvbuf[4], (u8)recvbuf[5]);
+			qDebug("%02x %02x %d.%d.%d %d", (u8)recvbuf[4], (u8)recvbuf[5]
+				, (u8)recvbuf[6], (u8)recvbuf[7]
+				, (u8)recvbuf[8], gatewaynum);
 			if (((u8)(0x82) != (u8)recvbuf[4])
 				&& ((u8)(0x20) != (u8)recvbuf[5])) {
 				continue;
@@ -903,7 +951,7 @@ int TBShardware::udpMulticastClinet(void)
 	::close(Mfd);
 #endif
 	return ret;
-		}
+}
 
 int TBShardware::getHostIpAddress(void)
 {
@@ -916,8 +964,8 @@ int TBShardware::getHostIpAddress(void)
 		if (ipAddressesList.at(i) != QHostAddress::LocalHost &&
 			ipAddressesList.at(i).toIPv4Address() &&
 			(ipAddressesList.at(i) != QHostAddress::Null)) {
-			hostip[i] = ipAddressesList.at(i).toString();
-			qDebug() << i << "local PC ip:" << hostip[i];
+			hostip[gatewaynum] = ipAddressesList.at(i).toString();
+			qDebug() << i << "local PC ip:" << hostip[gatewaynum];
 			gatewaynum++;
 		}
 	}
@@ -930,12 +978,10 @@ int TBShardware::getHostIpAddress(void)
 	return 0;
 }
 
-
 int TBShardware::getRunMode()
 {
 	return runmode;
 }
-
 
 void TBShardware::setRunMode(int mode)
 {
@@ -979,7 +1025,6 @@ int TBShardware::checkStatus_RX(int times)
 		else {
 			QMSLEEP(100);
 		}
-
 	}
 	if (i == times) {
 		return -1;
@@ -1065,7 +1110,6 @@ int TBShardware::reset()
 	return 0;
 }
 
-
 #ifdef Q_OS_WIN //windows
 SOCKET TBShardware::gethdudpfdMode()
 {
@@ -1103,9 +1147,6 @@ int TBShardware::closeNetSocket(int socketfd)
 }
 #endif
 
-
-
-
 RD_WT_PARM  TBShardware::getHardWareParm(void)
 {
 	return rwparm;
@@ -1115,4 +1156,3 @@ void TBShardware::setHardWareParm(RD_WT_PARM  rw)
 {
 	rwparm = rw;
 }
-

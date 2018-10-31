@@ -7,28 +7,28 @@
 
 #endif
 namespace Ui {
-class tbsui;
+	class tbsui;
 }
 
 class tbsui : public QDialog
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit tbsui(QWidget *parent = 0);
-    ~tbsui();
+	explicit tbsui(QWidget *parent = 0);
+	~tbsui();
 	void initForm();
 	void init_sql(void);
 	void updateMac_sql(QString qstrMac);
 	void refresh(void);
 protected:
-    bool eventFilter(QObject *watched, QEvent *event);
+	bool eventFilter(QObject *watched, QEvent *event);
 private:
-    Ui::tbsui *ui;
-    int width;
-    int height;
-    int width_s;
-    int height_s;
+	Ui::tbsui *ui;
+	int width;
+	int height;
+	int width_s;
+	int height_s;
 	int iserror;
 	int devno;
 	int netnum;
@@ -40,7 +40,7 @@ private:
 	TBShardware *tbshd;
 	RD_WT_PARM tbsrwparm;
 	NET_NODE nettag[16];
-	
+
 #ifdef Q_OS_WIN //windows
 	SOCKET uiudpfd;
 #else
@@ -50,11 +50,11 @@ private slots:
 	void threadFinished();
 	void soltsDisplayMsgUI(TBS_Msg_Type * msg);
 	void tunersCheckboxClick();
-	
+
 	void on_sli_H_valueChanged(int value);
-    void on_btnMenu_Min_clicked();
-    void on_btnMenu_Max_clicked();
-    void on_btnMenu_Close_clicked();
+	void on_btnMenu_Min_clicked();
+	void on_btnMenu_Max_clicked();
+	void on_btnMenu_Close_clicked();
 
 	//ui set
 	void on_too_Refresh_clicked();
