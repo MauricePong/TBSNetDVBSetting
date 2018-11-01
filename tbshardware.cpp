@@ -382,7 +382,7 @@ int TBShardware::readIPParm ( void )
     //  qDebug() << tmp[i];
     //}
     rwparm.ip = QString ( "%1.%2.%3.%4" )
-                .arg ( tmp[0x0] )
+                .arg ( tmp[0x00] )
                 .arg ( tmp[0x01] )
                 .arg ( tmp[0x02] )
                 .arg ( tmp[0x03] );
@@ -516,7 +516,7 @@ int TBShardware::readModulatorParm ( void )
                                 tmp[0x05] ) )
                     .arg ( ( char ) ( tmp[0x06] ) );
     rwparm.fre = QString::number ( qfreq.toFloat(),
-                                   'f', 2 );
+                                   'f', 1 );
     TBSSWAP ( tmp[0x0d], tmp[0x0e] );
     rwparm.sym = * ( u16 * ) ( &tmp[0x0d] );
     qDebug() << "qam:" << tmp[0x0f];
@@ -662,7 +662,7 @@ int TBShardware::writeModulatorParm ( void )
     if ( 1 == rwparm.isFreq_changed ) {
         //freq
         QString qfreq = QString::number (
-                            rwparm.fre.toFloat(), 'f', 2 );
+                            rwparm.fre.toFloat(), 'f', 1 );
         tmp[0] = ( u8 ) ( 00 );
         tmp[1] = ( u8 ) ( 11 + qfreq.length() ); //num
         tmp[2] = 0x41; //0

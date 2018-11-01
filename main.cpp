@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QStyleFactory>
 
-#if  1
+#if   1
 #define QTBS_MAIN_UI  tbsui
 #elif 0
 #define QTBS_MAIN_UI SetMACTool
