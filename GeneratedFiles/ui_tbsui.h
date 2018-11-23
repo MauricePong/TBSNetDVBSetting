@@ -56,6 +56,10 @@ public:
     QWidget *UpdateWdiget;
     QGridLayout *gridLayout_6;
     QToolButton *too_Apply;
+    QComboBox *com_IP;
+    QLabel *label_14;
+    QToolButton *too_Refresh;
+    QToolButton *too_Reset;
     QTabWidget *tw_Set;
     QWidget *tab_IPSetting;
     QGridLayout *gridLayout_7;
@@ -80,27 +84,26 @@ public:
     QCheckBox *che_t3;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_5;
-    QLineEdit *lin_Pla;
     QLabel *label_13;
+    QLabel *label_7;
     QLabel *label_12;
     QLabel *label_5;
-    QLabel *label_7;
+    QLineEdit *lin_Pla;
     QLineEdit *lin_Fre;
-    QLabel *label_9;
     QComboBox *com_Modulation;
+    QLabel *label_9;
+    QLabel *label_6;
     QLineEdit *lin_Lev;
-    QLabel *label_11;
+    QLineEdit *lin_Sym;
+    QComboBox *com_Protocol;
     QLabel *label_8;
     QLabel *label_10;
-    QLineEdit *lin_Sym;
-    QLabel *label_6;
+    QLabel *label_11;
     QLineEdit *lin_TSPort;
-    QLabel *label_15;
     QLabel *label_16;
-    QComboBox *com_Protocol;
-    QToolButton *too_Refresh;
-    QLabel *label_14;
-    QComboBox *com_IP;
+    QLabel *label_15;
+    QLineEdit *lin_CastIP;
+    QLabel *label_17;
     QSlider *sli_H;
 
     void setupUi(QDialog *tbsui)
@@ -225,6 +228,33 @@ public:
 
         gridLayout_6->addWidget(too_Apply, 1, 3, 1, 1);
 
+        com_IP = new QComboBox(UpdateWdiget);
+        com_IP->setObjectName(QStringLiteral("com_IP"));
+
+        gridLayout_6->addWidget(com_IP, 1, 1, 1, 1);
+
+        label_14 = new QLabel(UpdateWdiget);
+        label_14->setObjectName(QStringLiteral("label_14"));
+        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(label_14->sizePolicy().hasHeightForWidth());
+        label_14->setSizePolicy(sizePolicy3);
+
+        gridLayout_6->addWidget(label_14, 1, 0, 1, 1);
+
+        too_Refresh = new QToolButton(UpdateWdiget);
+        too_Refresh->setObjectName(QStringLiteral("too_Refresh"));
+        too_Refresh->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout_6->addWidget(too_Refresh, 1, 2, 1, 1);
+
+        too_Reset = new QToolButton(UpdateWdiget);
+        too_Reset->setObjectName(QStringLiteral("too_Reset"));
+        too_Reset->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout_6->addWidget(too_Reset, 1, 4, 1, 1);
+
         tw_Set = new QTabWidget(UpdateWdiget);
         tw_Set->setObjectName(QStringLiteral("tw_Set"));
         tab_IPSetting = new QWidget();
@@ -237,11 +267,11 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         che_dhcp = new QCheckBox(groupBox_3);
         che_dhcp->setObjectName(QStringLiteral("che_dhcp"));
-        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(che_dhcp->sizePolicy().hasHeightForWidth());
-        che_dhcp->setSizePolicy(sizePolicy3);
+        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(che_dhcp->sizePolicy().hasHeightForWidth());
+        che_dhcp->setSizePolicy(sizePolicy4);
 
         gridLayout->addWidget(che_dhcp, 0, 0, 1, 1);
 
@@ -328,18 +358,19 @@ public:
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         gridLayout_5 = new QGridLayout(groupBox_2);
         gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
-        lin_Pla = new QLineEdit(groupBox_2);
-        lin_Pla->setObjectName(QStringLiteral("lin_Pla"));
-        lin_Pla->setReadOnly(true);
-
-        gridLayout_5->addWidget(lin_Pla, 1, 1, 1, 1);
-
         label_13 = new QLabel(groupBox_2);
         label_13->setObjectName(QStringLiteral("label_13"));
         sizePolicy1.setHeightForWidth(label_13->sizePolicy().hasHeightForWidth());
         label_13->setSizePolicy(sizePolicy1);
 
         gridLayout_5->addWidget(label_13, 3, 2, 1, 1);
+
+        label_7 = new QLabel(groupBox_2);
+        label_7->setObjectName(QStringLiteral("label_7"));
+        sizePolicy1.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
+        label_7->setSizePolicy(sizePolicy1);
+
+        gridLayout_5->addWidget(label_7, 1, 0, 1, 1);
 
         label_12 = new QLabel(groupBox_2);
         label_12->setObjectName(QStringLiteral("label_12"));
@@ -355,12 +386,11 @@ public:
 
         gridLayout_5->addWidget(label_5, 5, 0, 1, 1);
 
-        label_7 = new QLabel(groupBox_2);
-        label_7->setObjectName(QStringLiteral("label_7"));
-        sizePolicy1.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
-        label_7->setSizePolicy(sizePolicy1);
+        lin_Pla = new QLineEdit(groupBox_2);
+        lin_Pla->setObjectName(QStringLiteral("lin_Pla"));
+        lin_Pla->setReadOnly(true);
 
-        gridLayout_5->addWidget(label_7, 1, 0, 1, 1);
+        gridLayout_5->addWidget(lin_Pla, 1, 1, 1, 1);
 
         lin_Fre = new QLineEdit(groupBox_2);
         lin_Fre->setObjectName(QStringLiteral("lin_Fre"));
@@ -369,13 +399,6 @@ public:
         lin_Fre->setDragEnabled(false);
 
         gridLayout_5->addWidget(lin_Fre, 2, 1, 1, 1);
-
-        label_9 = new QLabel(groupBox_2);
-        label_9->setObjectName(QStringLiteral("label_9"));
-        sizePolicy1.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
-        label_9->setSizePolicy(sizePolicy1);
-
-        gridLayout_5->addWidget(label_9, 2, 0, 1, 1);
 
         com_Modulation = new QComboBox(groupBox_2);
         com_Modulation->addItem(QString());
@@ -387,18 +410,37 @@ public:
 
         gridLayout_5->addWidget(com_Modulation, 5, 1, 1, 1);
 
+        label_9 = new QLabel(groupBox_2);
+        label_9->setObjectName(QStringLiteral("label_9"));
+        sizePolicy1.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
+        label_9->setSizePolicy(sizePolicy1);
+
+        gridLayout_5->addWidget(label_9, 2, 0, 1, 1);
+
+        label_6 = new QLabel(groupBox_2);
+        label_6->setObjectName(QStringLiteral("label_6"));
+        sizePolicy1.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
+        label_6->setSizePolicy(sizePolicy1);
+
+        gridLayout_5->addWidget(label_6, 4, 0, 1, 1);
+
         lin_Lev = new QLineEdit(groupBox_2);
         lin_Lev->setObjectName(QStringLiteral("lin_Lev"));
         lin_Lev->setClearButtonEnabled(false);
 
         gridLayout_5->addWidget(lin_Lev, 3, 1, 1, 1);
 
-        label_11 = new QLabel(groupBox_2);
-        label_11->setObjectName(QStringLiteral("label_11"));
-        sizePolicy1.setHeightForWidth(label_11->sizePolicy().hasHeightForWidth());
-        label_11->setSizePolicy(sizePolicy1);
+        lin_Sym = new QLineEdit(groupBox_2);
+        lin_Sym->setObjectName(QStringLiteral("lin_Sym"));
 
-        gridLayout_5->addWidget(label_11, 1, 2, 1, 1);
+        gridLayout_5->addWidget(lin_Sym, 4, 1, 1, 1);
+
+        com_Protocol = new QComboBox(groupBox_2);
+        com_Protocol->addItem(QString());
+        com_Protocol->addItem(QString());
+        com_Protocol->setObjectName(QStringLiteral("com_Protocol"));
+
+        gridLayout_5->addWidget(com_Protocol, 6, 1, 1, 1);
 
         label_8 = new QLabel(groupBox_2);
         label_8->setObjectName(QStringLiteral("label_8"));
@@ -414,27 +456,17 @@ public:
 
         gridLayout_5->addWidget(label_10, 4, 2, 1, 1);
 
-        lin_Sym = new QLineEdit(groupBox_2);
-        lin_Sym->setObjectName(QStringLiteral("lin_Sym"));
+        label_11 = new QLabel(groupBox_2);
+        label_11->setObjectName(QStringLiteral("label_11"));
+        sizePolicy1.setHeightForWidth(label_11->sizePolicy().hasHeightForWidth());
+        label_11->setSizePolicy(sizePolicy1);
 
-        gridLayout_5->addWidget(lin_Sym, 4, 1, 1, 1);
-
-        label_6 = new QLabel(groupBox_2);
-        label_6->setObjectName(QStringLiteral("label_6"));
-        sizePolicy1.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
-        label_6->setSizePolicy(sizePolicy1);
-
-        gridLayout_5->addWidget(label_6, 4, 0, 1, 1);
+        gridLayout_5->addWidget(label_11, 1, 2, 1, 1);
 
         lin_TSPort = new QLineEdit(groupBox_2);
         lin_TSPort->setObjectName(QStringLiteral("lin_TSPort"));
 
-        gridLayout_5->addWidget(lin_TSPort, 7, 1, 1, 1);
-
-        label_15 = new QLabel(groupBox_2);
-        label_15->setObjectName(QStringLiteral("label_15"));
-
-        gridLayout_5->addWidget(label_15, 7, 0, 1, 1);
+        gridLayout_5->addWidget(lin_TSPort, 8, 1, 1, 1);
 
         label_16 = new QLabel(groupBox_2);
         label_16->setObjectName(QStringLiteral("label_16"));
@@ -443,40 +475,27 @@ public:
 
         gridLayout_5->addWidget(label_16, 6, 0, 1, 1);
 
-        com_Protocol = new QComboBox(groupBox_2);
-        com_Protocol->addItem(QString());
-        com_Protocol->addItem(QString());
-        com_Protocol->setObjectName(QStringLiteral("com_Protocol"));
+        label_15 = new QLabel(groupBox_2);
+        label_15->setObjectName(QStringLiteral("label_15"));
 
-        gridLayout_5->addWidget(com_Protocol, 6, 1, 1, 1);
+        gridLayout_5->addWidget(label_15, 8, 0, 1, 1);
+
+        lin_CastIP = new QLineEdit(groupBox_2);
+        lin_CastIP->setObjectName(QStringLiteral("lin_CastIP"));
+
+        gridLayout_5->addWidget(lin_CastIP, 7, 1, 1, 1);
+
+        label_17 = new QLabel(groupBox_2);
+        label_17->setObjectName(QStringLiteral("label_17"));
+
+        gridLayout_5->addWidget(label_17, 7, 0, 1, 1);
 
 
         gridLayout_3->addWidget(groupBox_2, 0, 1, 1, 1);
 
         tw_Set->addTab(tab_KidSetting, QString());
 
-        gridLayout_6->addWidget(tw_Set, 2, 0, 1, 4);
-
-        too_Refresh = new QToolButton(UpdateWdiget);
-        too_Refresh->setObjectName(QStringLiteral("too_Refresh"));
-        too_Refresh->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout_6->addWidget(too_Refresh, 1, 2, 1, 1);
-
-        label_14 = new QLabel(UpdateWdiget);
-        label_14->setObjectName(QStringLiteral("label_14"));
-        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(label_14->sizePolicy().hasHeightForWidth());
-        label_14->setSizePolicy(sizePolicy4);
-
-        gridLayout_6->addWidget(label_14, 1, 0, 1, 1);
-
-        com_IP = new QComboBox(UpdateWdiget);
-        com_IP->setObjectName(QStringLiteral("com_IP"));
-
-        gridLayout_6->addWidget(com_IP, 1, 1, 1, 1);
+        gridLayout_6->addWidget(tw_Set, 2, 0, 1, 5);
 
 
         gridLayout_4->addWidget(UpdateWdiget, 1, 0, 1, 1);
@@ -526,6 +545,9 @@ public:
         btnMenu_Min->setText(QString());
         btnMenu_Max->setText(QString());
         too_Apply->setText(QApplication::translate("tbsui", "Apply  ", nullptr));
+        label_14->setText(QApplication::translate("tbsui", "Net list:", nullptr));
+        too_Refresh->setText(QApplication::translate("tbsui", "Refresh", nullptr));
+        too_Reset->setText(QApplication::translate("tbsui", "Reset  ", nullptr));
 #ifndef QT_NO_ACCESSIBILITY
         tab_IPSetting->setAccessibleDescription(QString());
 #endif // QT_NO_ACCESSIBILITY
@@ -546,38 +568,37 @@ public:
         che_t2->setText(QApplication::translate("tbsui", "Tuner 2", nullptr));
         che_t3->setText(QApplication::translate("tbsui", "Tuner 3", nullptr));
         groupBox_2->setTitle(QString());
-        lin_Pla->setText(QApplication::translate("tbsui", "0", nullptr));
         label_13->setText(QApplication::translate("tbsui", "(-35~0dBm)", nullptr));
+        label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));
         label_12->setText(QApplication::translate("tbsui", "(100~1000MHZ)", nullptr));
         label_5->setText(QApplication::translate("tbsui", "Modulation:", nullptr));
-        label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));
+        lin_Pla->setText(QApplication::translate("tbsui", "0", nullptr));
 #ifndef QT_NO_ACCESSIBILITY
         lin_Fre->setAccessibleName(QString());
 #endif // QT_NO_ACCESSIBILITY
         lin_Fre->setText(QString());
-        label_9->setText(QApplication::translate("tbsui", "Frequence:", nullptr));
         com_Modulation->setItemText(0, QApplication::translate("tbsui", "16QAM", nullptr));
         com_Modulation->setItemText(1, QApplication::translate("tbsui", "32QAM", nullptr));
         com_Modulation->setItemText(2, QApplication::translate("tbsui", "64QAM", nullptr));
         com_Modulation->setItemText(3, QApplication::translate("tbsui", "128QAM", nullptr));
         com_Modulation->setItemText(4, QApplication::translate("tbsui", "256QAM", nullptr));
 
-        lin_Lev->setText(QString());
-        label_11->setText(QApplication::translate("tbsui", "(bps)", nullptr));
-        label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
-        label_10->setText(QApplication::translate("tbsui", "(2000-7200\n"
-"kbps)", nullptr));
-        lin_Sym->setText(QString());
+        label_9->setText(QApplication::translate("tbsui", "Frequence:", nullptr));
         label_6->setText(QApplication::translate("tbsui", "Symbolrate:", nullptr));
-        lin_TSPort->setText(QString());
-        label_15->setText(QApplication::translate("tbsui", "TS Port:", nullptr));
-        label_16->setText(QApplication::translate("tbsui", "Net protocol:", nullptr));
+        lin_Lev->setText(QString());
+        lin_Sym->setText(QString());
         com_Protocol->setItemText(0, QApplication::translate("tbsui", "UDP", nullptr));
         com_Protocol->setItemText(1, QApplication::translate("tbsui", "RTP", nullptr));
 
+        label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
+        label_10->setText(QApplication::translate("tbsui", "(2000-7200\n"
+"kbps)", nullptr));
+        label_11->setText(QApplication::translate("tbsui", "(bps)", nullptr));
+        lin_TSPort->setText(QString());
+        label_16->setText(QApplication::translate("tbsui", "Net protocol:", nullptr));
+        label_15->setText(QApplication::translate("tbsui", "TS Port:", nullptr));
+        label_17->setText(QApplication::translate("tbsui", "Multicast/unicast ip:", nullptr));
         tw_Set->setTabText(tw_Set->indexOf(tab_KidSetting), QApplication::translate("tbsui", "Modulator", nullptr));
-        too_Refresh->setText(QApplication::translate("tbsui", "Refresh", nullptr));
-        label_14->setText(QApplication::translate("tbsui", "Net list:", nullptr));
     } // retranslateUi
 
 };

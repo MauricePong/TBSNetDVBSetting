@@ -244,7 +244,6 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="qss\psblack\uilogo\Checkbox" />
     <None Include="qss\psblack\uilogo\Check" />
     <None Include="qss\psblack\uilogo\Invalid" />

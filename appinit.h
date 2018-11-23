@@ -3,24 +3,23 @@
 
 #include <QObject>
 
-class AppInit : public QObject
-{
-    Q_OBJECT
-public:
-    static AppInit *Instance();
-    explicit AppInit(QObject *parent = 0);
+class AppInit : public QObject {
+  Q_OBJECT
+ public:
+  static AppInit *Instance();
+  explicit AppInit(QObject *parent = 0);
 
-    void start();
+  void start();
 
-protected:
-    bool eventFilter(QObject *obj, QEvent *evt);
+ protected:
+  bool eventFilter(QObject *obj, QEvent *evt);
 
-private:
-    static AppInit *self;
+ private:
+  static AppInit *self;
 
-signals:
+ signals:
 
-public slots:
+ public slots:
 };
 
-#endif // APPINIT_H
+#endif  // APPINIT_H
