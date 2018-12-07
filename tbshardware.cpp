@@ -97,7 +97,7 @@ void TBShardware::start() {
       break;
 
     case TBS_RESET_FUNC:
-      ret = reset();
+      ret = mcurst();
       if (0 == ret) {
         ret = 5;
       }
@@ -374,11 +374,26 @@ int TBShardware::readModulatorParm(void) {
   int rfxofficeaddr = 0x0030;
   int devno = rwparm.devno;
   int rfxphyaddr = rfxbaseaddr + rfxofficeaddr * devno;
-  u8 rfxdata[0x28] = {0};
+  u8 rfxdata[0x29] = {0};
+  float db = 0.0;
 
-  memset(rfxdata, 0, 0x28);
+  memset(rfxdata, 0, 0x29);
+  ret = controlExternalMemory(READ, rfxbaseaddr + 0x15, rfxdata, 5);
+  QString qlevl_0 = QString("%1%2%3%4%5")
+                      .arg((char)(rfxdata[0]))
+                      .arg((char)(rfxdata[1]))
+                      .arg((char)(rfxdata[2]))
+                      .arg((char)(rfxdata[3]))
+                      .arg((char)(rfxdata[4]));
+  float flev_0 = qlevl_0.toFloat();
+  if (flev_0 < -10.0){
+    db = 3.0;
+  }else {
+    db = 0.0;
+  }
+  memset(rfxdata, 0, 0x29);
   qDebug() << "select devno:" << rwparm.devno;
-  ret = controlExternalMemory(READ, rfxphyaddr, rfxdata, 0x28);
+  ret = controlExternalMemory(READ, rfxphyaddr, rfxdata, 0x29);
   QString qfreq = QString("%1%2%3%4%5%6%7")
                       .arg((char)(rfxdata[0x00]))
                       .arg((char)(rfxdata[0x01]))
@@ -402,6 +417,7 @@ int TBShardware::readModulatorParm(void) {
   for (i = 0; i < 4; i++) {
     playeratedata[i] = rfxdata[0x13 - i];
   }
+
   rwparm.pla = QString("%1").arg(*(int *)(&playeratedata[0]));
   qDebug() << "read playeratedata:" << rwparm.pla;
   QString qlevl = QString("%1%2%3%4")
@@ -412,7 +428,8 @@ int TBShardware::readModulatorParm(void) {
   if ('.' == (char)(rfxdata[0x18])) {
     qlevl.append(QString((char)(rfxdata[0x19])));
   }
-  rwparm.lev = qlevl;
+  QString qlevldb = QString("%1").arg(qlevl.toFloat() + db *rwparm.devno);
+  rwparm.lev = qlevldb;
   qDebug() << "read level:" << rwparm.lev;
   rwparm.mucastip = QString("%1.%2.%3.%4")
                         .arg(rfxdata[0x21])
@@ -425,6 +442,9 @@ int TBShardware::readModulatorParm(void) {
   TBSSWAP(rfxdata[0x26], rfxdata[0x27]);
   rwparm.tsport = *(u16 *)(&rfxdata[0x26]);
   qDebug() << "read tsport:" << rwparm.tsport;
+  rwparm.isRst = rfxdata[0x28] & 0x01;
+  qDebug() << "read tsRst:" << rwparm.isRst;
+
   return ret;
 }
 
@@ -497,9 +517,24 @@ int TBShardware::writeModulatorParm(void) {
   int rfxofficeaddr = 0x0030;
   int devno = rwparm.devno;
   int rfxphyaddr = rfxbaseaddr + rfxofficeaddr * devno;
-  u8 rfxdata[0x28] = {0};
+  u8 rfxdata[0x29] = {0};
+  float db = 0.0;
 
-  memset(rfxdata, 0, 0x28);
+  memset(rfxdata, 0, 0x29);
+  ret = controlExternalMemory(READ, rfxbaseaddr + 0x15, rfxdata, 5);
+  QString qlevl_0 = QString("%1%2%3%4%5")
+                        .arg((char)(rfxdata[0]))
+                        .arg((char)(rfxdata[1]))
+                        .arg((char)(rfxdata[2]))
+                        .arg((char)(rfxdata[3]))
+                        .arg((char)(rfxdata[4]));
+  float flev_0 = qlevl_0.toFloat();
+  if (flev_0 < -10.0) {
+    db = 3.0;
+  } else {
+    db = 0.0;
+  }
+  memset(rfxdata, 0, 0x29);
   qDebug() << "select devno:" << rwparm.devno;
   // freq
   QString qfreq = QString::number(rwparm.fre.toFloat(), 'f', 3);
@@ -514,7 +549,7 @@ int TBShardware::writeModulatorParm(void) {
   rfxdata[0x0f] = rwparm.qam & 0xff;
   qDebug() << "write qam:" << rwparm.qam;
   // level
-  QString qlevel = QString::number(rwparm.lev.toFloat(), 'f', 1);
+  QString qlevel = QString::number(rwparm.lev.toFloat() - db * rwparm.devno, 'f', 1);
   qDebug() << "write level:" << qlevel;
   for (i = 0; i < qlevel.length(); i++) {
     rfxdata[0x15 + i] = (u8)(qlevel.at(i).toLatin1());
@@ -542,14 +577,18 @@ int TBShardware::writeModulatorParm(void) {
   rfxdata[0x26] = (u8)((rwparm.tsport >> 8) & 0x0ff);
   rfxdata[0x27] = (u8)(rwparm.tsport & 0x0ff);
   qDebug() << "write tsport:" << rwparm.tsport;
-  ret = controlExternalMemory(WRITE, rfxphyaddr, rfxdata, 0x28);
+  rfxdata[0x28] = (u8)(rwparm.isRst & 0x01);
+  qDebug() << "write isRst:" << rwparm.isRst;
+  ret = controlExternalMemory(WRITE, rfxphyaddr, rfxdata, 0x29);
   if (-1 == ret) {
     return ret;
   }
-  ret = mcurst();
-  if (-1 == ret) {
-    return ret;
-  }
+ // ret = mcurst();
+ // if (-1 == ret) {
+ //     return ret;
+ //}
+
+
 #if 1
   ret = readModulatorParm();
   if (-1 == ret) {
@@ -846,27 +885,16 @@ int TBShardware::checkStatus_TX(int times) {
   return ret;
 }
 
-int TBShardware::reset() {
-  int rfxbaseaddr = 0x0020 + 0x28;
-  int rfxofficeaddr = 0x0030;
-  int devno = rwparm.devno;
-  int rfxphyaddr = rfxbaseaddr + rfxofficeaddr * devno;
-  u8 rfxdata[0x02] = {1, 1};
-  int ret = controlExternalMemory(WRITE, rfxphyaddr, rfxdata, 1);
-  if (-1 == ret){
-    return -1;
-	}
-  ret = mcurst();
-  return ret;
-}
 
 int TBShardware::mcurst() {
   u8 tmp[4] = {0xff,0xff,0xff,0xff};
   int ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
-  QMSLEEP(10);
+  QMSLEEP(100);
   tmp[0] = 0;
   ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
-  QMSLEEP(75000);
+  int timecout = 1000+20000 * rwparm.tunernum;
+  qDebug("mcu restart time:%d ms",timecout);
+  QMSLEEP(timecout);
   return ret;
 }
 

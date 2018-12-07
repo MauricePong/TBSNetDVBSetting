@@ -83,6 +83,7 @@ typedef unsigned int u32;
 #define TBS_UDPMULTICAST_FUNC 3
 #define TBS_RESET_FUNC 4
 #define TBS_UDOMULTICAST_MAC_FUNC 5
+#define TBS_RESTSRT_MCU_FUNC 6
 // read
 #define READ_NULL_FUNC 0
 #define READ_NET_PARM_FUNC 1
@@ -121,6 +122,8 @@ class RD_WT_PARM {
   QString fre;
   QString lev;
   QString mucastip;
+  int isRst;
+  int tunernum;
 };
 
 class TBS_Msg_Type {

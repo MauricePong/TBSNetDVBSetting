@@ -262,53 +262,7 @@
           </sizepolicy>
          </property>
          <layout class="QGridLayout" name="gridLayout_6">
-          <item row="1" column="3">
-           <widget class="QToolButton" name="too_Apply">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 60, 0);</string>
-            </property>
-            <property name="text">
-             <string>Apply  </string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QComboBox" name="com_IP"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>Net list:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QToolButton" name="too_Refresh">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 60, 0);</string>
-            </property>
-            <property name="text">
-             <string>Refresh</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QToolButton" name="too_Reset">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 60, 0);</string>
-            </property>
-            <property name="text">
-             <string>Reset  </string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="5">
+          <item row="2" column="0" colspan="6">
            <widget class="QTabWidget" name="tw_Set">
             <property name="currentIndex">
              <number>1</number>
@@ -453,8 +407,8 @@
                  <string/>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_5">
-                 <item row="3" column="2">
-                  <widget class="QLabel" name="label_13">
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="label_6">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -462,7 +416,77 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>(-35~0dBm)</string>
+                    <string>Symbolrate:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="0">
+                  <widget class="QLabel" name="label_15">
+                   <property name="text">
+                    <string>TS Port:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="7" column="1">
+                  <widget class="QLineEdit" name="lin_CastIP"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_9">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Frequence:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="0">
+                  <widget class="QLabel" name="label_16">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Net protocol:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="1">
+                  <widget class="QLineEdit" name="lin_TSPort">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QLabel" name="label_10">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>(2000-7200
+kbps)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_8">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Level:</string>
                    </property>
                   </widget>
                  </item>
@@ -479,8 +503,8 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="2">
-                  <widget class="QLabel" name="label_12">
+                 <item row="1" column="2">
+                  <widget class="QLabel" name="label_11">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -488,7 +512,31 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>(100~1000MHZ)</string>
+                    <string>(bps)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="1">
+                  <widget class="QComboBox" name="com_Protocol">
+                   <item>
+                    <property name="text">
+                     <string>UDP</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>RTP</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLineEdit" name="lin_Pla">
+                   <property name="text">
+                    <string>0</string>
+                   </property>
+                   <property name="readOnly">
+                    <bool>true</bool>
                    </property>
                   </widget>
                  </item>
@@ -502,35 +550,6 @@
                    </property>
                    <property name="text">
                     <string>Modulation:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QLineEdit" name="lin_Pla">
-                   <property name="text">
-                    <string>0</string>
-                   </property>
-                   <property name="readOnly">
-                    <bool>true</bool>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QLineEdit" name="lin_Fre">
-                   <property name="accessibleName">
-                    <string/>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="echoMode">
-                    <enum>QLineEdit::Normal</enum>
-                   </property>
-                   <property name="cursorPosition">
-                    <number>0</number>
-                   </property>
-                   <property name="dragEnabled">
-                    <bool>false</bool>
                    </property>
                   </widget>
                  </item>
@@ -566,8 +585,8 @@
                    </item>
                   </widget>
                  </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_9">
+                 <item row="3" column="2">
+                  <widget class="QLabel" name="label_13">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -575,12 +594,31 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Frequence:</string>
+                    <string>(-35~0dBm)</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="4" column="0">
-                  <widget class="QLabel" name="label_6">
+                 <item row="2" column="1">
+                  <widget class="QLineEdit" name="lin_Fre">
+                   <property name="accessibleName">
+                    <string/>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="echoMode">
+                    <enum>QLineEdit::Normal</enum>
+                   </property>
+                   <property name="cursorPosition">
+                    <number>0</number>
+                   </property>
+                   <property name="dragEnabled">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="2">
+                  <widget class="QLabel" name="label_12">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -588,7 +626,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Symbolrate:</string>
+                    <string>(100~1000MHZ)</string>
                    </property>
                   </widget>
                  </item>
@@ -609,94 +647,17 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="6" column="1">
-                  <widget class="QComboBox" name="com_Protocol">
-                   <item>
-                    <property name="text">
-                     <string>UDP</string>
-                    </property>
-                   </item>
-                   <item>
-                    <property name="text">
-                     <string>RTP</string>
-                    </property>
-                   </item>
-                  </widget>
-                 </item>
-                 <item row="3" column="0">
-                  <widget class="QLabel" name="label_8">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Level:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="2">
-                  <widget class="QLabel" name="label_10">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>(2000-7200
-kbps)</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QLabel" name="label_11">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>(bps)</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="8" column="1">
-                  <widget class="QLineEdit" name="lin_TSPort">
-                   <property name="text">
-                    <string/>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="6" column="0">
-                  <widget class="QLabel" name="label_16">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="text">
-                    <string>Net protocol:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="8" column="0">
-                  <widget class="QLabel" name="label_15">
-                   <property name="text">
-                    <string>TS Port:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="7" column="1">
-                  <widget class="QLineEdit" name="lin_CastIP"/>
-                 </item>
                  <item row="7" column="0">
                   <widget class="QLabel" name="label_17">
                    <property name="text">
                     <string>Multicast/unicast ip:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="0" colspan="2">
+                  <widget class="QCheckBox" name="che_Rst">
+                   <property name="text">
+                    <string>Is restart  (Restart the dvbc submodule)</string>
                    </property>
                   </widget>
                  </item>
@@ -705,6 +666,52 @@ kbps)</string>
               </item>
              </layout>
             </widget>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QComboBox" name="com_IP"/>
+          </item>
+          <item row="1" column="3">
+           <widget class="QToolButton" name="too_Refresh">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 60, 0);</string>
+            </property>
+            <property name="text">
+             <string>Refresh</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QToolButton" name="too_Reset">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 60, 0);</string>
+            </property>
+            <property name="text">
+             <string>Restart</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Net list:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QToolButton" name="too_Apply">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 60, 0);</string>
+            </property>
+            <property name="text">
+             <string>Apply  </string>
+            </property>
            </widget>
           </item>
          </layout>

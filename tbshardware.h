@@ -38,7 +38,6 @@ class TBShardware : public QObject, public TBSbase {
   void setWriteMode(int mode);
   int checkStatus_RX(int times);
   int checkStatus_TX(int times);
-  int reset();
   int mcurst();
 #ifdef Q_OS_WIN
   // windows
