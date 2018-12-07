@@ -428,7 +428,7 @@ int TBShardware::readModulatorParm(void) {
   if ('.' == (char)(rfxdata[0x18])) {
     qlevl.append(QString((char)(rfxdata[0x19])));
   }
-  QString qlevldb = QString("%1").arg(qlevl.toFloat() + db *rwparm.devno);
+  QString qlevldb = QString("%1").arg(qlevl.toFloat() - db *rwparm.devno);
   rwparm.lev = qlevldb;
   qDebug() << "read level:" << rwparm.lev;
   rwparm.mucastip = QString("%1.%2.%3.%4")
@@ -549,7 +549,7 @@ int TBShardware::writeModulatorParm(void) {
   rfxdata[0x0f] = rwparm.qam & 0xff;
   qDebug() << "write qam:" << rwparm.qam;
   // level
-  QString qlevel = QString::number(rwparm.lev.toFloat() - db * rwparm.devno, 'f', 1);
+  QString qlevel = QString::number(rwparm.lev.toFloat() + db * rwparm.devno, 'f', 1);
   qDebug() << "write level:" << qlevel;
   for (i = 0; i < qlevel.length(); i++) {
     rfxdata[0x15 + i] = (u8)(qlevel.at(i).toLatin1());
