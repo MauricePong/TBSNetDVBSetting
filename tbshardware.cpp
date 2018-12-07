@@ -375,22 +375,7 @@ int TBShardware::readModulatorParm(void) {
   int devno = rwparm.devno;
   int rfxphyaddr = rfxbaseaddr + rfxofficeaddr * devno;
   u8 rfxdata[0x29] = {0};
-  float db = 0.0;
 
-  memset(rfxdata, 0, 0x29);
-  ret = controlExternalMemory(READ, rfxbaseaddr + 0x15, rfxdata, 5);
-  QString qlevl_0 = QString("%1%2%3%4%5")
-                      .arg((char)(rfxdata[0]))
-                      .arg((char)(rfxdata[1]))
-                      .arg((char)(rfxdata[2]))
-                      .arg((char)(rfxdata[3]))
-                      .arg((char)(rfxdata[4]));
-  float flev_0 = qlevl_0.toFloat();
-  if (flev_0 < -10.0){
-    db = 3.0;
-  }else {
-    db = 0.0;
-  }
   memset(rfxdata, 0, 0x29);
   qDebug() << "select devno:" << rwparm.devno;
   ret = controlExternalMemory(READ, rfxphyaddr, rfxdata, 0x29);
@@ -428,8 +413,7 @@ int TBShardware::readModulatorParm(void) {
   if ('.' == (char)(rfxdata[0x18])) {
     qlevl.append(QString((char)(rfxdata[0x19])));
   }
-  QString qlevldb = QString("%1").arg(qlevl.toFloat() - db *rwparm.devno);
-  rwparm.lev = qlevldb;
+  rwparm.lev = qlevl;
   qDebug() << "read level:" << rwparm.lev;
   rwparm.mucastip = QString("%1.%2.%3.%4")
                         .arg(rfxdata[0x21])
@@ -518,22 +502,7 @@ int TBShardware::writeModulatorParm(void) {
   int devno = rwparm.devno;
   int rfxphyaddr = rfxbaseaddr + rfxofficeaddr * devno;
   u8 rfxdata[0x29] = {0};
-  float db = 0.0;
 
-  memset(rfxdata, 0, 0x29);
-  ret = controlExternalMemory(READ, rfxbaseaddr + 0x15, rfxdata, 5);
-  QString qlevl_0 = QString("%1%2%3%4%5")
-                        .arg((char)(rfxdata[0]))
-                        .arg((char)(rfxdata[1]))
-                        .arg((char)(rfxdata[2]))
-                        .arg((char)(rfxdata[3]))
-                        .arg((char)(rfxdata[4]));
-  float flev_0 = qlevl_0.toFloat();
-  if (flev_0 < -10.0) {
-    db = 3.0;
-  } else {
-    db = 0.0;
-  }
   memset(rfxdata, 0, 0x29);
   qDebug() << "select devno:" << rwparm.devno;
   // freq
@@ -549,7 +518,7 @@ int TBShardware::writeModulatorParm(void) {
   rfxdata[0x0f] = rwparm.qam & 0xff;
   qDebug() << "write qam:" << rwparm.qam;
   // level
-  QString qlevel = QString::number(rwparm.lev.toFloat() + db * rwparm.devno, 'f', 1);
+  QString qlevel = QString::number(rwparm.lev.toFloat(), 'f', 1);
   qDebug() << "write level:" << qlevel;
   for (i = 0; i < qlevel.length(); i++) {
     rfxdata[0x15 + i] = (u8)(qlevel.at(i).toLatin1());
