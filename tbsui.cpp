@@ -231,6 +231,7 @@ void tbsui::initForm() {
   devno = 0;
   netnum = 0;
   com_IP_soltEN_flg = 0;
+  uilock = 0;
   tbsrwparm.switchStatus = 0x0f;
   msgbox = NULL;
   msgbox = new TBSMesgDlg();
@@ -322,6 +323,10 @@ void tbsui::on_btnMenu_Close_clicked() {
 */
 
 void tbsui::on_too_Refresh_clicked() {
+  if (1 == uilock) {
+    return;
+  }
+  uilock = 1;
   qDebug() << "Refresh";
   int mip = ui->che_Mip->isChecked();
   if (0 == mip) {
@@ -335,8 +340,11 @@ void tbsui::on_too_Refresh_clicked() {
 }
 
 void tbsui::on_too_Apply_clicked() {
+  if (1 == uilock) {
+    return;
+  }
+  uilock = 1;
   qDebug() << "Apply";
-
 #if 1
   int index = ui->tw_Set->currentIndex();
   int ipindex = ui->com_IP->currentIndex();
@@ -436,6 +444,10 @@ void tbsui::on_too_Apply_clicked() {
 }
 
 void tbsui::on_too_Reset_clicked() {
+  if (1 == uilock) {
+    return;
+  }
+  uilock = 1;
   qDebug() << "dvbc sub-card Restart";
   int ipindex = ui->com_IP->currentIndex();
   if (-1 == ipindex) {
@@ -461,6 +473,10 @@ void tbsui::on_too_Reset_clicked() {
 }
 
 void tbsui::on_too_Reboot_clicked() {
+  if (1 == uilock) {
+    return;
+  }
+  uilock = 1;
   qDebug() << "All Restart";
   int ipindex = ui->com_IP->currentIndex();
   if (-1 == ipindex) {
@@ -487,7 +503,10 @@ void tbsui::on_too_Reboot_clicked() {
 
 void tbsui::slot_com_IP_currentIndexChanged(int idx) {
 #if 1
-
+  if (1 == uilock) {
+    return;
+  }
+  uilock = 1;
   if (idx < 0) {
     return;
   }
@@ -619,7 +638,8 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
     msgbox->hideBtn(msg->btnL, msg->btnR, msg->btnRtext);
 
     if ((0 == msg->btnL) && (0 == msg->btnR)) {
-      msgbox->setModal(false);
+      uilock = 1;
+			msgbox->setModal(false);
       msgbox->set_pbar_arg(20000,100000);
       msgbox->timerstart(100);
       msgbox->show();
@@ -627,6 +647,7 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
       msgbox->timerstop();
       msgbox->setModal(true);
       msgbox->exec();
+      uilock = 0;
     }
   } else if (2 == msg->type) {
     qDebug() << QString("%1->%2->%3:msg->switchStatus=%4")

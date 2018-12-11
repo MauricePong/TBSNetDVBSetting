@@ -41,7 +41,7 @@ class tbsui : public QDialog {
   TBShardware *tbshd;
   RD_WT_PARM tbsrwparm;
   NET_NODE nettag[16];
-
+  int uilock;
 #ifdef Q_OS_WIN  // windows
   SOCKET uiudpfd;
 #else
