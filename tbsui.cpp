@@ -620,8 +620,11 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
 
     if ((0 == msg->btnL) && (0 == msg->btnR)) {
       msgbox->setModal(false);
+      msgbox->set_pbar_arg(20000,100000);
+      msgbox->timerstart(100);
       msgbox->show();
     } else {
+      msgbox->timerstop();
       msgbox->setModal(true);
       msgbox->exec();
     }

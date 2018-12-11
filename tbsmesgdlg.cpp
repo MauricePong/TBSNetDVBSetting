@@ -14,9 +14,18 @@ TBSMesgDlg::TBSMesgDlg(QWidget *parent)
 
   ui->btn_Left->show();
   ui->btn_Right->show();
+  pbarmax = 0;
+  pbarvalue = 0;
+  timer = new QTimer(this);
+  connect(timer, SIGNAL(timeout()), this, SLOT(timeoutfunc()));
 }
 
-TBSMesgDlg::~TBSMesgDlg() { delete ui; }
+TBSMesgDlg::~TBSMesgDlg() {
+  if (NULL != timer) {
+    delete timer;
+  }
+  delete ui;
+}
 
 void TBSMesgDlg::displayText(QString qstmsg) {
   ui->lab_Msg->setText(QString(""));
@@ -44,9 +53,30 @@ void TBSMesgDlg::setWinTitle(QString qsttitle) {
   setWindowTitle(QString(""));
   setWindowTitle(qsttitle);
 }
+void TBSMesgDlg::timerstart(int time) {
+	pbarstep = time;
+	timer->start(time);
+}
+void TBSMesgDlg::timerstop() {
+  timer->stop();
+  ui->progressBar->setValue(pbarmax);
+}
+void TBSMesgDlg::set_pbar_arg(int val, int maxval) {
+	pbarvalue = val;
+  pbarmax = maxval;
+}
 void TBSMesgDlg::on_btn_Left_clicked() {
   // int ret = 0;
   // ret = ui->btn_Left->isHidden();
   return;
 }
 void TBSMesgDlg::on_btn_Right_clicked() { this->accept(); }
+
+void TBSMesgDlg::timeoutfunc() {
+	ui->progressBar->setRange(0,pbarmax);
+  pbarvalue = pbarvalue + pbarstep;
+  if (pbarvalue > pbarmax - 300) {
+    pbarvalue = pbarmax - 300;
+	}
+	ui->progressBar->setValue(pbarvalue);
+}

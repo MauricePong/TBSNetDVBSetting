@@ -17,6 +17,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 
@@ -26,10 +27,11 @@ class Ui_TBSMesgDlg
 {
 public:
     QGridLayout *gridLayout;
-    QPushButton *btn_Left;
-    QPushButton *btn_Right;
     QLabel *lab_Msg;
+    QPushButton *btn_Left;
     QSpacerItem *hspc;
+    QPushButton *btn_Right;
+    QProgressBar *progressBar;
 
     void setupUi(QDialog *TBSMesgDlg)
     {
@@ -38,39 +40,45 @@ public:
         TBSMesgDlg->resize(350, 100);
         gridLayout = new QGridLayout(TBSMesgDlg);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        btn_Left = new QPushButton(TBSMesgDlg);
-        btn_Left->setObjectName(QStringLiteral("btn_Left"));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(btn_Left->sizePolicy().hasHeightForWidth());
-        btn_Left->setSizePolicy(sizePolicy);
-        btn_Left->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout->addWidget(btn_Left, 1, 0, 1, 1);
-
-        btn_Right = new QPushButton(TBSMesgDlg);
-        btn_Right->setObjectName(QStringLiteral("btn_Right"));
-        sizePolicy.setHeightForWidth(btn_Right->sizePolicy().hasHeightForWidth());
-        btn_Right->setSizePolicy(sizePolicy);
-        btn_Right->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout->addWidget(btn_Right, 1, 2, 1, 1);
-
         lab_Msg = new QLabel(TBSMesgDlg);
         lab_Msg->setObjectName(QStringLiteral("lab_Msg"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(lab_Msg->sizePolicy().hasHeightForWidth());
-        lab_Msg->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(lab_Msg->sizePolicy().hasHeightForWidth());
+        lab_Msg->setSizePolicy(sizePolicy);
         lab_Msg->setWordWrap(true);
 
         gridLayout->addWidget(lab_Msg, 0, 0, 1, 3);
 
+        btn_Left = new QPushButton(TBSMesgDlg);
+        btn_Left->setObjectName(QStringLiteral("btn_Left"));
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(btn_Left->sizePolicy().hasHeightForWidth());
+        btn_Left->setSizePolicy(sizePolicy1);
+        btn_Left->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout->addWidget(btn_Left, 2, 0, 1, 1);
+
         hspc = new QSpacerItem(100, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
-        gridLayout->addItem(hspc, 1, 1, 1, 1);
+        gridLayout->addItem(hspc, 2, 1, 1, 1);
+
+        btn_Right = new QPushButton(TBSMesgDlg);
+        btn_Right->setObjectName(QStringLiteral("btn_Right"));
+        sizePolicy1.setHeightForWidth(btn_Right->sizePolicy().hasHeightForWidth());
+        btn_Right->setSizePolicy(sizePolicy1);
+        btn_Right->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout->addWidget(btn_Right, 2, 2, 1, 1);
+
+        progressBar = new QProgressBar(TBSMesgDlg);
+        progressBar->setObjectName(QStringLiteral("progressBar"));
+        progressBar->setValue(24);
+
+        gridLayout->addWidget(progressBar, 1, 0, 1, 3);
 
 
         retranslateUi(TBSMesgDlg);
@@ -81,9 +89,9 @@ public:
     void retranslateUi(QDialog *TBSMesgDlg)
     {
         TBSMesgDlg->setWindowTitle(QString());
+        lab_Msg->setText(QString());
         btn_Left->setText(QApplication::translate("TBSMesgDlg", "Yes", nullptr));
         btn_Right->setText(QApplication::translate("TBSMesgDlg", "NO", nullptr));
-        lab_Msg->setText(QString());
     } // retranslateUi
 
 };
