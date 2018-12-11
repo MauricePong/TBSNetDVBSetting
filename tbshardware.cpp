@@ -97,12 +97,17 @@ void TBShardware::start() {
       break;
 
     case TBS_RESET_FUNC:
-      ret = mcurst();
+      ret = subcard_restart();
       if (0 == ret) {
         ret = 5;
       }
       break;
-
+    case TBS_RESTSRT_MCU_FUNC:
+      ret = mcu_poweroff();
+      if (0 == ret) {
+        ret = 5;
+      }
+      break;
     case TBS_NULL_FUNC:
       ret = -1;
       break;
@@ -375,10 +380,15 @@ int TBShardware::readModulatorParm(void) {
   int devno = rwparm.devno;
   int rfxphyaddr = rfxbaseaddr + rfxofficeaddr * devno;
   u8 rfxdata[0x29] = {0};
+  u8 mcudata[4] = {0};
+  int mcuaddr = 0xe0 + devno;
 
   memset(rfxdata, 0, 0x29);
   qDebug() << "select devno:" << rwparm.devno;
   ret = controlExternalMemory(READ, rfxphyaddr, rfxdata, 0x29);
+  if (-1 == ret) {
+    return ret;
+  }
   QString qfreq = QString("%1%2%3%4%5%6%7")
                       .arg((char)(rfxdata[0x00]))
                       .arg((char)(rfxdata[0x01]))
@@ -428,7 +438,9 @@ int TBShardware::readModulatorParm(void) {
   qDebug() << "read tsport:" << rwparm.tsport;
   rwparm.isRst = rfxdata[0x28] & 0x01;
   qDebug() << "read tsRst:" << rwparm.isRst;
-
+  ret = controlExternalMemory(READ, mcuaddr, mcudata, 1);
+  rwparm.ismcurst = mcudata[0];
+  qDebug() << "read mcuRst:" << rwparm.ismcurst;
   return ret;
 }
 
@@ -487,7 +499,7 @@ int TBShardware::writeIPParm(void) {
   if (-1 == ret) {
     return ret;
   }
-  ret = mcurst();
+  ret = mcu_poweroff();
   if (0 == ret) {
     ret = 2;
   }
@@ -502,6 +514,8 @@ int TBShardware::writeModulatorParm(void) {
   int devno = rwparm.devno;
   int rfxphyaddr = rfxbaseaddr + rfxofficeaddr * devno;
   u8 rfxdata[0x29] = {0};
+  u8 mcudata[4] = {0};
+  int mcuaddr = 0xe0 + devno;
 
   memset(rfxdata, 0, 0x29);
   qDebug() << "select devno:" << rwparm.devno;
@@ -552,11 +566,16 @@ int TBShardware::writeModulatorParm(void) {
   if (-1 == ret) {
     return ret;
   }
- // ret = mcurst();
- // if (-1 == ret) {
- //     return ret;
- //}
-
+  mcudata[0] = (u8)(rwparm.ismcurst);
+  qDebug() << "write isRst:" << rwparm.ismcurst;
+  ret = controlExternalMemory(WRITE, mcuaddr, mcudata, 1);
+  if (-1 == ret) {
+    return ret;
+  }
+  // ret = mcurst();
+  // if (-1 == ret) {
+  //     return ret;
+  //}
 
 #if 1
   ret = readModulatorParm();
@@ -854,15 +873,51 @@ int TBShardware::checkStatus_TX(int times) {
   return ret;
 }
 
+int TBShardware::subcard_restart() {
+  u8 tmp[4] = {0xff, 0xff, 0xff, 0xff};
+  int ret = 0;
+  u8 mcudata[4] = {0};
+  int mcuaddr = 0xe0;
+  int tunernum = 0;
+  ret = controlExternalMemory(READ, mcuaddr, mcudata, 4);
+  if (-1 == ret) {
+    return ret;
+  }
+  for (int i = 0; i < 4; i++) {
+    if (1 == mcudata[i]) {
+      ++tunernum;
+    }
+  }
+  tunernum = tunernum > rwparm.tunernum ? rwparm.tunernum : tunernum;
+  ret = controlExternalMemory(WRITE, 0xff08, tmp, 1);
+  int timecout = 1000 + 20000 * tunernum;
+  qDebug("subcard_restart time:%d ms", timecout);
+  QMSLEEP(timecout);
+  return ret;
+}
 
-int TBShardware::mcurst() {
-  u8 tmp[4] = {0xff,0xff,0xff,0xff};
-  int ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
+int TBShardware::mcu_poweroff() {
+  u8 tmp[4] = {0xff, 0xff, 0xff, 0xff};
+  int ret = 0;
+  u8 mcudata[4] = {0};
+  int mcuaddr = 0xe0;
+  int tunernum = 0;
+  ret = controlExternalMemory(READ, mcuaddr, mcudata, 4);
+  if (-1 == ret ){
+    return ret;
+  }
+  for (int i = 0; i< 4;i++){
+    if (1 == mcudata[i]) {
+      ++tunernum;
+	}
+  }
+  tunernum = tunernum > rwparm.tunernum ? rwparm.tunernum : tunernum;
+  ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
   QMSLEEP(100);
   tmp[0] = 0;
   ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
-  int timecout = 1000+20000 * rwparm.tunernum;
-  qDebug("mcu restart time:%d ms",timecout);
+  int timecout = 1000 + 20000 * tunernum;
+  qDebug("mcu poweroff time:%d ms", timecout);
   QMSLEEP(timecout);
   return ret;
 }

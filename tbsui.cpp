@@ -413,6 +413,7 @@ void tbsui::on_too_Apply_clicked() {
         tbsrwparm.tsport = ui->lin_TSPort->text().toInt();
         tbsrwparm.mucastip = ui->lin_CastIP->text();
         tbsrwparm.isRst = ui->che_Rst->isChecked();
+        tbsrwparm.ismcurst = ui->che_mcurst->isChecked();
         tbshd->setHardWareParm(tbsrwparm);
         m_Thread.quit();
         m_Thread.wait();
@@ -425,7 +426,7 @@ void tbsui::on_too_Apply_clicked() {
 }
 
 void tbsui::on_too_Reset_clicked() {
-  qDebug() << "All Restart";
+  qDebug() << "dvbc sub-card Restart";
   int ipindex = ui->com_IP->currentIndex();
   if (-1 == ipindex) {
     return;
@@ -442,6 +443,31 @@ void tbsui::on_too_Reset_clicked() {
     tbsrwparm.tunernum += ui->che_t2->isEnabled();
     tbsrwparm.tunernum += ui->che_t3->isEnabled();
     tbshd->setRunMode(TBS_RESET_FUNC);
+    tbshd->setHardWareParm(tbsrwparm);
+    m_Thread.quit();
+    m_Thread.wait();
+    m_Thread.start();
+  }
+}
+
+void tbsui::on_too_Reboot_clicked() {
+  qDebug() << "All Restart";
+  int ipindex = ui->com_IP->currentIndex();
+  if (-1 == ipindex) {
+    return;
+  }
+
+  uiudpfd = tbshd->udpOpen(nettag[ipindex].ip, nettag[ipindex].port);
+  if (uiudpfd < 3) {
+    return;
+  } else {
+    tbshd->setudpfd(uiudpfd);
+    tbsrwparm.devno = devno;
+    tbsrwparm.tunernum = ui->che_t0->isEnabled();
+    tbsrwparm.tunernum += ui->che_t1->isEnabled();
+    tbsrwparm.tunernum += ui->che_t2->isEnabled();
+    tbsrwparm.tunernum += ui->che_t3->isEnabled();
+    tbshd->setRunMode(TBS_RESTSRT_MCU_FUNC);
     tbshd->setHardWareParm(tbsrwparm);
     m_Thread.quit();
     m_Thread.wait();
@@ -517,6 +543,7 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
         ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
         ui->com_Protocol->setCurrentIndex(tbsrwparm.protocol);
         ui->che_Rst->setChecked(tbsrwparm.isRst);
+        ui->che_mcurst->setChecked(tbsrwparm.ismcurst);
       } else {
         int index = ui->tw_Set->currentIndex();
 
@@ -536,6 +563,8 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
           ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
           ui->com_Protocol->setCurrentIndex(tbsrwparm.protocol);
           ui->che_Rst->setChecked(tbsrwparm.isRst);
+          ui->che_mcurst->setChecked(tbsrwparm.ismcurst);
+
         }
       }
     } else if ((0 == msg->isread) && (0 == msg->iserror)) {  // return write
@@ -566,6 +595,8 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
         ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
         ui->com_Protocol->setCurrentIndex(tbsrwparm.protocol);
         ui->che_Rst->setChecked(tbsrwparm.isRst);
+        ui->che_mcurst->setChecked(tbsrwparm.ismcurst);
+
       }
     } else if ((2 == msg->isread) && (1 == msg->iserror)) {
       if (0 == com_IP_soltEN_flg) {
