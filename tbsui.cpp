@@ -152,6 +152,7 @@ void tbsui::initForm() {
   this->setProperty("canMove", true);
   this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint |
                        Qt::WindowMinMaxButtonsHint);
+  this->setAttribute(Qt::WA_InputMethodEnabled, false);
   // QPixmap icon(":/image/logo.png");
   QPixmap icon(":/qss/psblack/uilogo/logo.png");
   ui->labIco->setPixmap(icon);
@@ -218,8 +219,8 @@ void tbsui::initForm() {
     che->setCheckable(true);
     connect(che, SIGNAL(clicked()), this, SLOT(tunersCheckboxClick()));
   }
-
   ui->com_IP->clear();
+  ui->com_IP->setEditable(false);
   ui->tw_Set->setCurrentIndex(0);
   width_s = this->size().width();
   height_s = this->size().height();
@@ -239,10 +240,11 @@ void tbsui::initForm() {
   connect(&m_Thread, SIGNAL(started()), tbshd, SLOT(start()));
   connect(tbshd, SIGNAL(sigDisplayMsgUI(TBS_Msg_Type *)), this,
           SLOT(soltsDisplayMsgUI(TBS_Msg_Type *)));
-  tbsrwparm.devno = devno;
-  tbshd->setHardWareParm(tbsrwparm);
-  tbshd->setRunMode(TBS_UDPMULTICAST_FUNC);
-  m_Thread.start();
+  //tbsrwparm.devno = devno;
+  //tbshd->setHardWareParm(tbsrwparm);
+  //tbshd->setRunMode(TBS_UDPMULTICAST_FUNC);
+ // m_Thread.start();
+
   // connect(&m_Thread, SIGNAL(finished()), tbshd, SLOT(deleteLater()));
   // connect(&m_Thread, SIGNAL(finished()), this, SLOT(threadFinished()));
   // qDebug() << QString("%1->%2->%3->%4")
@@ -321,6 +323,14 @@ void tbsui::on_btnMenu_Close_clicked() {
 
 void tbsui::on_too_Refresh_clicked() {
   qDebug() << "Refresh";
+  int mip = ui->che_Mip->isChecked();
+  if (0 == mip) {
+    tbshd->setManual_ip(QString("NULL"));
+  } else {
+    QString mip = ui->com_IP->lineEdit()->text();
+    qDebug() << mip;
+    tbshd->setManual_ip(mip);
+  }
   refresh();
 }
 
@@ -564,7 +574,6 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
           ui->com_Protocol->setCurrentIndex(tbsrwparm.protocol);
           ui->che_Rst->setChecked(tbsrwparm.isRst);
           ui->che_mcurst->setChecked(tbsrwparm.ismcurst);
-
         }
       }
     } else if ((0 == msg->isread) && (0 == msg->iserror)) {  // return write
@@ -596,7 +605,6 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
         ui->com_Protocol->setCurrentIndex(tbsrwparm.protocol);
         ui->che_Rst->setChecked(tbsrwparm.isRst);
         ui->che_mcurst->setChecked(tbsrwparm.ismcurst);
-
       }
     } else if ((2 == msg->isread) && (1 == msg->iserror)) {
       if (0 == com_IP_soltEN_flg) {
@@ -635,7 +643,9 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
     nettag[netnum].ip = msg->devip;
     nettag[netnum].port = msg->devport;
     nettag[netnum].switchStatus = msg->switchStatus;
-    ui->com_IP->addItem(nettag[netnum].ip, netnum);
+    ui->com_IP->addItem(
+        QString("%1:%2").arg(nettag[netnum].ip).arg(nettag[netnum].port),
+        netnum);
     ui->com_IP->setCurrentIndex(0);
     ;
     netnum++;
@@ -702,4 +712,12 @@ void tbsui::on_sli_H_valueChanged(int value) {
   this->resize(width, height);
   QString qst = QString("QCheckBox::indicator{ width: %1px; height: %1px; }")
                     .arg(4 + value);  //改变大小
+}
+
+void tbsui::on_che_Mip_stateChanged(int arg1) {
+  if (arg1 == 0) {
+    ui->com_IP->setEditable(false);
+  } else {
+    ui->com_IP->setEditable(true);
+  };
 }

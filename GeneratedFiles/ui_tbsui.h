@@ -56,13 +56,6 @@ public:
     QSlider *sli_H;
     QWidget *UpdateWdiget;
     QGridLayout *gridLayout_8;
-    QGridLayout *gridLayout_6;
-    QComboBox *com_IP;
-    QToolButton *too_Refresh;
-    QLabel *label_14;
-    QToolButton *too_Reset;
-    QToolButton *too_Apply;
-    QToolButton *too_Reboot;
     QTabWidget *tw_Set;
     QWidget *tab_IPSetting;
     QGridLayout *gridLayout_7;
@@ -79,6 +72,12 @@ public:
     QLabel *label_4;
     QWidget *tab_KidSetting;
     QGridLayout *gridLayout_3;
+    QGroupBox *gbox_Tuners;
+    QVBoxLayout *verticalLayout_2;
+    QCheckBox *che_t0;
+    QCheckBox *che_t1;
+    QCheckBox *che_t2;
+    QCheckBox *che_t3;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_5;
     QLabel *label_11;
@@ -103,12 +102,13 @@ public:
     QLabel *label_8;
     QLabel *label_10;
     QCheckBox *che_mcurst;
-    QGroupBox *gbox_Tuners;
-    QVBoxLayout *verticalLayout_2;
-    QCheckBox *che_t0;
-    QCheckBox *che_t1;
-    QCheckBox *che_t2;
-    QCheckBox *che_t3;
+    QGridLayout *gridLayout_6;
+    QCheckBox *che_Mip;
+    QComboBox *com_IP;
+    QToolButton *too_Refresh;
+    QToolButton *too_Apply;
+    QToolButton *too_Reset;
+    QToolButton *too_Reboot;
 
     void setupUi(QDialog *tbsui)
     {
@@ -241,62 +241,6 @@ public:
         UpdateWdiget->setSizePolicy(sizePolicy);
         gridLayout_8 = new QGridLayout(UpdateWdiget);
         gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
-        gridLayout_6 = new QGridLayout();
-        gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
-        com_IP = new QComboBox(UpdateWdiget);
-        com_IP->setObjectName(QStringLiteral("com_IP"));
-
-        gridLayout_6->addWidget(com_IP, 0, 2, 1, 2);
-
-        too_Refresh = new QToolButton(UpdateWdiget);
-        too_Refresh->setObjectName(QStringLiteral("too_Refresh"));
-        sizePolicy1.setHeightForWidth(too_Refresh->sizePolicy().hasHeightForWidth());
-        too_Refresh->setSizePolicy(sizePolicy1);
-        too_Refresh->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout_6->addWidget(too_Refresh, 1, 0, 1, 1);
-
-        label_14 = new QLabel(UpdateWdiget);
-        label_14->setObjectName(QStringLiteral("label_14"));
-        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        sizePolicy4.setHorizontalStretch(0);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(label_14->sizePolicy().hasHeightForWidth());
-        label_14->setSizePolicy(sizePolicy4);
-
-        gridLayout_6->addWidget(label_14, 0, 0, 1, 2);
-
-        too_Reset = new QToolButton(UpdateWdiget);
-        too_Reset->setObjectName(QStringLiteral("too_Reset"));
-        sizePolicy1.setHeightForWidth(too_Reset->sizePolicy().hasHeightForWidth());
-        too_Reset->setSizePolicy(sizePolicy1);
-        too_Reset->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout_6->addWidget(too_Reset, 1, 2, 1, 1);
-
-        too_Apply = new QToolButton(UpdateWdiget);
-        too_Apply->setObjectName(QStringLiteral("too_Apply"));
-        sizePolicy1.setHeightForWidth(too_Apply->sizePolicy().hasHeightForWidth());
-        too_Apply->setSizePolicy(sizePolicy1);
-        too_Apply->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout_6->addWidget(too_Apply, 1, 1, 1, 1);
-
-        too_Reboot = new QToolButton(UpdateWdiget);
-        too_Reboot->setObjectName(QStringLiteral("too_Reboot"));
-        sizePolicy1.setHeightForWidth(too_Reboot->sizePolicy().hasHeightForWidth());
-        too_Reboot->setSizePolicy(sizePolicy1);
-        too_Reboot->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
-
-        gridLayout_6->addWidget(too_Reboot, 1, 3, 1, 1);
-
-        gridLayout_6->setColumnStretch(0, 1);
-        gridLayout_6->setColumnStretch(1, 1);
-        gridLayout_6->setColumnStretch(2, 1);
-        gridLayout_6->setColumnStretch(3, 1);
-
-        gridLayout_8->addLayout(gridLayout_6, 0, 0, 1, 1);
-
         tw_Set = new QTabWidget(UpdateWdiget);
         tw_Set->setObjectName(QStringLiteral("tw_Set"));
         tab_IPSetting = new QWidget();
@@ -309,11 +253,11 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         che_dhcp = new QCheckBox(groupBox_3);
         che_dhcp->setObjectName(QStringLiteral("che_dhcp"));
-        QSizePolicy sizePolicy5(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(che_dhcp->sizePolicy().hasHeightForWidth());
-        che_dhcp->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy4(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(che_dhcp->sizePolicy().hasHeightForWidth());
+        che_dhcp->setSizePolicy(sizePolicy4);
 
         gridLayout->addWidget(che_dhcp, 0, 0, 1, 1);
 
@@ -365,6 +309,37 @@ public:
         tab_KidSetting->setObjectName(QStringLiteral("tab_KidSetting"));
         gridLayout_3 = new QGridLayout(tab_KidSetting);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        gbox_Tuners = new QGroupBox(tab_KidSetting);
+        gbox_Tuners->setObjectName(QStringLiteral("gbox_Tuners"));
+        gbox_Tuners->setCheckable(false);
+        verticalLayout_2 = new QVBoxLayout(gbox_Tuners);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        che_t0 = new QCheckBox(gbox_Tuners);
+        che_t0->setObjectName(QStringLiteral("che_t0"));
+        che_t0->setEnabled(true);
+        che_t0->setChecked(true);
+
+        verticalLayout_2->addWidget(che_t0);
+
+        che_t1 = new QCheckBox(gbox_Tuners);
+        che_t1->setObjectName(QStringLiteral("che_t1"));
+
+        verticalLayout_2->addWidget(che_t1);
+
+        che_t2 = new QCheckBox(gbox_Tuners);
+        che_t2->setObjectName(QStringLiteral("che_t2"));
+        che_t2->setEnabled(true);
+
+        verticalLayout_2->addWidget(che_t2);
+
+        che_t3 = new QCheckBox(gbox_Tuners);
+        che_t3->setObjectName(QStringLiteral("che_t3"));
+
+        verticalLayout_2->addWidget(che_t3);
+
+
+        gridLayout_3->addWidget(gbox_Tuners, 0, 0, 1, 1);
+
         groupBox_2 = new QGroupBox(tab_KidSetting);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         groupBox_2->setCheckable(false);
@@ -510,45 +485,67 @@ public:
         che_mcurst = new QCheckBox(groupBox_2);
         che_mcurst->setObjectName(QStringLiteral("che_mcurst"));
 
-        gridLayout_5->addWidget(che_mcurst, 10, 0, 1, 1);
+        gridLayout_5->addWidget(che_mcurst, 10, 0, 1, 2);
 
 
         gridLayout_3->addWidget(groupBox_2, 0, 1, 1, 1);
 
-        gbox_Tuners = new QGroupBox(tab_KidSetting);
-        gbox_Tuners->setObjectName(QStringLiteral("gbox_Tuners"));
-        gbox_Tuners->setCheckable(false);
-        verticalLayout_2 = new QVBoxLayout(gbox_Tuners);
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        che_t0 = new QCheckBox(gbox_Tuners);
-        che_t0->setObjectName(QStringLiteral("che_t0"));
-        che_t0->setEnabled(true);
-        che_t0->setChecked(true);
-
-        verticalLayout_2->addWidget(che_t0);
-
-        che_t1 = new QCheckBox(gbox_Tuners);
-        che_t1->setObjectName(QStringLiteral("che_t1"));
-
-        verticalLayout_2->addWidget(che_t1);
-
-        che_t2 = new QCheckBox(gbox_Tuners);
-        che_t2->setObjectName(QStringLiteral("che_t2"));
-        che_t2->setEnabled(true);
-
-        verticalLayout_2->addWidget(che_t2);
-
-        che_t3 = new QCheckBox(gbox_Tuners);
-        che_t3->setObjectName(QStringLiteral("che_t3"));
-
-        verticalLayout_2->addWidget(che_t3);
-
-
-        gridLayout_3->addWidget(gbox_Tuners, 0, 0, 1, 1);
-
         tw_Set->addTab(tab_KidSetting, QString());
 
         gridLayout_8->addWidget(tw_Set, 1, 0, 1, 1);
+
+        gridLayout_6 = new QGridLayout();
+        gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
+        che_Mip = new QCheckBox(UpdateWdiget);
+        che_Mip->setObjectName(QStringLiteral("che_Mip"));
+        che_Mip->setStyleSheet(QStringLiteral(""));
+
+        gridLayout_6->addWidget(che_Mip, 1, 0, 1, 1);
+
+        com_IP = new QComboBox(UpdateWdiget);
+        com_IP->setObjectName(QStringLiteral("com_IP"));
+        com_IP->setEditable(false);
+
+        gridLayout_6->addWidget(com_IP, 1, 1, 1, 3);
+
+        too_Refresh = new QToolButton(UpdateWdiget);
+        too_Refresh->setObjectName(QStringLiteral("too_Refresh"));
+        sizePolicy1.setHeightForWidth(too_Refresh->sizePolicy().hasHeightForWidth());
+        too_Refresh->setSizePolicy(sizePolicy1);
+        too_Refresh->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout_6->addWidget(too_Refresh, 0, 0, 1, 1);
+
+        too_Apply = new QToolButton(UpdateWdiget);
+        too_Apply->setObjectName(QStringLiteral("too_Apply"));
+        sizePolicy1.setHeightForWidth(too_Apply->sizePolicy().hasHeightForWidth());
+        too_Apply->setSizePolicy(sizePolicy1);
+        too_Apply->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout_6->addWidget(too_Apply, 0, 1, 1, 1);
+
+        too_Reset = new QToolButton(UpdateWdiget);
+        too_Reset->setObjectName(QStringLiteral("too_Reset"));
+        sizePolicy1.setHeightForWidth(too_Reset->sizePolicy().hasHeightForWidth());
+        too_Reset->setSizePolicy(sizePolicy1);
+        too_Reset->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout_6->addWidget(too_Reset, 0, 2, 1, 1);
+
+        too_Reboot = new QToolButton(UpdateWdiget);
+        too_Reboot->setObjectName(QStringLiteral("too_Reboot"));
+        sizePolicy1.setHeightForWidth(too_Reboot->sizePolicy().hasHeightForWidth());
+        too_Reboot->setSizePolicy(sizePolicy1);
+        too_Reboot->setStyleSheet(QStringLiteral("background-color: rgb(0, 60, 0);"));
+
+        gridLayout_6->addWidget(too_Reboot, 0, 3, 1, 1);
+
+        gridLayout_6->setColumnStretch(0, 1);
+        gridLayout_6->setColumnStretch(1, 1);
+        gridLayout_6->setColumnStretch(2, 1);
+        gridLayout_6->setColumnStretch(3, 1);
+
+        gridLayout_8->addLayout(gridLayout_6, 0, 0, 1, 1);
 
 
         gridLayout_4->addWidget(UpdateWdiget, 1, 0, 1, 1);
@@ -561,7 +558,7 @@ public:
         retranslateUi(tbsui);
 
         stackedWidget->setCurrentIndex(0);
-        tw_Set->setCurrentIndex(1);
+        tw_Set->setCurrentIndex(0);
         com_Modulation->setCurrentIndex(0);
 
 
@@ -582,11 +579,6 @@ public:
 #endif // QT_NO_TOOLTIP
         btnMenu_Min->setText(QString());
         btnMenu_Max->setText(QString());
-        too_Refresh->setText(QApplication::translate("tbsui", "Refresh", nullptr));
-        label_14->setText(QApplication::translate("tbsui", "List of dvbc modulate network devices\357\274\232", nullptr));
-        too_Reset->setText(QApplication::translate("tbsui", "Subcard restart", nullptr));
-        too_Apply->setText(QApplication::translate("tbsui", "Apply", nullptr));
-        too_Reboot->setText(QApplication::translate("tbsui", "All restart", nullptr));
 #ifndef QT_NO_ACCESSIBILITY
         tab_IPSetting->setAccessibleDescription(QString());
 #endif // QT_NO_ACCESSIBILITY
@@ -597,10 +589,14 @@ public:
 #endif // QT_NO_ACCESSIBILITY
         label->setText(QApplication::translate("tbsui", "Local IP:", nullptr));
         label_2->setText(QApplication::translate("tbsui", "Local port:", nullptr));
-        lin_Lport->setInputMask(QApplication::translate("tbsui", "00000", nullptr));
         label_3->setText(QApplication::translate("tbsui", "Netmask:", nullptr));
         label_4->setText(QApplication::translate("tbsui", "Gateway:", nullptr));
         tw_Set->setTabText(tw_Set->indexOf(tab_IPSetting), QApplication::translate("tbsui", "IP Setting", nullptr));
+        gbox_Tuners->setTitle(QApplication::translate("tbsui", "Tuner List:", nullptr));
+        che_t0->setText(QApplication::translate("tbsui", "Tuner 0", nullptr));
+        che_t1->setText(QApplication::translate("tbsui", "Tuner 1", nullptr));
+        che_t2->setText(QApplication::translate("tbsui", "Tuner 2", nullptr));
+        che_t3->setText(QApplication::translate("tbsui", "Tuner 3", nullptr));
         groupBox_2->setTitle(QString());
         label_11->setText(QApplication::translate("tbsui", "(bps)", nullptr));
         label_7->setText(QApplication::translate("tbsui", "Playrate:", nullptr));
@@ -614,7 +610,7 @@ public:
 
         label_12->setText(QApplication::translate("tbsui", "(100~1000MHZ)", nullptr));
         label_5->setText(QApplication::translate("tbsui", "Modulation:", nullptr));
-        che_Rst->setText(QApplication::translate("tbsui", "DVBC submodule restarts after power off", nullptr));
+        che_Rst->setText(QApplication::translate("tbsui", "DVBC submodule software restart", nullptr));
         lin_Lev->setText(QString());
         label_17->setText(QApplication::translate("tbsui", "Multicast/unicast ip:", nullptr));
         com_Modulation->setItemText(0, QApplication::translate("tbsui", "16QAM", nullptr));
@@ -633,13 +629,13 @@ public:
         label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
         label_10->setText(QApplication::translate("tbsui", "(2000-7200\n"
 "kbps)", nullptr));
-        che_mcurst->setText(QApplication::translate("tbsui", "RestartEN", nullptr));
-        gbox_Tuners->setTitle(QApplication::translate("tbsui", "Tuner List:", nullptr));
-        che_t0->setText(QApplication::translate("tbsui", "Tuner 0", nullptr));
-        che_t1->setText(QApplication::translate("tbsui", "Tuner 1", nullptr));
-        che_t2->setText(QApplication::translate("tbsui", "Tuner 2", nullptr));
-        che_t3->setText(QApplication::translate("tbsui", "Tuner 3", nullptr));
+        che_mcurst->setText(QApplication::translate("tbsui", "DVBC submodule restarts after poweroff", nullptr));
         tw_Set->setTabText(tw_Set->indexOf(tab_KidSetting), QApplication::translate("tbsui", "Modulator", nullptr));
+        che_Mip->setText(QApplication::translate("tbsui", "Manual add ip", nullptr));
+        too_Refresh->setText(QApplication::translate("tbsui", "Refresh", nullptr));
+        too_Apply->setText(QApplication::translate("tbsui", "Apply", nullptr));
+        too_Reset->setText(QApplication::translate("tbsui", "Subcard restart", nullptr));
+        too_Reboot->setText(QApplication::translate("tbsui", "All restart", nullptr));
     } // retranslateUi
 
 };

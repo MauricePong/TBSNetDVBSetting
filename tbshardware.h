@@ -27,7 +27,7 @@ class TBShardware : public QObject, public TBSbase {
   int writeModulatorParm(void);
   int writeNetMac(void);
 
-  int udpMulticastClinet(void);
+  int udpMulticastClinet(int manualip);
   int getHostIpAddress(void);
 
   int getRunMode();
@@ -36,6 +36,7 @@ class TBShardware : public QObject, public TBSbase {
   void setReadMode(int mode);
   int getWriteMode();
   void setWriteMode(int mode);
+  void setManual_ip(QString ip);
   int checkStatus_RX(int times);
   int checkStatus_TX(int times);
   int subcard_restart();
@@ -67,6 +68,7 @@ class TBShardware : public QObject, public TBSbase {
   int runmode;
   int readmode;
   int writemode;
+  QString manual_ip;
   TBS_Msg_Type *tbsmsg;
   RD_WT_PARM rwparm;
   int gatewaynum;

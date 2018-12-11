@@ -13,6 +13,7 @@ TBShardware::TBShardware() {
   tbsmsg->btnRtext = QString("OK");
   tbsmsg->tilie = QString("");
   tbsmsg->displaytext = QString("");
+  manual_ip = QString("NULL");
 }
 
 TBShardware::~TBShardware() {
@@ -51,8 +52,11 @@ void TBShardware::start() {
       ret = writeBuffer(writemode);
       break;
     case TBS_UDPMULTICAST_FUNC:
-      ret = udpMulticastClinet();
-
+      if (QString("NULL") == manual_ip) {
+        ret = udpMulticastClinet(0);
+      } else {
+        ret = udpMulticastClinet(1);
+      }
       if (-1 == ret) {
         break;
       }
@@ -74,7 +78,7 @@ void TBShardware::start() {
       break;
 
     case TBS_UDOMULTICAST_MAC_FUNC:
-      ret = udpMulticastClinet();
+      ret = udpMulticastClinet(0);
 
       if (-1 == ret) {
         break;
@@ -610,11 +614,12 @@ int TBShardware::writeNetMac(void) {
   return ret;
 }
 
-int TBShardware::udpMulticastClinet(void) {
+int TBShardware::udpMulticastClinet(int manualip) {
   int i = 0;
   int j = 0;
   int k = 0;
   int ret = 0;
+
   int timevalue = 2000;
   getHostIpAddress();
 #ifdef Q_OS_WIN  // windows
@@ -634,6 +639,27 @@ int TBShardware::udpMulticastClinet(void) {
   char recvbuf[64] = {'\0'};
   u8 tmp[2] = {0};
 
+  if (1 == manualip){
+    tbsmsg->devip = manual_ip.section(':', 0, 0).trimmed();
+    tbsmsg->devport = manual_ip.section(':', 1, 1).trimmed().toInt();
+    mudpfd = udpOpen(tbsmsg->devip, tbsmsg->devport);
+    if (mudpfd < 3) {
+      return -1;
+    }
+    setudpfd(mudpfd);
+    ret = readREG(REG64_BY_UDP_FUNC, 0x4014, 1, &tbsmsg->switchStatus);
+    mudpfd = udpClose(mudpfd);
+    setudpfd(mudpfd);
+    if (ret < 0) {
+      return -1;
+    }
+    first_ip.ip = tbsmsg->devip;
+    first_ip.port = tbsmsg->devport;
+    first_ip.switchStatus = tbsmsg->switchStatus;
+    tbsmsg->type = 2;
+    emit sigDisplayMsgUI(tbsmsg);
+    return 0;
+  }
   if ((Mfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
     qDebug() << "fail to socket";
     return -1;
@@ -817,6 +843,8 @@ int TBShardware::getWriteMode() { return writemode; }
 
 void TBShardware::setWriteMode(int mode) { writemode = mode; }
 
+void TBShardware::setManual_ip(QString ip) { manual_ip = ip; }
+
 int TBShardware::checkStatus_RX(int times) {
   int i = 0;
   int ret = 0;
@@ -890,7 +918,7 @@ int TBShardware::subcard_restart() {
   }
   tunernum = tunernum > rwparm.tunernum ? rwparm.tunernum : tunernum;
   ret = controlExternalMemory(WRITE, 0xff08, tmp, 1);
-  int timecout = 1000 + 20000 * tunernum;
+  int timecout = 10 + 15000 * tunernum;
   qDebug("subcard_restart time:%d ms", timecout);
   QMSLEEP(timecout);
   return ret;
@@ -903,20 +931,20 @@ int TBShardware::mcu_poweroff() {
   int mcuaddr = 0xe0;
   int tunernum = 0;
   ret = controlExternalMemory(READ, mcuaddr, mcudata, 4);
-  if (-1 == ret ){
+  if (-1 == ret) {
     return ret;
   }
-  for (int i = 0; i< 4;i++){
+  for (int i = 0; i < 4; i++) {
     if (1 == mcudata[i]) {
       ++tunernum;
-	}
+    }
   }
   tunernum = tunernum > rwparm.tunernum ? rwparm.tunernum : tunernum;
   ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
   QMSLEEP(100);
   tmp[0] = 0;
   ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
-  int timecout = 1000 + 20000 * tunernum;
+  int timecout = 10+15000 * tunernum;
   qDebug("mcu poweroff time:%d ms", timecout);
   QMSLEEP(timecout);
   return ret;

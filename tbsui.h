@@ -63,6 +63,7 @@ class tbsui : public QDialog {
   void on_too_Reset_clicked();
   void on_too_Reboot_clicked();
   void slot_com_IP_currentIndexChanged(int idx);
+  void on_che_Mip_stateChanged(int arg1);
 };
 
 #endif  //
