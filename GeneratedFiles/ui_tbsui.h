@@ -558,7 +558,7 @@ public:
         retranslateUi(tbsui);
 
         stackedWidget->setCurrentIndex(0);
-        tw_Set->setCurrentIndex(0);
+        tw_Set->setCurrentIndex(1);
         com_Modulation->setCurrentIndex(0);
 
 
@@ -610,7 +610,7 @@ public:
 
         label_12->setText(QApplication::translate("tbsui", "(100~1000MHZ)", nullptr));
         label_5->setText(QApplication::translate("tbsui", "Modulation:", nullptr));
-        che_Rst->setText(QApplication::translate("tbsui", "DVBC submodule software restart", nullptr));
+        che_Rst->setText(QApplication::translate("tbsui", "DVBC sub-module software restart", nullptr));
         lin_Lev->setText(QString());
         label_17->setText(QApplication::translate("tbsui", "Multicast/unicast ip:", nullptr));
         com_Modulation->setItemText(0, QApplication::translate("tbsui", "16QAM", nullptr));
@@ -629,12 +629,12 @@ public:
         label_8->setText(QApplication::translate("tbsui", "Level:", nullptr));
         label_10->setText(QApplication::translate("tbsui", "(2000-7200\n"
 "kbps)", nullptr));
-        che_mcurst->setText(QApplication::translate("tbsui", "DVBC submodule restarts after poweroff", nullptr));
+        che_mcurst->setText(QApplication::translate("tbsui", "DVBC sub-module restarts (power off-on )", nullptr));
         tw_Set->setTabText(tw_Set->indexOf(tab_KidSetting), QApplication::translate("tbsui", "Modulator", nullptr));
         che_Mip->setText(QApplication::translate("tbsui", "Manual add ip", nullptr));
         too_Refresh->setText(QApplication::translate("tbsui", "Refresh", nullptr));
         too_Apply->setText(QApplication::translate("tbsui", "Apply", nullptr));
-        too_Reset->setText(QApplication::translate("tbsui", "Subcard restart", nullptr));
+        too_Reset->setText(QApplication::translate("tbsui", "Sub-module restart", nullptr));
         too_Reboot->setText(QApplication::translate("tbsui", "All restart", nullptr));
     } // retranslateUi
 

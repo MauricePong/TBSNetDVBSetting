@@ -290,7 +290,7 @@
           <item row="1" column="0">
            <widget class="QTabWidget" name="tw_Set">
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_IPSetting">
              <property name="accessibleDescription">
@@ -529,7 +529,7 @@
                  <item row="9" column="0" colspan="2">
                   <widget class="QCheckBox" name="che_Rst">
                    <property name="text">
-                    <string>DVBC submodule software restart</string>
+                    <string>DVBC sub-module software restart</string>
                    </property>
                   </widget>
                  </item>
@@ -688,7 +688,7 @@ kbps)</string>
                  <item row="10" column="0" colspan="2">
                   <widget class="QCheckBox" name="che_mcurst">
                    <property name="text">
-                    <string>DVBC submodule restarts after poweroff</string>
+                    <string>DVBC sub-module restarts (power off-on )</string>
                    </property>
                   </widget>
                  </item>
@@ -762,7 +762,7 @@ kbps)</string>
                <string notr="true">background-color: rgb(0, 60, 0);</string>
               </property>
               <property name="text">
-               <string>Subcard restart</string>
+               <string>Sub-module restart</string>
               </property>
              </widget>
             </item>
