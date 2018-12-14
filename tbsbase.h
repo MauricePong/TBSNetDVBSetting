@@ -123,7 +123,7 @@ class RD_WT_PARM {
   QString lev;
   QString mucastip;
   int isRst;
-  int ismcurst;
+  //int ismcurst;
   int tunernum;
 };
 

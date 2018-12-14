@@ -101,7 +101,7 @@ void TBShardware::start() {
       break;
 
     case TBS_RESET_FUNC:
-      ret = subcard_restart();
+      ret = subcard_restart(0);
       if (0 == ret) {
         ret = 5;
       }
@@ -442,9 +442,9 @@ int TBShardware::readModulatorParm(void) {
   qDebug() << "read tsport:" << rwparm.tsport;
   rwparm.isRst = rfxdata[0x28] & 0x01;
   qDebug() << "read tsRst:" << rwparm.isRst;
-  ret = controlExternalMemory(READ, mcuaddr, mcudata, 1);
-  rwparm.ismcurst = mcudata[0];
-  qDebug() << "read mcuRst:" << rwparm.ismcurst;
+  //ret = controlExternalMemory(READ, mcuaddr, mcudata, 1);
+  //rwparm.ismcurst = mcudata[0];
+  //qDebug() << "read mcuRst:" << rwparm.ismcurst;
   return ret;
 }
 
@@ -570,16 +570,16 @@ int TBShardware::writeModulatorParm(void) {
   if (-1 == ret) {
     return ret;
   }
-  mcudata[0] = (u8)(rwparm.ismcurst);
-  qDebug() << "write isRst:" << rwparm.ismcurst;
-  ret = controlExternalMemory(WRITE, mcuaddr, mcudata, 1);
-  if (-1 == ret) {
-    return ret;
+ // mcudata[0] = (u8)(rwparm.ismcurst);
+ // qDebug() << "write isRst:" << rwparm.ismcurst;
+  //ret = controlExternalMemory(WRITE, mcuaddr, mcudata, 1);
+ // if (-1 == ret) {
+ //   return ret;
+ // }
+  ret = subcard_restart(rwparm.devno);
+   if (-1 == ret) {
+       return ret;
   }
-  // ret = mcurst();
-  // if (-1 == ret) {
-  //     return ret;
-  //}
 
 #if 1
   ret = readModulatorParm();
@@ -901,24 +901,15 @@ int TBShardware::checkStatus_TX(int times) {
   return ret;
 }
 
-int TBShardware::subcard_restart() {
+int TBShardware::subcard_restart(int devno) {
   u8 tmp[4] = {0xff, 0xff, 0xff, 0xff};
+  int timecout = 15000;
   int ret = 0;
-  u8 mcudata[4] = {0};
-  int mcuaddr = 0xe0;
-  int tunernum = 0;
-  ret = controlExternalMemory(READ, mcuaddr, mcudata, 4);
-  if (-1 == ret) {
-    return ret;
-  }
-  for (int i = 0; i < 4; i++) {
-    if (1 == mcudata[i]) {
-      ++tunernum;
-    }
-  }
-  tunernum = tunernum > rwparm.tunernum ? rwparm.tunernum : tunernum;
+  tmp[0] = devno;
   ret = controlExternalMemory(WRITE, 0xff08, tmp, 1);
-  int timecout = 10 + 15000 * tunernum;
+  if (0 == rwparm.isRst) {
+    timecout = 10000;
+  }
   qDebug("subcard_restart time:%d ms", timecout);
   QMSLEEP(timecout);
   return ret;
@@ -928,23 +919,11 @@ int TBShardware::mcu_poweroff() {
   u8 tmp[4] = {0xff, 0xff, 0xff, 0xff};
   int ret = 0;
   u8 mcudata[4] = {0};
-  int mcuaddr = 0xe0;
-  int tunernum = 0;
-  ret = controlExternalMemory(READ, mcuaddr, mcudata, 4);
-  if (-1 == ret) {
-    return ret;
-  }
-  for (int i = 0; i < 4; i++) {
-    if (1 == mcudata[i]) {
-      ++tunernum;
-    }
-  }
-  tunernum = tunernum > rwparm.tunernum ? rwparm.tunernum : tunernum;
   ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
   QMSLEEP(100);
   tmp[0] = 0;
   ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
-  int timecout = 10+15000 * tunernum;
+  int timecout = 2000 * rwparm.tunernum;
   qDebug("mcu poweroff time:%d ms", timecout);
   QMSLEEP(timecout);
   return ret;
