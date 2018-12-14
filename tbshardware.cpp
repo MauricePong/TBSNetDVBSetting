@@ -923,7 +923,7 @@ int TBShardware::mcu_poweroff() {
   QMSLEEP(100);
   tmp[0] = 0;
   ret = writeREG(REG64_BY_UDP_FUNC, 0x4014, 1, tmp);
-  int timecout = 2000 * rwparm.tunernum;
+  int timecout = 1000+15000 * rwparm.tunernum;
   qDebug("mcu poweroff time:%d ms", timecout);
   QMSLEEP(timecout);
   return ret;

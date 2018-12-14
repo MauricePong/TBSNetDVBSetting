@@ -528,6 +528,12 @@ void tbsui::slot_com_IP_currentIndexChanged(int idx) {
 
 #endif
 }
+int tbsui::get_random_number() {
+  qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+  int a = qrand() % 9;  //随机生成0到9的随机数
+  // qDebug() << a;
+  return a;
+}
 
 void tbsui::threadFinished() {
   qDebug()
@@ -643,7 +649,7 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
     if ((0 == msg->btnL) && (0 == msg->btnR)) {
       uilock = 1;
 			msgbox->setModal(false);
-      msgbox->set_pbar_arg(20000,100000);
+      msgbox->set_pbar_arg(get_random_number()*2500, 100000);
       msgbox->timerstart(100);
       msgbox->show();
     } else {

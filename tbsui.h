@@ -42,6 +42,7 @@ class tbsui : public QDialog {
   RD_WT_PARM tbsrwparm;
   NET_NODE nettag[16];
   int uilock;
+  int get_random_number();
 #ifdef Q_OS_WIN  // windows
   SOCKET uiudpfd;
 #else
