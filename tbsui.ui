@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>525</width>
-    <height>420</height>
+    <height>444</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -484,7 +484,7 @@
                  <item>
                   <widget class="QCheckBox" name="che_t3">
                    <property name="text">
-                    <string>Modulator  3</string>
+                    <string>Modulator 3</string>
                    </property>
                   </widget>
                  </item>
@@ -594,7 +594,7 @@
                  <item row="4" column="1">
                   <widget class="QLineEdit" name="lin_Sym">
                    <property name="text">
-                    <string/>
+                    <string>6875</string>
                    </property>
                   </widget>
                  </item>
@@ -670,25 +670,6 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="1">
-                  <widget class="QLineEdit" name="lin_Fre">
-                   <property name="accessibleName">
-                    <string/>
-                   </property>
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="echoMode">
-                    <enum>QLineEdit::Normal</enum>
-                   </property>
-                   <property name="cursorPosition">
-                    <number>0</number>
-                   </property>
-                   <property name="dragEnabled">
-                    <bool>false</bool>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="2" column="2">
                   <widget class="QLabel" name="label_12">
                    <property name="sizePolicy">
@@ -698,7 +679,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>(100~1000MHZ)</string>
+                    <string>MHZ</string>
                    </property>
                   </widget>
                  </item>
@@ -764,6 +745,480 @@ kbps)</string>
                    <item>
                     <property name="text">
                      <string>YES</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QComboBox" name="com_Freq">
+                   <item>
+                    <property name="text">
+                     <string>.</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>114.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>122.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>130.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>138.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>146.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>154.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>162.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>170.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>186.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>194.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>202.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>210.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>218.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>226.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>234.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>242.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>250.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>258.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>266.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>274.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>282.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>290.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>298.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>306.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>314.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>322.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>330.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>338.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>346.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>354.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>362.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>370.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>378.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>386.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>394.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>402.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>410.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>418.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>426.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>434.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>442.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>450.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>458.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>466.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>474.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>482.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>490.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>498.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>506.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>514.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>522.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>530.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>538.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>546.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>554.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>562.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>570.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>578.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>586.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>594.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>602.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>610.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>618.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>626.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>634.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>642.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>650.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>658.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>666.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>674.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>682.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>690.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>698.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>706.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>714.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>722.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>730.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>738.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>746.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>754.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>762.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>770.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>778.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>786.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>794.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>802.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>810.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>818.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>826.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>834.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>842.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>850.000</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>858.000</string>
                     </property>
                    </item>
                   </widget>

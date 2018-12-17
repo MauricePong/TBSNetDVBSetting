@@ -340,6 +340,109 @@ void tbsui::on_too_Refresh_clicked() {
 }
 
 void tbsui::on_too_Apply_clicked() {
+  QString qfreq[] = {
+      //"52.500",
+			//"62.000",
+			//"70.000",
+			//"80.000",
+			//"88.000",
+			//"96.000",
+			"114.000",
+			"122.000",
+			"130.000",
+			"138.000",
+			"146.000",
+			"154.000",
+			"162.000",
+			"170.000",
+			"186.000",
+			"194.000",
+			"202.000",
+			"210.000",
+			"218.000",
+			"226.000",
+			"234.000",
+			"242.000",
+			"250.000",
+			"258.000",
+			"266.000",
+			"274.000",
+			"282.000",
+			"290.000",
+			"298.000",
+			"306.000",
+			"314.000",
+			"322.000",
+			"330.000",
+			"338.000",
+			"346.000",
+			"354.000",
+			"362.000",
+			"370.000",
+			"378.000",
+			"386.000",
+			"394.000",
+			"402.000",
+			"410.000",
+			"418.000",
+			"426.000",
+			"434.000",
+			"442.000",
+			"450.000",
+			"458.000",
+			"466.000",
+			"474.000",
+			"482.000",
+			"490.000",
+			"498.000",
+			"506.000",
+			"514.000",
+			"522.000",
+			"530.000",
+			"538.000",
+			"546.000",
+			"554.000",
+			"562.000",
+			"570.000",
+			"578.000",
+			"586.000",
+			"594.000",
+			"602.000",
+			"610.000",
+			"618.000",
+			"626.000",
+			"634.000",
+			"642.000",
+			"650.000",
+			"658.000",
+			"666.000",
+			"674.000",
+			"682.000",
+			"690.000",
+			"698.000",
+			"706.000",
+			"714.000",
+			"722.000",
+			"730.000",
+			"738.000",
+			"746.000",
+			"754.000",
+			"762.000",
+			"770.000",
+			"778.000",
+			"786.000",
+			"794.000",
+			"802.000",
+			"810.000",
+			"818.000",
+			"826.000",
+			"834.000",
+			"842.000",
+			"850.000",
+			"858.000",
+			"NULL"
+	};
+
   if (1 == uilock) {
     return;
   }
@@ -385,16 +488,8 @@ void tbsui::on_too_Apply_clicked() {
         // check ui
         int sym = ui->lin_Sym->text().toInt();  // 2000~7200
         int tsport = ui->lin_TSPort->text().toInt();
-        float fre = ui->lin_Fre->text().toFloat();  // 100.000~1000.000
         float lev = ui->lin_Lev->text().toFloat();  // 0.0~-35.0
 
-        if ((fre < 100.000) || (fre > 1000.000)) {
-          ui->lin_Fre->setStyleSheet("QLineEdit{border:1px solid red }");
-          return;
-        } else {
-          ui->lin_Fre->setStyleSheet(
-              "QLineEdit{border:1px solid gray border-radius:1px}");
-        }
         if ((lev > 0.0) || (lev < -35.0)) {
           ui->lin_Lev->setStyleSheet("QLineEdit{border:1px solid red }");
           return;
@@ -426,7 +521,9 @@ void tbsui::on_too_Apply_clicked() {
         tbsrwparm.protocol = (u8)(ui->com_Protocol->currentIndex());
         tbsrwparm.qam = ui->com_Modulation->currentIndex();
         tbsrwparm.sym = ui->lin_Sym->text().toInt();
-        tbsrwparm.fre = ui->lin_Fre->text();
+       // tbsrwparm.fre = ui->lin_Fre->text();
+        tbsrwparm.fre = ui->com_Freq->currentText();
+					//qfreq[ui->com_Freq->currentIndex()];
         tbsrwparm.lev = ui->lin_Lev->text();
         tbsrwparm.tsport = ui->lin_TSPort->text().toInt();
         tbsrwparm.mucastip = ui->lin_CastIP->text();
@@ -541,14 +638,37 @@ void tbsui::threadFinished() {
 }
 
 void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
-  if (NULL == msgbox) {
-    return;
-  }
+ // QString qfreq[] = {
+ //     "114.000", "122.000", "130.000", "138.000", "146.000", "154.000",
+ //     "162.000", "170.000", "186.000", "194.000", "202.000", "210.000",
+ //     "218.000", "226.000", "234.000", "242.000", "250.000", "258.000",
+ //     "266.000", "274.000", "282.000", "290.000", "298.000", "306.000",
+ //     "314.000", "322.000", "330.000", "338.000", "346.000", "354.000",
+ //     "362.000", "370.000", "378.000", "386.000", "394.000", "402.000",
+ //     "410.000", "418.000", "426.000", "434.000", "442.000", "450.000",
+ //     "458.000", "466.000", "474.000", "482.000", "490.000", "498.000",
+ //     "506.000", "514.000", "522.000", "530.000", "538.000", "546.000",
+ //     "554.000", "562.000", "570.000", "578.000", "586.000", "594.000",
+ //     "602.000", "610.000", "618.000", "626.000", "634.000", "642.000",
+ //     "650.000", "658.000", "666.000", "674.000", "682.000", "690.000",
+ //     "698.000", "706.000", "714.000", "722.000", "730.000", "738.000",
+ //     "746.000", "754.000", "762.000", "770.000", "778.000", "786.000",
+ //     "794.000", "802.000", "810.000", "818.000", "826.000", "834.000",
+ //     "842.000", "850.000", "858.000","NULL"};
+ // if (NULL == msgbox) {
+ //   return;
+ // }
 
-  if (0 == msg->type) {
-    return;
-  }
-
+ // if (0 == msg->type) {
+ //   return;
+ // }
+ // int i = 0;
+ // float ffreq = 0.0;
+	//while (qfreq[i] != QString("NULL")) {
+ //   ffreq = tbsrwparm.fre.toFloat() - qfreq[i].toFloat();
+ //   if (ffreq)
+ //   ++i;
+ // }
   if (1 == msg->type) {
     if ((1 == msg->isread) && (0 == msg->iserror)) {
       uiudpfd = tbshd->udpClose(uiudpfd);
@@ -571,7 +691,7 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
         ui->lin_Pla->setText(tbsrwparm.pla);
         ui->lin_TSPort->setText(QString("%1").arg(tbsrwparm.tsport));
         ui->lin_CastIP->setText(tbsrwparm.mucastip);
-        ui->lin_Fre->setText(tbsrwparm.fre);
+        ui->com_Freq->setCurrentText(tbsrwparm.fre);
         ui->lin_Lev->setText(tbsrwparm.lev);
         ui->lin_Sym->setText(QString("%1").arg(tbsrwparm.sym));
         ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
@@ -592,7 +712,7 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
           ui->lin_Pla->setText(tbsrwparm.pla);
           ui->lin_TSPort->setText(QString("%1").arg(tbsrwparm.tsport));
           ui->lin_CastIP->setText(tbsrwparm.mucastip);
-          ui->lin_Fre->setText(tbsrwparm.fre);
+          ui->com_Freq->setCurrentText(tbsrwparm.fre);
           ui->lin_Sym->setText(QString("%1").arg(tbsrwparm.sym));
           ui->lin_Lev->setText(tbsrwparm.lev);
           ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
@@ -624,7 +744,7 @@ void tbsui::soltsDisplayMsgUI(TBS_Msg_Type *msg) {
         ui->lin_Pla->setText(tbsrwparm.pla);
         ui->lin_TSPort->setText(QString("%1").arg(tbsrwparm.tsport));
         ui->lin_CastIP->setText(tbsrwparm.mucastip);
-        ui->lin_Fre->setText(tbsrwparm.fre);
+        ui->com_Freq->setCurrentText(tbsrwparm.fre);
         ui->lin_Lev->setText(tbsrwparm.lev);
         ui->lin_Sym->setText(QString("%1").arg(tbsrwparm.sym));
         ui->com_Modulation->setCurrentIndex(tbsrwparm.qam);
