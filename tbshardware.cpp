@@ -44,86 +44,87 @@ void TBShardware::start() {
 	tbsmsg->switchStatus = 0x0f;
 	emit sigDisplayMsgUI(tbsmsg);
 
-	ret = isOperational();
-	if (0 == ret) {
-		switch (runmode) {
-		case TBS_READ_FUNC:
-			ret = readBuffer(readmode);
-			break;
-		case TBS_WRITE_FUNC:
-			ret = writeBuffer(writemode);
-			break;
-		case TBS_UDPMULTICAST_FUNC:
-			if (QString("NULL") == manual_ip) {
-				ret = udpMulticastClinet(0);
-			}
-			else {
-				ret = udpMulticastClinet(1);
-			}
-			if (-1 == ret) {
-				break;
-			}
-
-			sudpfd = udpOpen(first_ip.ip, first_ip.port);
-
-			if (sudpfd < 3) {
-				ret = -1;
-				break;
-			}
-
-			setudpfd(sudpfd);
-			ret = readBuffer(READ_NET_MODULATOR_PARM_FUNC);
-
-			if (-1 == ret) {
-				break;
-			}
-
-			break;
-
-		case TBS_UDOMULTICAST_MAC_FUNC:
+	switch (runmode) {
+	case TBS_READ_FUNC:
+		ret = readBuffer(readmode);
+		break;
+	case TBS_WRITE_FUNC:
+		ret = writeBuffer(writemode);
+		break;
+	case TBS_UDPMULTICAST_FUNC:
+		if (QString("NULL") == manual_ip) {
 			ret = udpMulticastClinet(0);
-
-			if (-1 == ret) {
-				break;
-			}
-
-			sudpfd = udpOpen(first_ip.ip, first_ip.port);
-
-			if (sudpfd < 3) {
-				ret = -1;
-				break;
-			}
-
-			setudpfd(sudpfd);
-			ret = readBuffer(READ_NET_MAC_FUNC);
-
-			if (-1 == ret) {
-				break;
-			}
-
+		}
+		else {
+			ret = udpMulticastClinet(1);
+		}
+		if (-1 == ret) {
 			break;
+		}
 
-		case TBS_RESET_FUNC:
-			ret = subcard_restart(0);
-			if (0 == ret) {
-				ret = 5;
-			}
-			break;
-		case TBS_RESTSRT_MCU_FUNC:
-			ret = mcu_poweroff();
-			if (0 == ret) {
-				ret = 5;
-			}
-			break;
-		case TBS_NULL_FUNC:
-			ret = -1;
-			break;
+		sudpfd = udpOpen(first_ip.ip, first_ip.port);
 
-		default:
+		if (sudpfd < 3) {
 			ret = -1;
 			break;
 		}
+
+		setudpfd(sudpfd);
+		ret = readBuffer(READ_NET_MODULATOR_PARM_FUNC);
+
+		if (-1 == ret) {
+			break;
+		}
+
+		break;
+
+	case TBS_UDOMULTICAST_MAC_FUNC:
+		ret = udpMulticastClinet(0);
+
+		if (-1 == ret) {
+			break;
+		}
+
+		sudpfd = udpOpen(first_ip.ip, first_ip.port);
+
+		if (sudpfd < 3) {
+			ret = -1;
+			break;
+		}
+
+		setudpfd(sudpfd);
+		ret = readBuffer(READ_NET_MAC_FUNC);
+
+		if (-1 == ret) {
+			break;
+		}
+
+		break;
+
+	case TBS_RESET_FUNC:
+		ret = subcard_restart(0);
+		if (0 == ret) {
+			ret = 5;
+		}
+		break;
+	case TBS_RESTSRT_MCU_FUNC:
+		ret = mcu_poweroff();
+		if (0 == ret) {
+			ret = 5;
+		}
+		break;
+	case TBS_NULL_FUNC:
+		ret = -1;
+		break;
+
+	default:
+		ret = -1;
+		break;
 	}
+	if (ret < 0) {
+		ret = isOperational();
+	}
+
 	runmode = 0;
 	readmode = 0;
 	writemode = 0;
@@ -252,19 +253,19 @@ void TBShardware::start() {
 		emit sigDisplayMsgUI(tbsmsg);
 	}
 	else if (-2 == ret) {
-	tbsmsg->type = 1;
-	tbsmsg->isreadall = 0;
-	tbsmsg->iserror = 1;
-	tbsmsg->isread = 2;
-	tbsmsg->btnL = 0;
-	tbsmsg->btnR = 1;
-	tbsmsg->btnRtext = QString("OK");
-	tbsmsg->tilie = QString("error");
-	tbsmsg->displaytext = QString("The current device is busy, please wait for it to run again.");
-	tbsmsg->devip = QString("");
-	tbsmsg->devport = 0;
-	tbsmsg->switchStatus = 0x0f;
-	emit sigDisplayMsgUI(tbsmsg);
+		tbsmsg->type = 1;
+		tbsmsg->isreadall = 0;
+		tbsmsg->iserror = 1;
+		tbsmsg->isread = 2;
+		tbsmsg->btnL = 0;
+		tbsmsg->btnR = 1;
+		tbsmsg->btnRtext = QString("OK");
+		tbsmsg->tilie = QString("error");
+		tbsmsg->displaytext = QString("The current device is busy, please wait for it to run again.");
+		tbsmsg->devip = QString("");
+		tbsmsg->devport = 0;
+		tbsmsg->switchStatus = 0x0f;
+		emit sigDisplayMsgUI(tbsmsg);
 	}
 
 	//  if (false == m_bRun) {
