@@ -205,7 +205,7 @@ class TBSbase {
 
   int checkHostStatus(int cs);
   int waitForHostWorkDone();
-
+	int isOperational(void);
  private:
   struct sockaddr_in udpsockaddr;
 

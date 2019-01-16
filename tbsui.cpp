@@ -340,6 +340,7 @@ void tbsui::on_too_Refresh_clicked() {
 }
 
 void tbsui::on_too_Apply_clicked() {
+
   QString qfreq[] = {
       //"52.500",
 			//"62.000",

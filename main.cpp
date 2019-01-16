@@ -47,9 +47,27 @@ int main(int argc, char *argv[]) {
   // QFont font  = qApp->font();
   // font.setPointSize(9);
   // qApp->setFont(font);
-
-  QTBS_MAIN_UI w;
-  w.show();
-
-  return a.exec();
+	if (QString(argv[0]).indexOf(QString("setmactool")) != -1) {
+		SetMACTool w;
+		w.show();
+		a.exec();
+	}
+	else if (QString(argv[0]).indexOf(QString("dvbctool")) != -1) {
+		tbsui	w;
+		w.show();
+		a.exec();
+	}
+	else if (QString(argv[0]).indexOf(QString("all")) != -1) {
+		tbsui	w;
+		w.show();
+		SetMACTool m;
+		m.show();
+		a.exec();
+	}
+	else {
+		QTBS_MAIN_UI w;
+		w.show();
+		a.exec();
+	}
+  return 0;
 }
