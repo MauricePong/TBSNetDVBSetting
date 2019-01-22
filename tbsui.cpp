@@ -447,7 +447,7 @@ void tbsui::on_too_Apply_clicked() {
   if (1 == uilock) {
     return;
   }
-  uilock = 1;
+
   qDebug() << "Apply";
 #if 1
   int index = ui->tw_Set->currentIndex();
@@ -536,7 +536,7 @@ void tbsui::on_too_Apply_clicked() {
       }
     }
   }
-
+	uilock = 1;
 #endif
 }
 
@@ -544,7 +544,6 @@ void tbsui::on_too_Reset_clicked() {
   if (1 == uilock) {
     return;
   }
-  uilock = 1;
   qDebug() << "dvbc sub-card Restart";
   int ipindex = ui->com_IP->currentIndex();
   if (-1 == ipindex) {
@@ -567,13 +566,14 @@ void tbsui::on_too_Reset_clicked() {
     m_Thread.wait();
     m_Thread.start();
   }
+	uilock = 1;
+
 }
 
 void tbsui::on_too_Reboot_clicked() {
   if (1 == uilock) {
     return;
   }
-  uilock = 1;
   qDebug() << " Restart";
   int ipindex = ui->com_IP->currentIndex();
   if (-1 == ipindex) {
@@ -596,6 +596,8 @@ void tbsui::on_too_Reboot_clicked() {
     m_Thread.wait();
     m_Thread.start();
   }
+	uilock = 1;
+
 }
 
 void tbsui::slot_com_IP_currentIndexChanged(int idx) {
@@ -603,7 +605,6 @@ void tbsui::slot_com_IP_currentIndexChanged(int idx) {
   if (1 == uilock) {
     return;
   }
-  uilock = 1;
   if (idx < 0) {
     return;
   }
@@ -623,6 +624,7 @@ void tbsui::slot_com_IP_currentIndexChanged(int idx) {
     m_Thread.wait();
     m_Thread.start();
   }
+	uilock = 1;
 
 #endif
 }
