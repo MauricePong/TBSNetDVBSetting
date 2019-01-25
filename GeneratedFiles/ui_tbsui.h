@@ -113,7 +113,7 @@ public:
     {
         if (tbsui->objectName().isEmpty())
             tbsui->setObjectName(QStringLiteral("tbsui"));
-        tbsui->resize(574, 464);
+        tbsui->resize(640, 490);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
